@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Module 4: The Engine — First Look — DARKINV Rainbow Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+  :root{
+    --red:#ff5c5c; --orange:#ff9f43; --yellow:#ffd23f; --green:#2fd06f;
+    --blue:#3fa9ff; --indigo:#6c6cf5; --violet:#c869e0;
+    --ink:#1c2333; --paper:#ffffff; --bg1:#eef6ff; --bg2:#fdf3ff;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:linear-gradient(160deg,var(--bg1),var(--bg2)); font-family:'Nunito',sans-serif; color:var(--ink); padding:0 0 60px; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 16px; }
+  .rainbow-strip{ height:14px; background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--indigo),var(--violet)); background-size:200% 100%; animation:slide 6s linear infinite; }
+  @keyframes slide{ 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+  .hero{ text-align:center; padding:20px 0 6px; }
+  .module-badge{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; background:white; color:var(--indigo); border:2px solid var(--indigo); padding:4px 14px; border-radius:999px; margin-bottom:10px; }
+  h1{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:clamp(24px,5.5vw,40px); margin:4px 0 2px; background:linear-gradient(90deg,var(--red),var(--indigo)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p{ color:#4a5a78; font-weight:700; font-size:15.5px; margin:4px 0 10px; }
+
+  .card{ background:var(--paper); border-radius:24px; padding:22px 22px 26px; margin-bottom:20px; box-shadow:0 6px 0 rgba(28,35,51,0.08),0 12px 26px rgba(28,35,51,0.07); border:3px solid #e7effa; }
+  .eyebrow{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; color:white; padding:4px 12px; border-radius:999px; margin-bottom:10px; }
+  .card h2{ font-family:'Baloo 2',sans-serif; font-size:22px; margin:0 0 8px; }
+  .card h3{ font-family:'Baloo 2',sans-serif; font-size:16px; margin:0 0 6px; }
+  .card p{ font-size:15.5px; line-height:1.55; margin:6px 0; }
+
+  .kid-box{ background:#eef2ff; border:2px solid var(--indigo); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin:8px 0 14px; }
+  .kid-box .tag{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:var(--indigo); letter-spacing:.05em; display:block; margin-bottom:4px; }
+
+  /* signal light */
+  .signal-row{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin: 16px 0 4px; }
+  .signal{
+    flex:1 1 220px; border-radius:20px; padding:16px; color:white; text-align:center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  }
+  @keyframes glow{ 0%,100%{ box-shadow:0 0 0px rgba(255,255,255,0);} 50%{ box-shadow:0 0 22px rgba(255,255,255,0.55);} }
+  .signal .lamp{
+    width:46px; height:46px; border-radius:50%; margin:0 auto 8px; background:white;
+    animation: glow 1.8s ease-in-out infinite;
+  }
+  .signal.green{ background:linear-gradient(160deg,#2fd06f,#1d9a53); }
+  .signal.green .lamp{ background:#eaffef; }
+  .signal.red{ background:linear-gradient(160deg,#ff5c5c,#c93838); }
+  .signal.red .lamp{ background:#ffecec; }
+  .signal.yellow{ background:linear-gradient(160deg,#ffd23f,#e0a800); }
+  .signal.yellow .lamp{ background:#fffbe6; }
+  .signal h4{ font-family:'Baloo 2',sans-serif; font-size:18px; margin:2px 0 6px; }
+  .signal p{ font-size:13px; line-height:1.5; }
+
+  .two-col{ display:flex; gap:18px; flex-wrap:wrap; }
+  .two-col > div{ flex:1 1 260px; background:#f7fbff; border:2px solid #e4f0fb; border-radius:16px; padding:14px 16px; }
+  .two-col ul{ margin:6px 0 0; padding-left:18px; font-size:14.5px; line-height:1.5; }
+
+  .rule-box{ background:#fff8e0; border:2px dashed var(--orange); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin-top:12px; }
+
+  /* checklist */
+  .checklist{ display:grid; gap:8px; margin-top:14px; }
+  .check-item{
+    display:flex; align-items:center; gap:12px; background:#f6f8fd; border:2px solid #e7ebf7;
+    border-radius:14px; padding:10px 14px; font-weight:700; font-size:14.5px;
+  }
+  .check-item .box{
+    width:24px; height:24px; border-radius:6px; border:2px solid var(--indigo); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:14px; color:var(--indigo); cursor:pointer;
+    user-select:none;
+  }
+  .check-item.checked .box{ background:var(--indigo); color:white; }
+  .check-item .num{ font-family:'Baloo 2',sans-serif; font-weight:800; color:var(--indigo); }
+
+  .chart-frame{ border-radius:16px; overflow:hidden; border:3px solid #e4f0fb; margin-top:10px; }
+  .live-tag{ display:inline-flex; align-items:center; gap:6px; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:white; background:var(--red); padding:3px 10px; border-radius:999px; margin-bottom:8px; }
+  .live-dot{ width:8px; height:8px; border-radius:50%; background:white; animation:pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+  .quiz-card{ background:linear-gradient(180deg,#fff,#fbf9ff); }
+  .qnum{ display:inline-flex; align-items:center; justify-content:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:15px; color:white; width:28px; height:28px; border-radius:50%; margin-right:8px; flex-shrink:0; }
+  .question{ margin-bottom:20px; }
+  .question .qtext{ font-weight:800; font-size:16px; display:flex; align-items:flex-start; gap:2px; margin-bottom:10px; }
+  .options{ display:grid; gap:8px; margin-left:36px; }
+  .opt{ display:flex; align-items:center; gap:10px; background:#f6f8fd; border:2px solid #e7ebf7; border-radius:12px; padding:10px 12px; cursor:pointer; font-weight:700; font-size:14.5px; transition:all .15s ease; }
+  .opt:hover{ border-color:var(--indigo); }
+  .opt.selected{ border-color:var(--indigo); background:#eef0ff; }
+  .opt.correct{ border-color:var(--green); background:#e7fbef; }
+  .opt.incorrect{ border-color:var(--red); background:#ffeeee; }
+  .opt input{ accent-color:var(--indigo); }
+  #quizBtn{ display:block; margin:18px auto 0; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; background:linear-gradient(90deg,var(--indigo),var(--violet)); color:white; border:none; padding:12px 30px; border-radius:999px; cursor:pointer; box-shadow:0 4px 0 #4c47c9; }
+  #quizBtn:active{ transform:translateY(2px); box-shadow:0 2px 0 #4c47c9; }
+  #result{ text-align:center; margin-top:18px; display:none; }
+  #result .score{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:26px; }
+  #result p{ font-weight:700; color:#4a5a78; }
+  footer{ text-align:center; font-size:13px; color:#6b7a94; margin-top:8px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="rainbow-strip"></div>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="module-badge">🌈 DARKINV RAINBOW ENGINE · MODULE 4</span>
+    <h1>The Engine — First Look</h1>
+    <p>Week 2 · Session 4 — Setup, Signals & Paper Trading Live</p>
+  </div>
+
+  <!-- WHAT IS THE ENGINE -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--indigo)">KEY CONCEPT</span>
+    <h2>What IS The Engine?</h2>
+    <div class="kid-box">
+      <span class="tag">THE KID VERSION</span>
+      "The Engine is your personal trade signal machine. It takes everything we've learned — candles, structure, momentum, indicators — and puts it all through a filter. When everything lines up, The Engine lights up. GREEN = go, RED = stop, YELLOW = wait. It doesn't replace your judgment — it CONFIRMS it."
+    </div>
+
+    <div class="signal-row">
+      <div class="signal green">
+        <div class="lamp"></div>
+        <h4>GREEN</h4>
+        <p>All conditions align for a long. Buyers in control, momentum up. Look for entry, stop below recent low, target at next resistance.</p>
+      </div>
+      <div class="signal red">
+        <div class="lamp"></div>
+        <h4>RED</h4>
+        <p>All conditions align for a short. Sellers in control, momentum down. Look for short entry, stop above recent high, target at next support.</p>
+      </div>
+      <div class="signal yellow">
+        <div class="lamp"></div>
+        <h4>YELLOW</h4>
+        <p>Mixed signals. Market undecided. Not enough edge. STAY OUT — patience IS a position.</p>
+      </div>
+    </div>
+    <div class="rule-box">NEVER fight the Engine signal.</div>
+  </div>
+
+  <!-- ONE-TWO PUNCH -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--green)">THE ONE-TWO PUNCH</span>
+    <h2>The Engine + Price Action</h2>
+    <div class="two-col">
+      <div>
+        <h3>Step 1: Read the Engine</h3>
+        <ul>
+          <li>Check the signal: Green, Red, or Yellow?</li>
+          <li>Green → look only for LONG setups</li>
+          <li>Red → look only for SHORT setups</li>
+          <li>Yellow → hands in your pockets</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Step 2: Confirm With Candles</h3>
+        <ul>
+          <li><b>Green Engine + Hammer at support = STRONG buy</b></li>
+          <li><b>Red Engine + Shooting Star at resistance = STRONG short</b></li>
+          <li>Wait for the CLOSE of the signal candle before entering</li>
+          <li>Never enter mid-candle</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 POINT CHECKLIST -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--violet)">RUN THIS BEFORE EVERY ENTRY</span>
+    <h2>The 8-Point Pre-Trade Checklist</h2>
+    <p>Tap each box as you go through it — all 8 must be checked before entry.</p>
+    <div class="checklist" id="checklist">
+      <div class="check-item"><span class="num">1</span><span class="box" onclick="toggleCheck(this)"></span>Engine Signal — GREEN (long) or RED (short)? If Yellow, STOP.</div>
+      <div class="check-item"><span class="num">2</span><span class="box" onclick="toggleCheck(this)"></span>Market Structure — am I trading WITH the trend?</div>
+      <div class="check-item"><span class="num">3</span><span class="box" onclick="toggleCheck(this)"></span>Location — is price near support (long) or resistance (short)?</div>
+      <div class="check-item"><span class="num">4</span><span class="box" onclick="toggleCheck(this)"></span>Candle Confirmation — Hammer for long, Shooting Star for short?</div>
+      <div class="check-item"><span class="num">5</span><span class="box" onclick="toggleCheck(this)"></span>Indicators — do at least 2 agree with the Engine direction?</div>
+      <div class="check-item"><span class="num">6</span><span class="box" onclick="toggleCheck(this)"></span>Stop Loss — below recent low (long) or above recent high (short)?</div>
+      <div class="check-item"><span class="num">7</span><span class="box" onclick="toggleCheck(this)"></span>Target — at least 2:1 reward-to-risk?</div>
+      <div class="check-item"><span class="num">8</span><span class="box" onclick="toggleCheck(this)"></span>Risk — under 2% of account on this trade?</div>
+    </div>
+  </div>
+
+  <!-- LIVE CHART / PAPER TRADE SESSION -->
+  <div class="card">
+    
+  <!-- 3ATM BUNDLE COMPANION -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--indigo)">◈ COMPANION · 3ATM BUNDLE</span>
+    <h2>When All Three Agree — That's Your Signal</h2>
+    <div class="kid-box">The 3ATM Bundle is the engine's highest-confidence signal. When MACD, ADX, and RSI all align at the same time — that's not luck, that's a high-probability setup calling your name.</div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:14px 0;">
+      <div style="background:linear-gradient(135deg,#eef2ff,#e5e8ff);border:2px solid var(--indigo);border-radius:16px;padding:16px;">
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:16px;color:var(--indigo);margin-bottom:6px;">① MACD</div>
+        <div style="font-size:14px;line-height:1.55;"><b>What it does:</b> Measures momentum. When the MACD line crosses above the signal line — bulls are in control. Below — bears are in control.<br><br><b>READY when:</b> MACD is above the signal line (call) or below (put) and in the right territory.</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#edfaf4,#d9f5e7);border:2px solid var(--green);border-radius:16px;padding:16px;">
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:16px;color:var(--green);margin-bottom:6px;">② ADX</div>
+        <div style="font-size:14px;line-height:1.55;"><b>What it does:</b> Measures TREND STRENGTH — not direction, just how strong the move is. Below 15? No trend. Above 20 and rising? Trend confirmed.<br><br><b>READY when:</b> ADX is above threshold AND actively rising.</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#fff4e8,#ffe8cc);border:2px solid var(--orange);border-radius:16px;padding:16px;">
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:16px;color:var(--orange);margin-bottom:6px;">③ RSI</div>
+        <div style="font-size:14px;line-height:1.55;"><b>What it does:</b> Measures momentum on a 0–100 scale. Above 50 favors bulls. Below 50 favors bears. Above 70 = overbought. Below 30 = oversold.<br><br><b>READY when:</b> RSI above 47 for calls · below 47 for puts.</div>
+      </div>
+    </div>
+
+    <div class="steps" style="margin-top:10px;">
+      <div class="step"><span class="n" style="background:var(--violet)">1</span>Watch the scorecard ◈ 3ATM row. It counts: <b>1/3 → 2/3 → READY</b></div>
+      <div class="step"><span class="n" style="background:var(--violet)">2</span>When it shows <b>READY in green</b> — all three aligned for a CALL setup</div>
+      <div class="step"><span class="n" style="background:var(--violet)">3</span>When it shows <b>READY in red</b> — all three aligned for a PUT setup</div>
+      <div class="step"><span class="n" style="background:var(--violet)">4</span>3ATM READY + Zone confirmation = highest probability entry. Wait for both.</div>
+      <div class="step"><span class="n" style="background:var(--violet)">5</span>Never force a trade when it shows 1/3 or 2/3. <b>Patience is part of the strategy.</b></div>
+    </div>
+
+    <div class="rule-box" style="margin-top:14px;background:#f0eeff;border-color:var(--indigo);">
+      "The 3ATM bundle doesn't fire often — but when it does, it fires with conviction. Your job is to be ready and disciplined enough to wait for it." — Coach K
+    </div>
+  </div>
+
+  <div class="card">
+    
+  <!-- ENTRY & EXIT COMPANION -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--orange)">◈ COMPANION · ENTRY & EXIT MASTERY</span>
+    <h2>Getting In Right. Getting Out Smart.</h2>
+    <div class="kid-box">Most beginners focus only on entries. Professionals obsess over exits. Your exit is where your profit is protected or lost. Know both before you touch the keyboard.</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;">
+      <div style="background:linear-gradient(135deg,#e8f9f0,#c8f5df);border:2px solid var(--green);border-radius:16px;padding:16px;">
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:17px;color:var(--green);margin-bottom:8px;">🟢 ENTRY — When To Get In</div>
+        <div style="font-size:14px;line-height:1.6;"><b>ANCHOR windows:</b> 0, 1, 8 minutes of each 10-min cycle — highest probability entry times<br><br><b>3ATM READY</b> + Zone confirmation + session active = ▲ FIRE or ▼ FIRE signal<br><br><b>Volume SURGE</b> confirms the move has institutional backing</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#fff4e8,#ffe0b8);border:2px solid var(--orange);border-radius:16px;padding:16px;">
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:17px;color:var(--orange);margin-bottom:8px;">🟠 EXIT — When To Get Out</div>
+        <div style="font-size:14px;line-height:1.6;"><b>Orange circle</b> on chart = engine says exit now<br><br><b>Chandelier Exit:</b> price drops 2× ATR from the high water mark<br><br><b>Breakeven:</b> once up 10 pts, stop moves to entry — you can't lose<br><br><b>EXIT ZONE windows:</b> 0, 3, 7 minutes — watch closely</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step"><span class="n" style="background:var(--orange)">1</span><b>Set your Stop Loss FIRST</b> — below the recent low (long) or above recent high (short). Always before entry.</div>
+      <div class="step"><span class="n" style="background:var(--orange)">2</span><b>Take Profit target</b> — minimum 2:1 reward-to-risk. Risk 25 pts → target 60 pts.</div>
+      <div class="step"><span class="n" style="background:var(--orange)">3</span><b>Trail activates</b> at 5 pts profit — the engine starts trailing your stop automatically</div>
+      <div class="step"><span class="n" style="background:var(--orange)">4</span><b>Yellow candle appears</b> during a trade — warning. Don't add. Watch closely. Engine may exit.</div>
+      <div class="step"><span class="n" style="background:var(--orange)">5</span><b>White triangle</b> appears = SL/TP/Trail hit. <b>Orange circle</b> = engine exited. Know your markers.</div>
+    </div>
+
+    <div class="rule-box" style="margin-top:14px;background:#fff8ec;border-color:var(--orange);">
+      "Amateurs think about entries. Professionals think about exits. Know exactly where you're getting out BEFORE you get in." — Coach K
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow" style="background:var(--red)">LIVE PAPER TRADE SESSION</span>
+    <h2>Tonight we take signals LIVE</h2>
+    <p>This is real, live-updating NQ price with HMA, MACD, and RSI on the chart — everything the Engine reads. Every entry called out loud. Every stop set. Every target placed. This is game night.</p>
+    <span class="live-tag"><span class="live-dot"></span>LIVE</span>
+    <div class="chart-frame">
+      <div class="tradingview-widget-container">
+        <div id="tv_chart_module4"></div>
+        <script src="https://s3.tradingview.com/tv.js"></script>
+        <script type="text/javascript">
+          new TradingView.widget({
+            "width": "100%",
+            "height": 460,
+            "symbol": "CME_MINI:NQ1!",
+            "interval": "5",
+            "timezone": "America/New_York",
+            "theme": "light",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "allow_symbol_change": true,
+            "studies": ["MAExp@tv-basicstudies", "MACD@tv-basicstudies", "RSI@tv-basicstudies"],
+            "container_id": "tv_chart_module4"
+          });
+        </script>
+      </div>
+    </div>
+    <div class="rule-box">🌈 Rainbow Engine drill: call the current signal — Green, Red, or Yellow — from what's on this live chart right now, then run it through the 8-point checklist above.</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card quiz-card" id="quizCard">
+    <span class="eyebrow" style="background:var(--red)">SELF-ASSESSMENT</span>
+    <h2>Module 4 Quiz — 5 Questions</h2>
+    <p style="margin-bottom:18px;">Pick the best answer for each question, then press Check My Answers.</p>
+    <form id="quizForm">
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--red)">1</span>What does a YELLOW Engine signal mean?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q1" value="a">Buy immediately</label>
+          <label class="opt"><input type="radio" name="q1" value="b">Sell immediately</label>
+          <label class="opt"><input type="radio" name="q1" value="c">Stay out — not enough edge</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--orange)">2</span>What is the "One-Two Punch"?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q2" value="a">Two indicators disagreeing</label>
+          <label class="opt"><input type="radio" name="q2" value="b">Engine signal + candle confirmation</label>
+          <label class="opt"><input type="radio" name="q2" value="c">Trading two symbols at once</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--yellow)">3</span>Green Engine + Hammer at support is described as what?</div>
+        <div class="options" data-correct="a">
+          <label class="opt"><input type="radio" name="q3" value="a">A STRONG buy setup</label>
+          <label class="opt"><input type="radio" name="q3" value="b">A reason to short</label>
+          <label class="opt"><input type="radio" name="q3" value="c">Meaningless — ignore both</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--green)">4</span>Per the checklist, how many indicators should agree with the Engine direction?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q4" value="a">0 — Engine is enough alone</label>
+          <label class="opt"><input type="radio" name="q4" value="b">At least 2</label>
+          <label class="opt"><input type="radio" name="q4" value="c">All 7, no exceptions</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--indigo)">5</span>When should you enter after a signal candle forms?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q5" value="a">As soon as the candle starts forming</label>
+          <label class="opt"><input type="radio" name="q5" value="b">Halfway through the candle</label>
+          <label class="opt"><input type="radio" name="q5" value="c">After the candle closes</label>
+        </div>
+      </div>
+    </form>
+    <button id="quizBtn" onclick="checkQuiz()">Check My Answers 🌈</button>
+    <div id="result">
+      <div class="score" id="scoreText"></div>
+      <p id="scoreMsg"></p>
+    </div>
+  </div>
+
+  <footer>DARKINV Trading Academy · Rainbow Engine Curriculum · Module 4 of 6</footer>
+</div>
+
+<script>
+function toggleCheck(el){
+  el.parentElement.classList.toggle('checked');
+  el.textContent = el.parentElement.classList.contains('checked') ? '✓' : '';
+}
+function checkQuiz(){
+  const questionBlocks = document.querySelectorAll('.question');
+  let score = 0;
+  questionBlocks.forEach(block => {
+    const optsDiv = block.querySelector('.options');
+    const correct = optsDiv.getAttribute('data-correct');
+    const opts = optsDiv.querySelectorAll('.opt');
+    let chosen = null;
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct','incorrect','selected');
+      if(input.checked){ chosen = input.value; opt.classList.add('selected'); }
+    });
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      if(input.value === correct){ opt.classList.add('correct'); }
+      else if(input.value === chosen){ opt.classList.add('incorrect'); }
+    });
+    if(chosen === correct) score++;
+  });
+  const resultDiv = document.getElementById('result');
+  document.getElementById('scoreText').textContent = score + ' / 5 correct';
+  document.getElementById('scoreMsg').textContent =
+    score === 5 ? "🌈 Perfect! You're ready for Module 5." :
+    score >= 3 ? "Solid! Review the missed ones, then move on." :
+    "Let's review this module again before moving forward.";
+  resultDiv.style.display = 'block';
+  resultDiv.scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>

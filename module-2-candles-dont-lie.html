@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Module 2: Candles Don't Lie — DARKINV Rainbow Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+  :root{
+    --red:#ff5c5c; --orange:#ff9f43; --yellow:#ffd23f; --green:#2fd06f;
+    --blue:#3fa9ff; --indigo:#6c6cf5; --violet:#c869e0;
+    --ink:#1c2333; --paper:#ffffff; --bg1:#eef6ff; --bg2:#fdf3ff;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:linear-gradient(160deg,var(--bg1),var(--bg2)); font-family:'Nunito',sans-serif; color:var(--ink); padding:0 0 60px; }
+  .wrap{ max-width:900px; margin:0 auto; padding:0 16px; }
+  .rainbow-strip{ height:14px; background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--indigo),var(--violet)); background-size:200% 100%; animation:slide 6s linear infinite; }
+  @keyframes slide{ 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+  .hero{ text-align:center; padding:20px 0 6px; }
+  .module-badge{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; background:white; color:var(--indigo); border:2px solid var(--indigo); padding:4px 14px; border-radius:999px; margin-bottom:10px; }
+  h1{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:clamp(26px,6vw,42px); margin:4px 0 2px; background:linear-gradient(90deg,var(--red),var(--indigo)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p{ color:#4a5a78; font-weight:700; font-size:15.5px; margin:4px 0 10px; }
+
+  .card{ background:var(--paper); border-radius:24px; padding:22px 22px 26px; margin-bottom:20px; box-shadow:0 6px 0 rgba(28,35,51,0.08),0 12px 26px rgba(28,35,51,0.07); border:3px solid #e7effa; }
+  .eyebrow{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; color:white; padding:4px 12px; border-radius:999px; margin-bottom:10px; }
+  .card h2{ font-family:'Baloo 2',sans-serif; font-size:23px; margin:0 0 8px; }
+  .card p{ font-size:16px; line-height:1.55; margin:6px 0; }
+
+  .kid-box{ background:#eef2ff; border:2px solid var(--indigo); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin: 8px 0 14px; }
+  .kid-box .tag{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:var(--indigo); letter-spacing:.05em; display:block; margin-bottom:4px; }
+
+  .anatomy-row{ display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+  .anatomy-row .art{ flex:0 0 160px; }
+  .anatomy-row .text{ flex:1 1 300px; }
+  .part-pill{ display:inline-flex; align-items:center; gap:6px; font-weight:800; font-family:'Baloo 2',sans-serif; font-size:13.5px; padding:3px 10px; border-radius:999px; margin:2px 4px 2px 0; color:white; }
+
+  .type-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-top:14px; }
+  .type-card{ background:#f7fbff; border:2px solid #e4f0fb; border-radius:16px; padding:12px 12px 14px; text-align:center; }
+  .type-card h4{ font-family:'Baloo 2',sans-serif; font-size:15px; margin:6px 0 4px; }
+  .type-card p{ font-size:12.5px; line-height:1.4; margin:0; color:#4a5a78; font-weight:700; }
+
+  .rule-box{ background:#fff8e0; border:2px dashed var(--orange); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin-top:12px; }
+  .mistake-box{ background:#ffecec; border:2px dashed var(--red); border-radius:16px; padding:12px 14px; font-weight:700; font-size:14px; margin-top:8px; color:#a3243f; }
+
+  .chart-frame{ border-radius:16px; overflow:hidden; border:3px solid #e4f0fb; margin-top:10px; }
+  .live-tag{ display:inline-flex; align-items:center; gap:6px; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:white; background:var(--red); padding:3px 10px; border-radius:999px; margin-bottom:8px; }
+  .live-dot{ width:8px; height:8px; border-radius:50%; background:white; animation:pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+  .quiz-card{ background:linear-gradient(180deg,#fff,#fbf9ff); }
+  .qnum{ display:inline-flex; align-items:center; justify-content:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:15px; color:white; width:28px; height:28px; border-radius:50%; margin-right:8px; flex-shrink:0; }
+  .question{ margin-bottom:20px; }
+  .question .qtext{ font-weight:800; font-size:16px; display:flex; align-items:flex-start; gap:2px; margin-bottom:10px; }
+  .options{ display:grid; gap:8px; margin-left:36px; }
+  .opt{ display:flex; align-items:center; gap:10px; background:#f6f8fd; border:2px solid #e7ebf7; border-radius:12px; padding:10px 12px; cursor:pointer; font-weight:700; font-size:14.5px; transition:all .15s ease; }
+  .opt:hover{ border-color:var(--indigo); }
+  .opt.selected{ border-color:var(--indigo); background:#eef0ff; }
+  .opt.correct{ border-color:var(--green); background:#e7fbef; }
+  .opt.incorrect{ border-color:var(--red); background:#ffeeee; }
+  .opt input{ accent-color:var(--indigo); }
+  #quizBtn{ display:block; margin:18px auto 0; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; background:linear-gradient(90deg,var(--indigo),var(--violet)); color:white; border:none; padding:12px 30px; border-radius:999px; cursor:pointer; box-shadow:0 4px 0 #4c47c9; }
+  #quizBtn:active{ transform:translateY(2px); box-shadow:0 2px 0 #4c47c9; }
+  #result{ text-align:center; margin-top:18px; display:none; }
+  #result .score{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:26px; }
+  #result p{ font-weight:700; color:#4a5a78; }
+  footer{ text-align:center; font-size:13px; color:#6b7a94; margin-top:8px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="rainbow-strip"></div>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="module-badge">🌈 DARKINV RAINBOW ENGINE · MODULE 2</span>
+    <h1>Candles Don't Lie</h1>
+    <p>Week 1 · Session 2 — Reading the Story</p>
+  </div>
+
+  <!-- 4 parts of a candle -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--indigo)">KEY CONCEPT</span>
+    <h2>The 4 Parts of Every Candle</h2>
+    <div class="kid-box">
+      <span class="tag">THE KID VERSION</span>
+      "A candle is like a 5-minute arm wrestling match. The OPEN is when they grab hands. The CLOSE is when someone wins. The HIGH is how far back the winner pushed. The LOW is how far the loser was pushed before fighting back. The WICKS are the battle scars — proof someone tried and got rejected."
+    </div>
+    <div class="anatomy-row">
+      <div class="art">
+        <svg viewBox="0 0 160 220" width="100%">
+          <line x1="80" y1="15" x2="80" y2="60" stroke="#2fd06f" stroke-width="6" stroke-linecap="round"/>
+          <rect x="50" y="60" width="60" height="100" rx="12" fill="#2fd06f"/>
+          <line x1="80" y1="160" x2="80" y2="205" stroke="#2fd06f" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="80" cy="12" r="6" fill="#ff5c5c"/>
+          <circle cx="80" cy="208" r="6" fill="#ff5c5c"/>
+          <circle cx="50" cy="60" r="6" fill="#ffd23f"/>
+          <circle cx="110" cy="160" r="6" fill="#6c6cf5"/>
+        </svg>
+      </div>
+      <div class="text">
+        <p><span class="part-pill" style="background:var(--red)">HIGH</span>the ceiling they hit</p>
+        <p><span class="part-pill" style="background:var(--yellow); color:#4a3200;">OPEN</span>the starting gun</p>
+        <p><span class="part-pill" style="background:var(--indigo)">CLOSE</span>the final score</p>
+        <p><span class="part-pill" style="background:var(--red)">LOW</span>the floor they found</p>
+        <p><span class="part-pill" style="background:var(--green)">WICK</span>the war-zone lines — rejected price</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 candle types -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--green)">THE 6 TYPES YOU MUST KNOW</span>
+    <h2>Every candle tells one of six stories</h2>
+    <div class="type-grid">
+      <div class="type-card">
+        <svg viewBox="0 0 60 90" width="60"><line x1="30" y1="8" x2="30" y2="30" stroke="#2fd06f" stroke-width="5"/><rect x="16" y="30" width="28" height="35" rx="6" fill="#2fd06f"/><line x1="30" y1="65" x2="30" y2="82" stroke="#2fd06f" stroke-width="5"/></svg>
+        <h4 style="color:var(--green)">Bullish</h4>
+        <p>Close &gt; Open. Buyers won. Bigger body = stronger move.</p>
+      </div>
+      <div class="type-card">
+        <svg viewBox="0 0 60 90" width="60"><line x1="30" y1="8" x2="30" y2="30" stroke="#ff5c5c" stroke-width="5"/><rect x="16" y="30" width="28" height="35" rx="6" fill="#ff5c5c"/><line x1="30" y1="65" x2="30" y2="82" stroke="#ff5c5c" stroke-width="5"/></svg>
+        <h4 style="color:var(--red)">Bearish</h4>
+        <p>Close &lt; Open. Sellers won. Be careful buying into a string of these.</p>
+      </div>
+      <div class="type-card">
+        <svg viewBox="0 0 60 90" width="60"><line x1="30" y1="8" x2="30" y2="82" stroke="#6c6cf5" stroke-width="5"/><rect x="16" y="42" width="28" height="6" fill="#6c6cf5"/></svg>
+        <h4 style="color:var(--indigo)">Doji</h4>
+        <p>Open ≈ Close. Neither side won. Never trade into one.</p>
+      </div>
+      <div class="type-card">
+        <svg viewBox="0 0 60 90" width="60"><line x1="30" y1="20" x2="30" y2="82" stroke="#ff9f43" stroke-width="5"/><rect x="16" y="20" width="28" height="18" rx="6" fill="#ff9f43"/></svg>
+        <h4 style="color:var(--orange)">Hammer</h4>
+        <p>Long lower wick. Buyers fought back hard. Possible reversal UP.</p>
+      </div>
+      <div class="type-card">
+        <svg viewBox="0 0 60 90" width="60"><line x1="30" y1="8" x2="30" y2="70" stroke="#c869e0" stroke-width="5"/><rect x="16" y="52" width="28" height="18" rx="6" fill="#c869e0"/></svg>
+        <h4 style="color:var(--violet)">Shooting Star</h4>
+        <p>Long upper wick. Sellers rejected the push up. Watch at resistance.</p>
+      </div>
+      <div class="type-card">
+        <svg viewBox="0 0 60 90" width="60"><line x1="30" y1="10" x2="30" y2="80" stroke="#ffd23f" stroke-width="5"/><rect x="16" y="38" width="28" height="14" rx="6" fill="#ffd23f"/></svg>
+        <h4 style="color:#a3820a">Spinning Top</h4>
+        <p>Small body, wicks both sides. Market pausing — wait it out.</p>
+      </div>
+    </div>
+    <div class="mistake-box">⚠️ Mistake to avoid: don't chase a 5th green candle in a row — a pullback is often coming. And never trade into a doji; wait for the next candle to show direction.</div>
+  </div>
+
+  <!-- LIVE CHART -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--red)">LIVE CHART PRACTICE</span>
+    <h2>Spot the candles — live, right now</h2>
+    <p>This is a real, live-updating NQ chart. Call out each candle one by one: is it bullish, bearish, a doji, hammer, shooting star, or spinning top?</p>
+    <span class="live-tag"><span class="live-dot"></span>LIVE</span>
+    <div class="chart-frame">
+      <div class="tradingview-widget-container">
+        <div id="tv_chart_module2"></div>
+        <script src="https://s3.tradingview.com/tv.js"></script>
+        <script type="text/javascript">
+          new TradingView.widget({
+            "width": "100%",
+            "height": 420,
+            "symbol": "CME_MINI:NQ1!",
+            "interval": "5",
+            "timezone": "America/New_York",
+            "theme": "light",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "hide_top_toolbar": false,
+            "allow_symbol_change": true,
+            "container_id": "tv_chart_module2"
+          });
+        </script>
+      </div>
+    </div>
+    <div class="rule-box">🌈 Rainbow Engine drill: pause on any candle, name its type out loud, and say who won the arm-wrestling match — buyers or sellers — before moving to the next one.</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card quiz-card" id="quizCard">
+    <span class="eyebrow" style="background:var(--red)">SELF-ASSESSMENT</span>
+    <h2>Module 2 Quiz — 5 Questions</h2>
+    <p style="margin-bottom:18px;">Pick the best answer for each question, then press Check My Answers.</p>
+    <form id="quizForm">
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--red)">1</span>What does the CLOSE of a candle tell you?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q1" value="a">Where the candle started</label>
+          <label class="opt"><input type="radio" name="q1" value="b">Who won — buyers or sellers</label>
+          <label class="opt"><input type="radio" name="q1" value="c">The name of the pattern</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--orange)">2</span>A hammer candle has what feature?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q2" value="a">A long upper wick</label>
+          <label class="opt"><input type="radio" name="q2" value="b">No wicks at all</label>
+          <label class="opt"><input type="radio" name="q2" value="c">A long lower wick</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--yellow)">3</span>What should you do when you see a doji?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q3" value="a">Buy immediately</label>
+          <label class="opt"><input type="radio" name="q3" value="b">Wait for the next candle to show direction</label>
+          <label class="opt"><input type="radio" name="q3" value="c">Short immediately</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--green)">4</span>A shooting star at resistance often signals what?</div>
+        <div class="options" data-correct="a">
+          <label class="opt"><input type="radio" name="q4" value="a">A possible reversal DOWN</label>
+          <label class="opt"><input type="radio" name="q4" value="b">A possible reversal UP</label>
+          <label class="opt"><input type="radio" name="q4" value="c">Nothing — ignore it</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--indigo)">5</span>What does a wick represent?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q5" value="a">The open price only</label>
+          <label class="opt"><input type="radio" name="q5" value="b">A trading fee</label>
+          <label class="opt"><input type="radio" name="q5" value="c">Price that went there but got rejected</label>
+        </div>
+      </div>
+    </form>
+    <button id="quizBtn" onclick="checkQuiz()">Check My Answers 🌈</button>
+    <div id="result">
+      <div class="score" id="scoreText"></div>
+      <p id="scoreMsg"></p>
+    </div>
+  </div>
+
+  <footer>DARKINV Trading Academy · Rainbow Engine Curriculum · Module 2 of 6</footer>
+</div>
+
+<script>
+function checkQuiz(){
+  const questionBlocks = document.querySelectorAll('.question');
+  let score = 0;
+  questionBlocks.forEach(block => {
+    const optsDiv = block.querySelector('.options');
+    const correct = optsDiv.getAttribute('data-correct');
+    const opts = optsDiv.querySelectorAll('.opt');
+    let chosen = null;
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct','incorrect','selected');
+      if(input.checked){ chosen = input.value; opt.classList.add('selected'); }
+    });
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      if(input.value === correct){ opt.classList.add('correct'); }
+      else if(input.value === chosen){ opt.classList.add('incorrect'); }
+    });
+    if(chosen === correct) score++;
+  });
+  const resultDiv = document.getElementById('result');
+  document.getElementById('scoreText').textContent = score + ' / 5 correct';
+  document.getElementById('scoreMsg').textContent =
+    score === 5 ? "🌈 Perfect! You're ready for Module 3." :
+    score >= 3 ? "Solid! Review the missed ones, then move on." :
+    "Let's review this module again before moving forward.";
+  resultDiv.style.display = 'block';
+  resultDiv.scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>

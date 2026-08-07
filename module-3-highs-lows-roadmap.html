@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Module 3: Highs, Lows & The Road Map — DARKINV Rainbow Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+  :root{
+    --red:#ff5c5c; --orange:#ff9f43; --yellow:#ffd23f; --green:#2fd06f;
+    --blue:#3fa9ff; --indigo:#6c6cf5; --violet:#c869e0;
+    --ink:#1c2333; --paper:#ffffff; --bg1:#eef6ff; --bg2:#fdf3ff;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:linear-gradient(160deg,var(--bg1),var(--bg2)); font-family:'Nunito',sans-serif; color:var(--ink); padding:0 0 60px; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 16px; }
+  .rainbow-strip{ height:14px; background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--indigo),var(--violet)); background-size:200% 100%; animation:slide 6s linear infinite; }
+  @keyframes slide{ 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+  .hero{ text-align:center; padding:20px 0 6px; }
+  .module-badge{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; background:white; color:var(--indigo); border:2px solid var(--indigo); padding:4px 14px; border-radius:999px; margin-bottom:10px; }
+  h1{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:clamp(24px,5.5vw,40px); margin:4px 0 2px; background:linear-gradient(90deg,var(--red),var(--indigo)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p{ color:#4a5a78; font-weight:700; font-size:15.5px; margin:4px 0 10px; }
+
+  .card{ background:var(--paper); border-radius:24px; padding:22px 22px 26px; margin-bottom:20px; box-shadow:0 6px 0 rgba(28,35,51,0.08),0 12px 26px rgba(28,35,51,0.07); border:3px solid #e7effa; }
+  .eyebrow{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; color:white; padding:4px 12px; border-radius:999px; margin-bottom:10px; }
+  .card h2{ font-family:'Baloo 2',sans-serif; font-size:22px; margin:0 0 8px; }
+  .card h3{ font-family:'Baloo 2',sans-serif; font-size:17px; margin:0 0 6px; }
+  .card p{ font-size:15.5px; line-height:1.55; margin:6px 0; }
+
+  .kid-box{ background:#eef2ff; border:2px solid var(--indigo); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin:8px 0 14px; }
+  .kid-box .tag{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:var(--indigo); letter-spacing:.05em; display:block; margin-bottom:4px; }
+
+  .two-col{ display:flex; gap:18px; flex-wrap:wrap; }
+  .two-col > div{ flex:1 1 260px; background:#f7fbff; border:2px solid #e4f0fb; border-radius:16px; padding:14px 16px; }
+  .two-col ul{ margin:6px 0 0; padding-left:18px; font-size:14.5px; line-height:1.5; }
+
+  .rule-box{ background:#fff8e0; border:2px dashed var(--orange); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin-top:12px; }
+
+  /* indicator cards */
+  .ind-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:14px; }
+  .ind-card{ border-radius:16px; padding:14px 16px; color:white; }
+  .ind-card h4{ font-family:'Baloo 2',sans-serif; font-size:16px; margin:0 0 6px; }
+  .ind-card p{ font-size:13px; line-height:1.5; margin:4px 0; }
+  .ind-card .tip{ background:rgba(255,255,255,.18); border-radius:10px; padding:8px 10px; font-size:12.5px; margin-top:8px; font-style:italic; }
+
+  .cheat-table{ width:100%; border-collapse:collapse; margin-top:10px; font-size:13px; }
+  .cheat-table th, .cheat-table td{ border:1px solid #e4f0fb; padding:8px 10px; text-align:left; }
+  .cheat-table th{ background:#f0f4ff; font-family:'Baloo 2',sans-serif; font-size:12.5px; }
+
+  .chart-frame{ border-radius:16px; overflow:hidden; border:3px solid #e4f0fb; margin-top:10px; }
+  .live-tag{ display:inline-flex; align-items:center; gap:6px; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:white; background:var(--red); padding:3px 10px; border-radius:999px; margin-bottom:8px; }
+  .live-dot{ width:8px; height:8px; border-radius:50%; background:white; animation:pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+  .quiz-card{ background:linear-gradient(180deg,#fff,#fbf9ff); }
+  .qnum{ display:inline-flex; align-items:center; justify-content:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:15px; color:white; width:28px; height:28px; border-radius:50%; margin-right:8px; flex-shrink:0; }
+  .question{ margin-bottom:20px; }
+  .question .qtext{ font-weight:800; font-size:16px; display:flex; align-items:flex-start; gap:2px; margin-bottom:10px; }
+  .options{ display:grid; gap:8px; margin-left:36px; }
+  .opt{ display:flex; align-items:center; gap:10px; background:#f6f8fd; border:2px solid #e7ebf7; border-radius:12px; padding:10px 12px; cursor:pointer; font-weight:700; font-size:14.5px; transition:all .15s ease; }
+  .opt:hover{ border-color:var(--indigo); }
+  .opt.selected{ border-color:var(--indigo); background:#eef0ff; }
+  .opt.correct{ border-color:var(--green); background:#e7fbef; }
+  .opt.incorrect{ border-color:var(--red); background:#ffeeee; }
+  .opt input{ accent-color:var(--indigo); }
+  #quizBtn{ display:block; margin:18px auto 0; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; background:linear-gradient(90deg,var(--indigo),var(--violet)); color:white; border:none; padding:12px 30px; border-radius:999px; cursor:pointer; box-shadow:0 4px 0 #4c47c9; }
+  #quizBtn:active{ transform:translateY(2px); box-shadow:0 2px 0 #4c47c9; }
+  #result{ text-align:center; margin-top:18px; display:none; }
+  #result .score{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:26px; }
+  #result p{ font-weight:700; color:#4a5a78; }
+  footer{ text-align:center; font-size:13px; color:#6b7a94; margin-top:8px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="rainbow-strip"></div>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="module-badge">🌈 DARKINV RAINBOW ENGINE · MODULE 3</span>
+    <h1>Highs, Lows & The Road Map</h1>
+    <p>Week 2 · Session 3 — Structure, Support/Resistance & Indicators</p>
+  </div>
+
+  <!-- MARKET STRUCTURE -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--indigo)">KEY CONCEPT</span>
+    <h2>Market Structure — The Staircase</h2>
+    <div class="kid-box">
+      <span class="tag">THE KID VERSION</span>
+      "The market moves like stairs. Uptrend = stairs going UP (each step is higher than the last). Downtrend = stairs going DOWN (each step is lower). The trick is knowing which staircase you're on BEFORE you start climbing."
+    </div>
+    <div class="two-col">
+      <div>
+        <h3 style="color:var(--green)">Uptrend — Stairs Going UP</h3>
+        <ul>
+          <li><b>Higher High (HH):</b> each new peak is above the last peak</li>
+          <li><b>Higher Low (HL):</b> each pullback stops higher than the last</li>
+          <li>Trend is UP as long as HH + HL holds</li>
+          <li>One Lower Low breaks the structure — stay alert</li>
+          <li>Best trades: buy the Higher Low (the "dip")</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color:var(--red)">Downtrend — Stairs Going DOWN</h3>
+        <ul>
+          <li><b>Lower High (LH):</b> each bounce gets rejected lower</li>
+          <li><b>Lower Low (LL):</b> each drop goes further down</li>
+          <li>Trend is DOWN as long as LH + LL holds</li>
+          <li>One Higher High can signal a reversal</li>
+          <li>Best trades: short the Lower High (the "bounce")</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPPORT / RESISTANCE -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--green)">KEY CONCEPT</span>
+    <h2>Support & Resistance — The Floor and Ceiling</h2>
+    <div class="kid-box">
+      <span class="tag">THE KID VERSION</span>
+      "Support is like a TRAMPOLINE under price — it bounces. Resistance is like a CEILING above price — it blocks. The more times price bounces off a level, the STRONGER that level is. When the floor breaks, it becomes the new ceiling. When the ceiling breaks, it becomes the new floor."
+    </div>
+    <svg viewBox="0 0 640 190" width="100%">
+      <line x1="20" y1="35" x2="620" y2="35" stroke="#ff5c5c" stroke-width="3" stroke-dasharray="8 6"/>
+      <text x="24" y="26" font-family="Baloo 2, sans-serif" font-weight="700" font-size="14" fill="#a3243f">RESISTANCE — sellers reject price here</text>
+      <line x1="20" y1="155" x2="620" y2="155" stroke="#2fd06f" stroke-width="3" stroke-dasharray="8 6"/>
+      <text x="24" y="178" font-family="Baloo 2, sans-serif" font-weight="700" font-size="14" fill="#1d7a48">SUPPORT — buyers step in here</text>
+      <g stroke-linecap="round">
+        <line x1="80" y1="65" x2="80" y2="145" stroke="#2fd06f" stroke-width="4"/><rect x="70" y="82" width="20" height="48" rx="4" fill="#2fd06f"/>
+        <line x1="150" y1="40" x2="150" y2="120" stroke="#ff5c5c" stroke-width="4"/><rect x="140" y="52" width="20" height="48" rx="4" fill="#ff5c5c"/>
+        <line x1="220" y1="70" x2="220" y2="148" stroke="#2fd06f" stroke-width="4"/><rect x="210" y="88" width="20" height="44" rx="4" fill="#2fd06f"/>
+        <line x1="300" y1="38" x2="300" y2="115" stroke="#ff5c5c" stroke-width="4"/><rect x="290" y="50" width="20" height="46" rx="4" fill="#ff5c5c"/>
+        <line x1="380" y1="80" x2="380" y2="150" stroke="#2fd06f" stroke-width="4"/><rect x="370" y="95" width="20" height="42" rx="4" fill="#2fd06f"/>
+        <line x1="460" y1="36" x2="460" y2="112" stroke="#ff5c5c" stroke-width="4"/><rect x="450" y="48" width="20" height="46" rx="4" fill="#ff5c5c"/>
+        <line x1="540" y1="72" x2="540" y2="146" stroke="#2fd06f" stroke-width="4"/><rect x="530" y="86" width="20" height="42" rx="4" fill="#2fd06f"/>
+      </g>
+    </svg>
+    <div class="two-col" style="margin-top:8px;">
+      <div>
+        <h3>Support — The Floor</h3>
+        <ul>
+          <li>A price floor where buyers step in</li>
+          <li>More bounces = stronger support</li>
+          <li>When support breaks, it becomes new resistance</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Resistance — The Ceiling</h3>
+        <ul>
+          <li>A price ceiling where sellers take over</li>
+          <li>More rejections = stronger resistance</li>
+          <li>When resistance breaks, it becomes new support</li>
+        </ul>
+      </div>
+    </div>
+    <div class="rule-box">Break of Structure (BOS): bullish BOS = price breaks above a previous high, old resistance flips to support. Bearish BOS = price breaks below a previous low, old support flips to resistance. Confirmation: close above/below the level on the daily or 15-min chart.</div>
+  </div>
+
+  <!-- INDICATORS -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--violet)">KNOW YOUR TOOLS</span>
+    <h2>The 7 Indicators</h2>
+    <p>Indicators are tools, not crystal balls. Your job is to stack multiple indicators so they <b>agree</b> before you pull the trigger. When 4–5 point the same direction, that's a high-probability trade.</p>
+    <div class="ind-grid">
+      <div class="ind-card" style="background:linear-gradient(135deg,#3fa9ff,#6c6cf5);">
+        <h4>ROC — Rate of Change</h4>
+        <p>Measures how fast price is moving vs N periods ago. Rising above zero = accelerating up. Falling below zero = accelerating down.</p>
+        <div class="tip">"It's a speedometer — shows HOW FAST you're getting there, not just where."</div>
+      </div>
+      <div class="ind-card" style="background:linear-gradient(135deg,#2fd06f,#3fa9ff);">
+        <h4>HMA — Hull Moving Average</h4>
+        <p>A smoothed moving average with much less lag. Rising + price above = uptrend confirmed. Steep slope = strong momentum.</p>
+        <div class="tip">"Regular MAs text you 10 minutes late. HMA texts you instantly."</div>
+      </div>
+      <div class="ind-card" style="background:linear-gradient(135deg,#6c6cf5,#c869e0);">
+        <h4>200-Day Moving Average</h4>
+        <p>THE BIG ONE — every institution watches this line. Price above = long-term bull. Price below = long-term bear.</p>
+        <div class="tip">"When price crosses it, the whole market changes its opinion."</div>
+      </div>
+      <div class="ind-card" style="background:linear-gradient(135deg,#c869e0,#ff9f43);">
+        <h4>Stochastic RSI</h4>
+        <p>Below 20 = oversold, potential bounce. Above 80 = overbought. %K crossing %D from below 20 = buy signal.</p>
+        <div class="tip">"A check on a check — is RSI itself tired?"</div>
+      </div>
+      <div class="ind-card" style="background:linear-gradient(135deg,#ff9f43,#ff5c5c);">
+        <h4>DMI / ADX</h4>
+        <p>+DI = bull strength, -DI = bear strength. ADX above 25 = strong trend. Below 20 = choppy — avoid trend trades.</p>
+        <div class="tip">"A tug-of-war scoreboard — ADX tells you how hard both sides are pulling."</div>
+      </div>
+      <div class="ind-card" style="background:linear-gradient(135deg,#ff5c5c,#ffd23f);">
+        <h4>MACD</h4>
+        <p>12 EMA vs 26 EMA. MACD crossing above signal = bullish. Crossing below = bearish. Histogram size = momentum strength.</p>
+        <div class="tip">"Two runners racing — the histogram shows how far ahead they are."</div>
+      </div>
+      <div class="ind-card" style="background:linear-gradient(135deg,#ffd23f,#2fd06f); color:#3a2f00;">
+        <h4 style="color:#3a2f00">RSI</h4>
+        <p style="color:#3a2f00">0–100 scale. Above 70 = overbought. Below 30 = oversold. Divergence from price = powerful reversal signal.</p>
+        <div class="tip" style="background:rgba(0,0,0,.08); color:#3a2f00;">"A rubber band pulled too far wants to snap back — but it can stay stretched a while in a trend."</div>
+      </div>
+    </div>
+
+    <table class="cheat-table">
+      <tr><th>Indicator</th><th>Reads</th><th>Key Signal</th><th>Best Timeframe</th></tr>
+      <tr><td>ROC</td><td>Momentum speed</td><td>Zero-line crossover</td><td>5m / 15m</td></tr>
+      <tr><td>HMA</td><td>Trend direction fast</td><td>Slope + price position</td><td>5m / 15m</td></tr>
+      <tr><td>200-Day MA</td><td>Long-term bias</td><td>Price above/below line</td><td>Daily</td></tr>
+      <tr><td>Stoch RSI</td><td>RSI overbought/sold</td><td>Cross below 20 / above 80</td><td>1m / 5m</td></tr>
+      <tr><td>DMI / ADX</td><td>Trend strength + dir.</td><td>ADX &gt; 25, +DI vs -DI</td><td>15m / 1hr</td></tr>
+      <tr><td>MACD</td><td>Momentum shifts</td><td>Signal line crossover</td><td>5m / 15m</td></tr>
+      <tr><td>RSI</td><td>Overbought / Oversold</td><td>70 caution / 30 watch</td><td>5m / 1hr</td></tr>
+    </table>
+  </div>
+
+  <!-- LIVE CHART -->
+  <div class="card">
+    
+  <!-- SUPPLY & DEMAND COMPANION -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--blue)">◈ COMPANION · SUPPLY & DEMAND ZONES</span>
+    <h2>Where the Big Money Buyers and Sellers Live</h2>
+    <div class="kid-box">Support and Resistance are lines on a chart. Supply and Demand ZONES are areas where institutional money made big decisions. Price always comes back to these zones — that's your edge.</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;">
+      <div style="background:linear-gradient(135deg,#e8f9f0,#c8f5df);border:2px solid var(--green);border-radius:16px;padding:16px;">
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:17px;color:var(--green);margin-bottom:8px;">🟢 DEMAND ZONE</div>
+        <div style="font-size:14px;line-height:1.6;">Area where buyers overwhelmed sellers. Price shot UP from here before. When price RETURNS to this zone — buyers step in again.<br><br><b>What to do:</b> Look for CALL signals, 3ATM READY, green candle confirmation.</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#fff0f0,#ffd6d6);border:2px solid var(--red);border-radius:16px;padding:16px;">
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:17px;color:var(--red);margin-bottom:8px;">🔴 SUPPLY ZONE</div>
+        <div style="font-size:14px;line-height:1.6;">Area where sellers overwhelmed buyers. Price dropped HARD from here before. When price RETURNS to this zone — sellers step in again.<br><br><b>What to do:</b> Look for PUT signals, 3ATM READY, red candle confirmation.</div>
+      </div>
+    </div>
+
+    <div class="steps" style="margin-top:4px;">
+      <div class="step"><span class="n" style="background:var(--blue)">1</span><b>Breakout:</b> Price breaks ABOVE a supply zone with surge + momentum = aggressive call entry signal</div>
+      <div class="step"><span class="n" style="background:var(--blue)">2</span><b>Retest:</b> Price breaks above, pulls back to test the old zone as new support, bounces = conservative entry</div>
+      <div class="step"><span class="n" style="background:var(--blue)">3</span>The Engine scorecard Zone row tells you: DEMAND · SUPPLY · BREAK UP · BREAK DN · RETEST</div>
+      <div class="step"><span class="n" style="background:var(--blue)">4</span>Gray zone on chart = inactive. Green zone = active demand. Red zone = active supply</div>
+      <div class="step"><span class="n" style="background:var(--blue)">5</span>Highest probability: 3ATM READY + price IN a demand zone = FIRE signal. Two confirmations, one entry.</div>
+    </div>
+
+    <div class="rule-box" style="margin-top:14px;background:#e8f4ff;border-color:var(--blue);">
+      "Support and resistance are floors and ceilings. Supply and demand zones are rooms where decisions were made. Learn to see the rooms." — Coach K
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow" style="background:var(--red)">LIVE CHART PRACTICE</span>
+    <h2>Find the levels — live, right now</h2>
+    <p>This is a real, live-updating NQ chart with RSI and MACD already on it. Mark one support and one resistance in your head, then check where RSI and MACD sit right now.</p>
+    <span class="live-tag"><span class="live-dot"></span>LIVE</span>
+    <div class="chart-frame">
+      <div class="tradingview-widget-container">
+        <div id="tv_chart_module3"></div>
+        <script src="https://s3.tradingview.com/tv.js"></script>
+        <script type="text/javascript">
+          new TradingView.widget({
+            "width": "100%",
+            "height": 460,
+            "symbol": "CME_MINI:NQ1!",
+            "interval": "15",
+            "timezone": "America/New_York",
+            "theme": "light",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "allow_symbol_change": true,
+            "studies": ["RSI@tv-basicstudies", "MACD@tv-basicstudies"],
+            "container_id": "tv_chart_module3"
+          });
+        </script>
+      </div>
+    </div>
+    <div class="rule-box">🌈 Rainbow Engine drill: find a Break of Structure on this live chart and say out loud — "old resistance, new support" or "old support, new resistance."</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card quiz-card" id="quizCard">
+    <span class="eyebrow" style="background:var(--red)">SELF-ASSESSMENT</span>
+    <h2>Module 3 Quiz — 5 Questions</h2>
+    <p style="margin-bottom:18px;">Pick the best answer for each question, then press Check My Answers.</p>
+    <form id="quizForm">
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--red)">1</span>What defines an uptrend?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q1" value="a">Lower highs and lower lows</label>
+          <label class="opt"><input type="radio" name="q1" value="b">Higher highs and higher lows</label>
+          <label class="opt"><input type="radio" name="q1" value="c">Price staying perfectly flat</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--orange)">2</span>When resistance finally breaks, what does it usually become?</div>
+        <div class="options" data-correct="a">
+          <label class="opt"><input type="radio" name="q2" value="a">New support</label>
+          <label class="opt"><input type="radio" name="q2" value="b">Nothing — it disappears</label>
+          <label class="opt"><input type="radio" name="q2" value="c">A doji</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--yellow)">3</span>An ADX reading below 20 means what?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q3" value="a">A very strong trend</label>
+          <label class="opt"><input type="radio" name="q3" value="b">Guaranteed reversal</label>
+          <label class="opt"><input type="radio" name="q3" value="c">Weak/choppy market — avoid trend trades</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--green)">4</span>RSI above 70 generally signals what?</div>
+        <div class="options" data-correct="a">
+          <label class="opt"><input type="radio" name="q4" value="a">Overbought — caution zone</label>
+          <label class="opt"><input type="radio" name="q4" value="b">Oversold — buy zone</label>
+          <label class="opt"><input type="radio" name="q4" value="c">The market is closed</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--indigo)">5</span>What is the single most-watched indicator by institutions?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q5" value="a">Stochastic RSI</label>
+          <label class="opt"><input type="radio" name="q5" value="b">The 200-Day Moving Average</label>
+          <label class="opt"><input type="radio" name="q5" value="c">ROC</label>
+        </div>
+      </div>
+    </form>
+    <button id="quizBtn" onclick="checkQuiz()">Check My Answers 🌈</button>
+    <div id="result">
+      <div class="score" id="scoreText"></div>
+      <p id="scoreMsg"></p>
+    </div>
+  </div>
+
+  <footer>DARKINV Trading Academy · Rainbow Engine Curriculum · Module 3 of 6</footer>
+</div>
+
+<script>
+function checkQuiz(){
+  const questionBlocks = document.querySelectorAll('.question');
+  let score = 0;
+  questionBlocks.forEach(block => {
+    const optsDiv = block.querySelector('.options');
+    const correct = optsDiv.getAttribute('data-correct');
+    const opts = optsDiv.querySelectorAll('.opt');
+    let chosen = null;
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct','incorrect','selected');
+      if(input.checked){ chosen = input.value; opt.classList.add('selected'); }
+    });
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      if(input.value === correct){ opt.classList.add('correct'); }
+      else if(input.value === chosen){ opt.classList.add('incorrect'); }
+    });
+    if(chosen === correct) score++;
+  });
+  const resultDiv = document.getElementById('result');
+  document.getElementById('scoreText').textContent = score + ' / 5 correct';
+  document.getElementById('scoreMsg').textContent =
+    score === 5 ? "🌈 Perfect! You're ready for Module 4." :
+    score >= 3 ? "Solid! Review the missed ones, then move on." :
+    "Let's review this module again before moving forward.";
+  resultDiv.style.display = 'block';
+  resultDiv.scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>

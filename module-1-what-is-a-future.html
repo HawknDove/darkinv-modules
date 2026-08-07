@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Module 1: What Is a Future? — DARKINV Rainbow Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+
+  :root{
+    --red:#ff5c5c; --orange:#ff9f43; --yellow:#ffd23f; --green:#2fd06f;
+    --blue:#3fa9ff; --indigo:#6c6cf5; --violet:#c869e0;
+    --ink:#1c2333; --paper:#ffffff; --bg1:#eef6ff; --bg2:#fdf3ff;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background: linear-gradient(160deg, var(--bg1), var(--bg2));
+    font-family:'Nunito', sans-serif;
+    color: var(--ink);
+    padding: 0 0 60px;
+  }
+  .wrap{ max-width: 880px; margin:0 auto; padding: 0 16px; }
+
+  /* rainbow top strip */
+  .rainbow-strip{
+    height: 14px;
+    background: linear-gradient(90deg, var(--red), var(--orange), var(--yellow), var(--green), var(--blue), var(--indigo), var(--violet));
+    background-size: 200% 100%;
+    animation: slide 6s linear infinite;
+  }
+  @keyframes slide{ 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+
+  .hero{ text-align:center; padding: 20px 0 6px; }
+  .module-badge{
+    display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px;
+    letter-spacing:.06em; background: white; color: var(--indigo);
+    border: 2px solid var(--indigo); padding: 4px 14px; border-radius:999px; margin-bottom:10px;
+  }
+  h1{
+    font-family:'Baloo 2', sans-serif; font-weight:800;
+    font-size: clamp(26px, 6vw, 42px); margin: 4px 0 2px;
+    background: linear-gradient(90deg, var(--red), var(--indigo));
+    -webkit-background-clip: text; background-clip:text; color:transparent;
+  }
+  .hero p{ color:#4a5a78; font-weight:700; font-size:15.5px; margin: 4px 0 10px; }
+
+  /* mascot */
+  .mascot-box{ display:flex; justify-content:center; margin: 6px 0 14px; }
+  @keyframes bob{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-8px);} }
+  @keyframes puff{ 0%{ opacity:0; transform: translate(0,0) scale(0.4);} 40%{opacity:.9;} 100%{ opacity:0; transform: translate(-18px,-38px) scale(1.3);} }
+  .mascot{ animation: bob 2.6s ease-in-out infinite; }
+  .puff{ animation: puff 2.2s ease-out infinite; transform-origin:center; }
+  .puff.d2{ animation-delay: .7s; }
+  .puff.d3{ animation-delay: 1.4s; }
+
+  .card{
+    background: var(--paper); border-radius: 24px; padding: 22px 22px 26px; margin-bottom: 20px;
+    box-shadow: 0 6px 0 rgba(28,35,51,0.08), 0 12px 26px rgba(28,35,51,0.07);
+    border: 3px solid #e7effa;
+  }
+  .eyebrow{
+    display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px;
+    letter-spacing:.06em; color: white; padding:4px 12px; border-radius:999px; margin-bottom:10px;
+  }
+  .card h2{ font-family:'Baloo 2', sans-serif; font-size:23px; margin: 0 0 8px; }
+  .card p{ font-size:16px; line-height:1.55; margin:6px 0; }
+
+  .rule-box{
+    background:#fff8e0; border:2px dashed var(--orange); border-radius:16px;
+    padding:14px 16px; font-weight:700; font-size:15px; margin-top:12px;
+  }
+
+  /* symbol cards */
+  .symbol-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap:14px; margin-top: 14px; }
+  .symbol-card{
+    border-radius:18px; padding:14px 16px; color:white; position:relative; overflow:hidden;
+  }
+  .symbol-card h3{ font-family:'Baloo 2',sans-serif; font-size:20px; margin:0 0 2px; }
+  .symbol-card .sub{ font-size:12.5px; font-weight:700; opacity:.9; margin-bottom:8px;}
+  .symbol-card .stat{ font-size:14px; font-weight:800; line-height:1.5; }
+  .symbol-card .stat span{ font-weight:600; opacity:.9; }
+  .mini-badge{
+    display:inline-block; background: rgba(255,255,255,0.25); border-radius:999px;
+    padding: 2px 10px; font-size:11.5px; font-weight:800; margin-top:8px;
+  }
+
+  .tug{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .tug > .art{ flex: 0 0 190px; }
+  .tug > .text{ flex:1 1 250px; }
+
+  /* quiz */
+  .quiz-card{ background: linear-gradient(180deg, #fff, #fbf9ff); }
+  .qnum{
+    display:inline-flex; align-items:center; justify-content:center;
+    font-family:'Baloo 2',sans-serif; font-weight:800; font-size:15px; color:white;
+    width:28px; height:28px; border-radius:50%; margin-right:8px; flex-shrink:0;
+  }
+  .question{ margin-bottom: 20px; }
+  .question .qtext{ font-weight:800; font-size:16px; display:flex; align-items:flex-start; gap:2px; margin-bottom:10px; }
+  .options{ display:grid; gap:8px; margin-left: 36px; }
+  .opt{
+    display:flex; align-items:center; gap:10px; background:#f6f8fd; border:2px solid #e7ebf7;
+    border-radius:12px; padding:10px 12px; cursor:pointer; font-weight:700; font-size:14.5px;
+    transition: all .15s ease;
+  }
+  .opt:hover{ border-color: var(--indigo); }
+  .opt.selected{ border-color: var(--indigo); background:#eef0ff; }
+  .opt.correct{ border-color: var(--green); background:#e7fbef; }
+  .opt.incorrect{ border-color: var(--red); background:#ffeeee; }
+  .opt input{ accent-color: var(--indigo); }
+
+  #quizBtn{
+    display:block; margin: 18px auto 0; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px;
+    background: linear-gradient(90deg, var(--indigo), var(--violet)); color:white; border:none;
+    padding: 12px 30px; border-radius: 999px; cursor:pointer; box-shadow: 0 4px 0 #4c47c9;
+  }
+  #quizBtn:active{ transform: translateY(2px); box-shadow: 0 2px 0 #4c47c9; }
+
+  #result{ text-align:center; margin-top:18px; display:none; }
+  #result .score{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:26px; }
+  #result p{ font-weight:700; color:#4a5a78; }
+
+  footer{ text-align:center; font-size:13px; color:#6b7a94; margin-top:8px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="rainbow-strip"></div>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="module-badge">🌈 DARKINV RAINBOW ENGINE · MODULE 1</span>
+    <h1>What Is a Future?</h1>
+    <p>Week 1 · Session 1 — "Taught like you're 5. Traded like a pro."</p>
+  </div>
+
+  <!-- mascot -->
+  <div class="mascot-box">
+    <svg class="mascot" viewBox="0 0 260 180" width="230">
+      <ellipse class="puff" cx="55" cy="55" rx="14" ry="11" fill="#dfe8f5"/>
+      <ellipse class="puff d2" cx="45" cy="50" rx="11" ry="9" fill="#dfe8f5"/>
+      <ellipse class="puff d3" cx="60" cy="45" rx="9" ry="7" fill="#dfe8f5"/>
+      <!-- smokestack -->
+      <rect x="60" y="60" width="16" height="26" rx="4" fill="#6c6cf5"/>
+      <!-- body: rainbow segments -->
+      <rect x="70" y="86" width="150" height="60" rx="20" fill="#ff5c5c"/>
+      <rect x="70" y="86" width="150" height="12" fill="#ff9f43"/>
+      <rect x="70" y="98" width="150" height="12" fill="#ffd23f"/>
+      <rect x="70" y="110" width="150" height="12" fill="#2fd06f"/>
+      <rect x="70" y="122" width="150" height="12" fill="#3fa9ff"/>
+      <rect x="70" y="134" width="150" height="12" fill="#c869e0"/>
+      <clipPath id="clip"><rect x="70" y="86" width="150" height="60" rx="20"/></clipPath>
+      <g clip-path="url(#clip)">
+        <rect x="70" y="86" width="150" height="12" fill="#ff9f43"/>
+        <rect x="70" y="98" width="150" height="12" fill="#ffd23f"/>
+        <rect x="70" y="110" width="150" height="12" fill="#2fd06f"/>
+        <rect x="70" y="122" width="150" height="12" fill="#3fa9ff"/>
+        <rect x="70" y="134" width="150" height="12" fill="#c869e0"/>
+      </g>
+      <!-- face -->
+      <circle cx="205" cy="116" r="26" fill="#fff" opacity="0.001"/>
+      <circle cx="196" cy="112" r="7" fill="white"/>
+      <circle cx="196" cy="112" r="3.4" fill="#1c2333"/>
+      <path d="M186 128 Q198 138 210 126" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <!-- wheels -->
+      <circle cx="100" cy="150" r="16" fill="#1c2333"/><circle cx="100" cy="150" r="6" fill="#ffd23f"/>
+      <circle cx="150" cy="150" r="16" fill="#1c2333"/><circle cx="150" cy="150" r="6" fill="#ffd23f"/>
+      <circle cx="195" cy="150" r="16" fill="#1c2333"/><circle cx="195" cy="150" r="6" fill="#ffd23f"/>
+      <!-- front light -->
+      <circle cx="222" cy="106" r="7" fill="#ffd23f"/>
+    </svg>
+  </div>
+
+  <!-- SECTION: what is a future -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--indigo)">MEET THE IDEA</span>
+    <h2>A future is a promise you make today</h2>
+    <p>Imagine you tell your friend: <b>"I promise to trade you my toy car for $10 next Friday — no matter what."</b> Even if your car gets a scratch, even if your friend changes their mind, you both agreed on the price <i>today</i> for something that happens <i>later</i>.</p>
+    <p>That's a <b>futures contract</b>. Traders aren't buying the actual thing right now — they're agreeing on a price for a set moment in the future. As <b>day traders</b>, we make that promise and then let it go before the day ends, trying to catch the price moving up or down along the way.</p>
+    <div class="rule-box">🌈 Rainbow Engine version: a future is a promise on a price. Our job is to read where that price is likely headed before everyone else sees it.</div>
+  </div>
+
+  <!-- SECTION: long vs short -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--green)">TWO WAYS TO WIN</span>
+    <h2>Long vs. Short</h2>
+    <div class="tug">
+      <div class="art">
+        <svg viewBox="0 0 200 150" width="100%">
+          <line x1="10" y1="75" x2="190" y2="75" stroke="#e0c26a" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="35" cy="52" r="15" fill="#2fd06f"/><rect x="23" y="65" width="24" height="32" rx="8" fill="#2fd06f"/>
+          <circle cx="165" cy="52" r="15" fill="#ff5c5c"/><rect x="153" y="65" width="24" height="32" rx="8" fill="#ff5c5c"/>
+          <rect x="94" y="65" width="6" height="20" fill="#ffd23f"/>
+        </svg>
+      </div>
+      <div class="text">
+        <p>🟢 <b>LONG</b> = you bought first. You want the price to go <b>UP</b> so you can sell higher later.</p>
+        <p>🔴 <b>SHORT</b> = you sold first. You want the price to go <b>DOWN</b> so you can buy it back cheaper later.</p>
+        <p>The exciting part: in futures, you can try to win <b>either way</b> — up or down — as long as you read the market right.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: symbols -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--violet)">MEET THE FUTURES FAMILY</span>
+    <h2>Tick & point values — the numbers that matter</h2>
+    <p>Every time price moves the smallest possible step, that's called a <b>tick</b>. Each symbol has its own dollar value per tick and per point (4 ticks = 1 point on NQ/ES/MNQ/MES; on YM/MYM, 1 tick = 1 point).</p>
+
+    <div class="symbol-grid">
+      <div class="symbol-card" style="background:linear-gradient(135deg,#3fa9ff,#6c6cf5);">
+        <h3>NQ</h3><div class="sub">E-mini Nasdaq-100 · "The Big Dog"</div>
+        <div class="stat">$5.00 <span>per tick</span></div>
+        <div class="stat">$20.00 <span>per point</span></div>
+        <span class="mini-badge">Fast · Tech-heavy · Volatile</span>
+      </div>
+      <div class="symbol-card" style="background:linear-gradient(135deg,#3fa9ff,#2fd06f);">
+        <h3>MNQ</h3><div class="sub">Micro E-mini Nasdaq-100</div>
+        <div class="stat">$0.50 <span>per tick</span></div>
+        <div class="stat">$2.00 <span>per point</span></div>
+        <span class="mini-badge">Where beginners START</span>
+      </div>
+      <div class="symbol-card" style="background:linear-gradient(135deg,#c869e0,#6c6cf5);">
+        <h3>ES</h3><div class="sub">E-mini S&amp;P 500 · Institutional standard</div>
+        <div class="stat">$12.50 <span>per tick</span></div>
+        <div class="stat">$50.00 <span>per point</span></div>
+        <span class="mini-badge">Calmer · Highest global volume</span>
+      </div>
+      <div class="symbol-card" style="background:linear-gradient(135deg,#c869e0,#ff9f43);">
+        <h3>MES</h3><div class="sub">Micro E-mini S&amp;P 500</div>
+        <div class="stat">$1.25 <span>per tick</span></div>
+        <div class="stat">$5.00 <span>per point</span></div>
+        <span class="mini-badge">Small size, same chart</span>
+      </div>
+      <div class="symbol-card" style="background:linear-gradient(135deg,#ff9f43,#ff5c5c);">
+        <h3>YM</h3><div class="sub">E-mini Dow Jones</div>
+        <div class="stat">$5.00 <span>per tick (= 1 point)</span></div>
+        <span class="mini-badge">1 tick = 1 point — simple math</span>
+      </div>
+      <div class="symbol-card" style="background:linear-gradient(135deg,#ff5c5c,#ffd23f);">
+        <h3>MYM</h3><div class="sub">Micro E-mini Dow Jones</div>
+        <div class="stat">$0.50 <span>per tick (= 1 point)</span></div>
+        <span class="mini-badge">1/10th the size of YM</span>
+      </div>
+    </div>
+
+    <div class="rule-box">🌈 Rainbow Engine rule: always know your dollars-per-tick BEFORE you click buy or sell. It's the number that controls how big your stop can safely be.</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card quiz-card" id="quizCard">
+    <span class="eyebrow" style="background:var(--red)">SELF-ASSESSMENT</span>
+    <h2>Module 1 Quiz — 5 Questions</h2>
+    <p style="margin-bottom:18px;">Pick the best answer for each question, then press Check My Answers.</p>
+
+    <form id="quizForm">
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--red)">1</span>What is a futures contract?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q1" value="a">You own the actual item right now</label>
+          <label class="opt"><input type="radio" name="q1" value="b">A promise to trade at an agreed price at a set time</label>
+          <label class="opt"><input type="radio" name="q1" value="c">A type of savings account</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--orange)">2</span>Which symbol is nicknamed "The Big Dog" for day traders?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q2" value="a">ES</label>
+          <label class="opt"><input type="radio" name="q2" value="b">NQ</label>
+          <label class="opt"><input type="radio" name="q2" value="c">YM</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--yellow)">3</span>If you go LONG, what do you want price to do?</div>
+        <div class="options" data-correct="a">
+          <label class="opt"><input type="radio" name="q3" value="a">Go up</label>
+          <label class="opt"><input type="radio" name="q3" value="b">Go down</label>
+          <label class="opt"><input type="radio" name="q3" value="c">Stay exactly the same</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--green)">4</span>On MNQ, how much is one full point worth?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q4" value="a">$0.50</label>
+          <label class="opt"><input type="radio" name="q4" value="b">$20.00</label>
+          <label class="opt"><input type="radio" name="q4" value="c">$2.00</label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--indigo)">5</span>On YM and MYM, how many ticks make one point?</div>
+        <div class="options" data-correct="a">
+          <label class="opt"><input type="radio" name="q5" value="a">1 tick</label>
+          <label class="opt"><input type="radio" name="q5" value="b">4 ticks</label>
+          <label class="opt"><input type="radio" name="q5" value="c">10 ticks</label>
+        </div>
+      </div>
+    </form>
+
+    <button id="quizBtn" onclick="checkQuiz()">Check My Answers 🌈</button>
+
+    <div id="result">
+      <div class="score" id="scoreText"></div>
+      <p id="scoreMsg"></p>
+    </div>
+  </div>
+
+  <footer>DARKINV Trading Academy · Rainbow Engine Curriculum · Module 1 of the Fast to Futures program</footer>
+</div>
+
+<script>
+function checkQuiz(){
+  const questionBlocks = document.querySelectorAll('.question');
+  let score = 0;
+  questionBlocks.forEach(block => {
+    const optsDiv = block.querySelector('.options');
+    const correct = optsDiv.getAttribute('data-correct');
+    const opts = optsDiv.querySelectorAll('.opt');
+    let chosen = null;
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct','incorrect','selected');
+      if(input.checked){
+        chosen = input.value;
+        opt.classList.add('selected');
+      }
+    });
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      if(input.value === correct){
+        opt.classList.add('correct');
+      } else if(input.value === chosen){
+        opt.classList.add('incorrect');
+      }
+    });
+    if(chosen === correct) score++;
+  });
+
+  const resultDiv = document.getElementById('result');
+  const scoreText = document.getElementById('scoreText');
+  const scoreMsg = document.getElementById('scoreMsg');
+  resultDiv.style.display = 'block';
+  scoreText.textContent = score + ' / 5 correct';
+  if(score === 5){ scoreMsg.textContent = "🌈 Perfect! You're ready for Module 2."; }
+  else if(score >= 3){ scoreMsg.textContent = "Solid! Review the missed ones, then move on."; }
+  else { scoreMsg.textContent = "Let's review this module again before moving forward."; }
+  resultDiv.scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>

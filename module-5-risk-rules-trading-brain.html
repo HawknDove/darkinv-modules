@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Module 5: Risk Rules & The Trading Brain — DARKINV Rainbow Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+  :root{
+    --red:#ff5c5c; --orange:#ff9f43; --yellow:#ffd23f; --green:#2fd06f;
+    --blue:#3fa9ff; --indigo:#6c6cf5; --violet:#c869e0;
+    --ink:#1c2333; --paper:#ffffff; --bg1:#eef6ff; --bg2:#fdf3ff;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:linear-gradient(160deg,var(--bg1),var(--bg2)); font-family:'Nunito',sans-serif; color:var(--ink); padding:0 0 60px; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 16px; }
+  .rainbow-strip{ height:14px; background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--indigo),var(--violet)); background-size:200% 100%; animation:slide 6s linear infinite; }
+  @keyframes slide{ 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+  .hero{ text-align:center; padding:20px 0 6px; }
+  .module-badge{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; background:white; color:var(--indigo); border:2px solid var(--indigo); padding:4px 14px; border-radius:999px; margin-bottom:10px; }
+  h1{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:clamp(24px,5.5vw,40px); margin:4px 0 2px; background:linear-gradient(90deg,var(--red),var(--indigo)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p{ color:#4a5a78; font-weight:700; font-size:15.5px; margin:4px 0 10px; }
+
+  .card{ background:var(--paper); border-radius:24px; padding:22px 22px 26px; margin-bottom:20px; box-shadow:0 6px 0 rgba(28,35,51,0.08),0 12px 26px rgba(28,35,51,0.07); border:3px solid #e7effa; }
+  .eyebrow{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; color:white; padding:4px 12px; border-radius:999px; margin-bottom:10px; }
+  .card h2{ font-family:'Baloo 2',sans-serif; font-size:22px; margin:0 0 8px; }
+  .card h3{ font-family:'Baloo 2',sans-serif; font-size:16px; margin:0 0 6px; }
+  .card p{ font-size:15.5px; line-height:1.55; margin:6px 0; }
+
+  .kid-box{ background:#eef2ff; border:2px solid var(--indigo); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin:8px 0 14px; }
+  .kid-box .tag{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:var(--indigo); letter-spacing:.05em; display:block; margin-bottom:4px; }
+
+  .rule-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:12px; }
+  .rule-item{ background:#f7fbff; border:2px solid #e4f0fb; border-radius:14px; padding:12px 14px; }
+  .rule-item h4{ font-family:'Baloo 2',sans-serif; font-size:14.5px; margin:0 0 4px; color:var(--indigo); }
+  .rule-item p{ font-size:13.5px; margin:0; line-height:1.45; }
+
+  .risk-table{ width:100%; border-collapse:collapse; margin-top:12px; font-size:13.5px; }
+  .risk-table th, .risk-table td{ border:1px solid #e4f0fb; padding:8px 10px; text-align:center; }
+  .risk-table th{ background:#f0f4ff; font-family:'Baloo 2',sans-serif; font-size:12.5px; }
+  .risk-table td b{ color:var(--indigo); }
+
+  .enemy-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:14px; }
+  .enemy-card{ border-radius:16px; padding:14px 16px; color:white; }
+  .enemy-card h4{ font-family:'Baloo 2',sans-serif; font-size:16px; margin:0 0 6px; }
+  .enemy-card p{ font-size:13px; line-height:1.5; margin:4px 0; }
+  .enemy-card .fix{ background:rgba(255,255,255,.2); border-radius:10px; padding:8px 10px; font-size:12.5px; margin-top:8px; }
+
+  .routine-list{ display:grid; gap:8px; margin-top:12px; }
+  .routine-item{ display:flex; gap:12px; align-items:flex-start; background:#f6f8fd; border-left:5px solid var(--yellow); border-radius:12px; padding:10px 14px; font-size:14.5px; }
+  .routine-item b{ display:block; font-family:'Baloo 2',sans-serif; font-size:13px; color:#a3820a; }
+
+  .rule-box{ background:#fff8e0; border:2px dashed var(--orange); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin-top:12px; }
+
+  /* calculator */
+  .calc{ background:#f7fbff; border:2px solid #e4f0fb; border-radius:16px; padding:16px; margin-top:14px; }
+  .calc label{ font-weight:800; font-family:'Baloo 2',sans-serif; font-size:13.5px; display:block; margin-bottom:6px; }
+  .calc input{ width:100%; padding:10px 12px; border-radius:10px; border:2px solid #dbe6f5; font-size:15px; font-weight:700; font-family:'Nunito',sans-serif; margin-bottom:12px; }
+  .calc-out{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-top:8px; }
+  .calc-out div{ background:white; border:2px solid #e4f0fb; border-radius:12px; padding:10px; text-align:center; }
+  .calc-out .val{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:18px; color:var(--indigo); }
+  .calc-out .lbl{ font-size:11.5px; font-weight:700; color:#4a5a78; }
+
+  .quiz-card{ background:linear-gradient(180deg,#fff,#fbf9ff); }
+  .qnum{ display:inline-flex; align-items:center; justify-content:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:15px; color:white; width:28px; height:28px; border-radius:50%; margin-right:8px; flex-shrink:0; }
+  .question{ margin-bottom:20px; }
+  .question .qtext{ font-weight:800; font-size:16px; display:flex; align-items:flex-start; gap:2px; margin-bottom:10px; }
+  .options{ display:grid; gap:8px; margin-left:36px; }
+  .opt{ display:flex; align-items:center; gap:10px; background:#f6f8fd; border:2px solid #e7ebf7; border-radius:12px; padding:10px 12px; cursor:pointer; font-weight:700; font-size:14.5px; transition:all .15s ease; }
+  .opt:hover{ border-color:var(--indigo); }
+  .opt.selected{ border-color:var(--indigo); background:#eef0ff; }
+  .opt.correct{ border-color:var(--green); background:#e7fbef; }
+  .opt.incorrect{ border-color:var(--red); background:#ffeeee; }
+  .opt input{ accent-color:var(--indigo); }
+  #quizBtn{ display:block; margin:18px auto 0; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; background:linear-gradient(90deg,var(--indigo),var(--violet)); color:white; border:none; padding:12px 30px; border-radius:999px; cursor:pointer; box-shadow:0 4px 0 #4c47c9; }
+  #quizBtn:active{ transform:translateY(2px); box-shadow:0 2px 0 #4c47c9; }
+  #result{ text-align:center; margin-top:18px; display:none; }
+  #result .score{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:26px; }
+  #result p{ font-weight:700; color:#4a5a78; }
+  footer{ text-align:center; font-size:13px; color:#6b7a94; margin-top:8px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="rainbow-strip"></div>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="module-badge">🌈 DARKINV RAINBOW ENGINE · MODULE 5</span>
+    <h1>Risk Rules & The Trading Brain</h1>
+    <p>Week 3 · Session 5 — Risk Management & Psychology</p>
+  </div>
+
+  <!-- RISK RULES -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--indigo)">KEY CONCEPT</span>
+    <h2>Risk Management — The Non-Negotiables</h2>
+    <div class="kid-box">
+      <span class="tag">THE KID VERSION</span>
+      "Imagine you have a sandwich for lunch every day. Risk management means you NEVER bet your whole sandwich on one trade. You only bet a tiny bite. That way, even if you lose — you still have your sandwich. Most traders blow up because they bet the whole sandwich. DON'T."
+    </div>
+    <div class="rule-grid">
+      <div class="rule-item"><h4>The 1-2% Rule</h4><p>Never risk more than 1-2% of your account on ANY single trade. $5,000 account = max $50–$100 risk per trade.</p></div>
+      <div class="rule-item"><h4>Stop Loss Required</h4><p>Goes on the chart BEFORE you enter. Not after. No exceptions. It is your seatbelt.</p></div>
+      <div class="rule-item"><h4>1:2 Risk-Reward Minimum</h4><p>If you risk $50, your target must be at least $100. Never take a trade where you risk more than you can gain.</p></div>
+      <div class="rule-item"><h4>Position Sizing</h4><p>If your stop is far, use fewer contracts. If stop is tight, you can use more.</p></div>
+      <div class="rule-item"><h4>Daily Loss Limit</h4><p>Set a daily max loss (e.g. 3% of account). When you hit it — STOP. Log off. Tomorrow is a new day.</p></div>
+      <div class="rule-item"><h4>Max Trades Per Day</h4><p>Beginners: max 3 trades per day. Quality over quantity. Overtrading is the #1 killer of accounts.</p></div>
+    </div>
+  </div>
+
+  <!-- RISK CALCULATOR -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--green)">TRY IT YOURSELF</span>
+    <h2>Risk Calculator — Your Numbers</h2>
+    <p>Type in your account size to see your own 2% max risk and minimum 1:2 target.</p>
+    <div class="calc">
+      <label for="acct">Account Size ($)</label>
+      <input type="number" id="acct" value="5000" oninput="calcRisk()">
+      <div class="calc-out">
+        <div><div class="val" id="riskOut">$100</div><div class="lbl">2% MAX RISK</div></div>
+        <div><div class="val" id="targetOut">$200</div><div class="lbl">MIN TARGET (1:2)</div></div>
+        <div><div class="val" id="dailyOut">$150</div><div class="lbl">DAILY LOSS LIMIT (3%)</div></div>
+      </div>
+    </div>
+    <table class="risk-table">
+      <tr><th>Account Size</th><th>2% Max Risk</th><th>Min Target (1:2)</th><th>MNQ Contracts (approx)</th></tr>
+      <tr><td>$1,000</td><td><b>$20</b></td><td><b>$40</b></td><td>1 micro</td></tr>
+      <tr><td>$2,500</td><td><b>$50</b></td><td><b>$100</b></td><td>1-2 micros</td></tr>
+      <tr><td>$5,000</td><td><b>$100</b></td><td><b>$200</b></td><td>2-3 micros</td></tr>
+      <tr><td>$10,000</td><td><b>$200</b></td><td><b>$400</b></td><td>3-5 micros</td></tr>
+    </table>
+  </div>
+
+  <!-- TRADING BRAIN -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--violet)">KNOW YOUR ENEMIES</span>
+    <h2>The Trading Brain</h2>
+    <p>The market is designed to trigger your emotions. Every dip is designed to scare you out. Every spike is designed to pull you in too late. The professional trader's ONLY advantage is emotional control and a proven process.</p>
+    <div class="enemy-grid">
+      <div class="enemy-card" style="background:linear-gradient(135deg,#3fa9ff,#6c6cf5);">
+        <h4>Fear</h4>
+        <p>Exiting profitable trades too early. Not entering valid setups. Moving stop loss to break-even too fast.</p>
+        <div class="fix">Antidote: trust the process. Define your exit before you enter.</div>
+      </div>
+      <div class="enemy-card" style="background:linear-gradient(135deg,#2fd06f,#1d9a53);">
+        <h4>Greed</h4>
+        <p>Holding past your target. Adding more contracts after winners. Ignoring stop losses.</p>
+        <div class="fix">Antidote: lock in partial profits. Scale OUT, not up, after wins.</div>
+      </div>
+      <div class="enemy-card" style="background:linear-gradient(135deg,#ff5c5c,#c93838);">
+        <h4>Revenge Trading</h4>
+        <p>Jumping right back in after a loss to "make it back." Larger size after losses. Ignoring rules.</p>
+        <div class="fix">Antidote: log off for 30 minutes minimum after a loss. Journal first.</div>
+      </div>
+      <div class="enemy-card" style="background:linear-gradient(135deg,#ff9f43,#ffd23f); color:#3a2f00;">
+        <h4 style="color:#3a2f00">FOMO</h4>
+        <p style="color:#3a2f00">Chasing a move after it already happened. Entering without confirmation because "it's going!"</p>
+        <div class="fix" style="background:rgba(0,0,0,.08); color:#3a2f00;">Antidote: "There is always another trade." Missing one setup beats a bad trade.</div>
+      </div>
+      <div class="enemy-card" style="background:linear-gradient(135deg,#c869e0,#6c6cf5);">
+        <h4>Overconfidence</h4>
+        <p>After 3 winners in a row — taking sloppy trades, skipping checklist, sizing up too fast.</p>
+        <div class="fix">Antidote: your best trading comes from the process, not your feelings. Stay humble after wins.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY ROUTINE -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--orange)">BUILD THE HABIT</span>
+    <h2>The Daily Trading Routine</h2>
+    <div class="routine-list">
+      <div class="routine-item"><div><b>30 MIN BEFORE OPEN</b>Check daily chart, mark S/R levels, note economic events, check 200MA position — know the battlefield before the battle.</div></div>
+      <div class="routine-item"><div><b>AT MARKET OPEN</b>Watch the first 15–30 minutes. Do NOT trade the open as a beginner — the open is the most manipulated time.</div></div>
+      <div class="routine-item"><div><b>DURING SESSION</b>Run the checklist. Wait for Engine + candle + structure alignment. Max 3 trades — quality over quantity.</div></div>
+      <div class="routine-item"><div><b>AFTER SESSION</b>Journal every trade, win or lose. Screenshot the chart. Note your emotions — champions watch the film.</div></div>
+      <div class="routine-item"><div><b>EVENING</b>20 minutes of chart study. Find patterns. No trading — just building pattern recognition.</div></div>
+    </div>
+    <div class="rule-box">"The market tests your character before it tests your chart reading."</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card quiz-card" id="quizCard">
+    
+  <!-- PSYCHOLOGY COMPANION -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--violet)">◈ COMPANION · TRADING PSYCHOLOGY</span>
+    <h2>The Game Inside the Game</h2>
+    <div class="kid-box">You can know every indicator, every pattern, every rule — and still blow your account if your mind isn't right. Trading psychology is not optional. It IS the strategy.</div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0;">
+      <div style="background:#fff0ff;border:2px solid var(--violet);border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">😱</div>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:14px;color:var(--violet);">FEAR</div>
+        <div style="font-size:13px;color:#4a5a78;line-height:1.5;">Stops you from taking valid setups. Makes you exit too early. Leads to missed profits.</div>
+      </div>
+      <div style="background:#fff3e8;border:2px solid var(--orange);border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">🤑</div>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:14px;color:var(--orange);">GREED</div>
+        <div style="font-size:13px;color:#4a5a78;line-height:1.5;">Keeps you in too long. Makes you move your take profit. Turns winners into losers.</div>
+      </div>
+      <div style="background:#fff8e0;border:2px solid var(--yellow);border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">😤</div>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:14px;color:#b8860b;">REVENGE</div>
+        <div style="font-size:13px;color:#4a5a78;line-height:1.5;">Trading to get back a loss. FOMO after a missed entry. The fastest way to blow an account.</div>
+      </div>
+      <div style="background:#eef9f0;border:2px solid var(--green);border-radius:14px;padding:14px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:6px;">🧘</div>
+        <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:14px;color:var(--green);">DISCIPLINE</div>
+        <div style="font-size:13px;color:#4a5a78;line-height:1.5;">Follows the rules when it's hard. Sits on hands when there's no signal. Trusts the engine.</div>
+      </div>
+    </div>
+
+    <div class="steps" style="margin-top:4px;">
+      <div class="step"><span class="n" style="background:var(--violet)">1</span><b>Rate your emotion before every trade (1–10).</b> 10 = completely calm. Below 7? Step away.</div>
+      <div class="step"><span class="n" style="background:var(--violet)">2</span><b>No trade is better than a bad trade.</b> The best traders sit on their hands 80% of the time.</div>
+      <div class="step"><span class="n" style="background:var(--violet)">3</span><b>After a loss:</b> close the platform. Walk away for 15 minutes minimum. No revenge trades.</div>
+      <div class="step"><span class="n" style="background:var(--violet)">4</span><b>After a win:</b> don't get cocky. The next trade has zero memory of the last one.</div>
+      <div class="step"><span class="n" style="background:var(--violet)">5</span><b>Daily affirmation:</b> "I trade the plan. I protect my capital. I learn every session."</div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#f0eeff,#ffe8ff);border:2px solid var(--violet);border-radius:16px;padding:16px;margin-top:14px;">
+      <div style="font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;color:var(--violet);margin-bottom:10px;">🧠 Saturday Tea & Coffee — August Focus</div>
+      <div style="font-size:14px;line-height:1.65;color:#3a3060;">Every Saturday @ 9AM EST — Coach K and Coach Laura J lead a live conversation on the mental game of trading. This month: <b>how to build the habits of a professional trader</b>. No charts. No entries. Just the mindset work that separates the 5% who make it from everyone else.</div>
+    </div>
+
+    <div class="rule-box" style="margin-top:14px;background:#f5f0ff;border-color:var(--violet);">
+      "The market doesn't care about your feelings. But your feelings will absolutely affect how you trade the market. Master your mind first." — Coach Laura J
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow" style="background:var(--red)">SELF-ASSESSMENT</span>
+    <h2>Module 5 Quiz — 5 Questions</h2>
+    <p style="margin-bottom:18px;">Pick the best answer for each question, then press Check My Answers.</p>
+    <form id="quizForm">
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--red)">1</span>On a $5,000 account, what is the max 2% risk per trade?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q1" value="a">$500</label>
+          <label class="opt"><input type="radio" name="q1" value="b">$100</label>
+          <label class="opt"><input type="radio" name="q1" value="c">$10</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--orange)">2</span>When should your stop loss be placed?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q2" value="a">After you're already in profit</label>
+          <label class="opt"><input type="radio" name="q2" value="b">Only if the trade goes wrong</label>
+          <label class="opt"><input type="radio" name="q2" value="c">Before you enter the trade</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--yellow)">3</span>What is the antidote to revenge trading?</div>
+        <div class="options" data-correct="a">
+          <label class="opt"><input type="radio" name="q3" value="a">Log off for 30 minutes after a loss</label>
+          <label class="opt"><input type="radio" name="q3" value="b">Double your size to win it back</label>
+          <label class="opt"><input type="radio" name="q3" value="c">Enter another trade immediately</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--green)">4</span>If you risk $50 on a trade, what should your minimum target be?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q4" value="a">$25</label>
+          <label class="opt"><input type="radio" name="q4" value="b">$100</label>
+          <label class="opt"><input type="radio" name="q4" value="c">$50</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--indigo)">5</span>What should you do when you hit your daily loss limit?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q5" value="a">Take one more trade to try to recover</label>
+          <label class="opt"><input type="radio" name="q5" value="b">Switch to a bigger contract size</label>
+          <label class="opt"><input type="radio" name="q5" value="c">Log off — tomorrow is a new day</label>
+        </div>
+      </div>
+    </form>
+    <button id="quizBtn" onclick="checkQuiz()">Check My Answers 🌈</button>
+    <div id="result">
+      <div class="score" id="scoreText"></div>
+      <p id="scoreMsg"></p>
+    </div>
+  </div>
+
+  <footer>DARKINV Trading Academy · Rainbow Engine Curriculum · Module 5 of 6</footer>
+</div>
+
+<script>
+function calcRisk(){
+  const acct = parseFloat(document.getElementById('acct').value) || 0;
+  document.getElementById('riskOut').textContent = '$' + (acct*0.02).toFixed(0);
+  document.getElementById('targetOut').textContent = '$' + (acct*0.04).toFixed(0);
+  document.getElementById('dailyOut').textContent = '$' + (acct*0.03).toFixed(0);
+}
+calcRisk();
+
+function checkQuiz(){
+  const questionBlocks = document.querySelectorAll('.question');
+  let score = 0;
+  questionBlocks.forEach(block => {
+    const optsDiv = block.querySelector('.options');
+    const correct = optsDiv.getAttribute('data-correct');
+    const opts = optsDiv.querySelectorAll('.opt');
+    let chosen = null;
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct','incorrect','selected');
+      if(input.checked){ chosen = input.value; opt.classList.add('selected'); }
+    });
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      if(input.value === correct){ opt.classList.add('correct'); }
+      else if(input.value === chosen){ opt.classList.add('incorrect'); }
+    });
+    if(chosen === correct) score++;
+  });
+  const resultDiv = document.getElementById('result');
+  document.getElementById('scoreText').textContent = score + ' / 5 correct';
+  document.getElementById('scoreMsg').textContent =
+    score === 5 ? "🌈 Perfect! You're ready for Module 6 — graduation." :
+    score >= 3 ? "Solid! Review the missed ones, then move on." :
+    "Let's review this module again before moving forward.";
+  resultDiv.style.display = 'block';
+  resultDiv.scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>

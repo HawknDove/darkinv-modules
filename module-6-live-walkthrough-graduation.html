@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Module 6: Live Walkthrough + Graduation — DARKINV Rainbow Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap');
+  :root{
+    --red:#ff5c5c; --orange:#ff9f43; --yellow:#ffd23f; --green:#2fd06f;
+    --blue:#3fa9ff; --indigo:#6c6cf5; --violet:#c869e0;
+    --ink:#1c2333; --paper:#ffffff; --bg1:#eef6ff; --bg2:#fdf3ff;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:linear-gradient(160deg,var(--bg1),var(--bg2)); font-family:'Nunito',sans-serif; color:var(--ink); padding:0 0 60px; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 16px; }
+  .rainbow-strip{ height:14px; background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--indigo),var(--violet)); background-size:200% 100%; animation:slide 6s linear infinite; }
+  @keyframes slide{ 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+  .hero{ text-align:center; padding:20px 0 6px; }
+  .module-badge{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; background:white; color:var(--indigo); border:2px solid var(--indigo); padding:4px 14px; border-radius:999px; margin-bottom:10px; }
+  h1{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:clamp(24px,5.5vw,40px); margin:4px 0 2px; background:linear-gradient(90deg,var(--red),var(--indigo)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p{ color:#4a5a78; font-weight:700; font-size:15.5px; margin:4px 0 10px; }
+
+  .card{ background:var(--paper); border-radius:24px; padding:22px 22px 26px; margin-bottom:20px; box-shadow:0 6px 0 rgba(28,35,51,0.08),0 12px 26px rgba(28,35,51,0.07); border:3px solid #e7effa; }
+  .eyebrow{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; color:white; padding:4px 12px; border-radius:999px; margin-bottom:10px; }
+  .card h2{ font-family:'Baloo 2',sans-serif; font-size:22px; margin:0 0 8px; }
+  .card p{ font-size:15.5px; line-height:1.55; margin:6px 0; }
+
+  .kid-box{ background:#eef2ff; border:2px solid var(--indigo); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin:8px 0 14px; }
+
+  /* 11 step */
+  .steps{ display:grid; gap:8px; margin-top:12px; }
+  .step{ display:flex; gap:12px; align-items:flex-start; background:#f6f8fd; border-left:5px solid var(--indigo); border-radius:12px; padding:10px 14px; font-size:14.5px; }
+  .step .n{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:16px; color:white; background:var(--indigo); width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+  .chart-frame{ border-radius:16px; overflow:hidden; border:3px solid #e4f0fb; margin-top:10px; }
+  .live-tag{ display:inline-flex; align-items:center; gap:6px; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:white; background:var(--red); padding:3px 10px; border-radius:999px; margin-bottom:8px; }
+  .live-dot{ width:8px; height:8px; border-radius:50%; background:white; animation:pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+  /* journal template */
+  .journal-table{ width:100%; border-collapse:collapse; margin-top:12px; font-size:13.5px; }
+  .journal-table th, .journal-table td{ border:1px solid #e4f0fb; padding:8px 10px; text-align:left; }
+  .journal-table th{ background:#f0f4ff; font-family:'Baloo 2',sans-serif; font-size:12.5px; width:38%; }
+  .journal-table td input{ width:100%; border:none; background:transparent; font-family:'Nunito',sans-serif; font-size:13.5px; padding:2px; }
+
+  /* roadmap */
+  .phase-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin-top:14px; }
+  .phase-card{ border-radius:16px; padding:14px 16px; color:white; }
+  .phase-card h4{ font-family:'Baloo 2',sans-serif; font-size:16px; margin:0 0 6px; }
+  .phase-card p{ font-size:13px; line-height:1.5; margin:4px 0; }
+
+  /* certificate */
+  .cert{
+    background: linear-gradient(160deg,#fffdf7,#fff9ec);
+    border: 6px double var(--gold, #d4af37);
+    border-radius: 20px; padding: 30px 24px; text-align:center; position:relative;
+    background-image: linear-gradient(90deg, rgba(255,92,92,.06), rgba(255,159,67,.06), rgba(255,210,63,.06), rgba(47,208,111,.06), rgba(63,169,255,.06), rgba(108,108,245,.06), rgba(200,105,224,.06));
+  }
+  .cert .brand{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:14px; letter-spacing:.1em; color:#a3820a; }
+  .cert h2{ font-family:'Playfair Display',serif; font-size: clamp(24px,5vw,34px); margin:8px 0 2px; color:#1c2333; }
+  .cert .sub{ font-family:'Playfair Display',serif; font-style:italic; font-size:14px; color:#6b5a1f; margin-bottom:16px; }
+  .cert input{
+    font-family:'Playfair Display',serif; font-size:22px; text-align:center; border:none; border-bottom:2px solid #d4af37;
+    background:transparent; width: 80%; max-width:420px; padding:6px; margin: 6px 0 18px; color:var(--indigo); font-weight:700;
+  }
+  .cert p{ font-size:14px; line-height:1.6; color:#3a3524; margin: 4px 0; }
+  .cert .quote{ font-style:italic; margin-top:16px; font-size:13.5px; color:#8a7530; }
+  .medal{ margin: 4px auto 10px; }
+
+  .rule-box{ background:#fff8e0; border:2px dashed var(--orange); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin-top:12px; }
+
+  .quiz-card{ background:linear-gradient(180deg,#fff,#fbf9ff); }
+  .qnum{ display:inline-flex; align-items:center; justify-content:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:15px; color:white; width:28px; height:28px; border-radius:50%; margin-right:8px; flex-shrink:0; }
+  .question{ margin-bottom:20px; }
+  .question .qtext{ font-weight:800; font-size:16px; display:flex; align-items:flex-start; gap:2px; margin-bottom:10px; }
+  .options{ display:grid; gap:8px; margin-left:36px; }
+  .opt{ display:flex; align-items:center; gap:10px; background:#f6f8fd; border:2px solid #e7ebf7; border-radius:12px; padding:10px 12px; cursor:pointer; font-weight:700; font-size:14.5px; transition:all .15s ease; }
+  .opt:hover{ border-color:var(--indigo); }
+  .opt.selected{ border-color:var(--indigo); background:#eef0ff; }
+  .opt.correct{ border-color:var(--green); background:#e7fbef; }
+  .opt.incorrect{ border-color:var(--red); background:#ffeeee; }
+  .opt input[type=radio]{ accent-color:var(--indigo); width:auto; }
+  #quizBtn{ display:block; margin:18px auto 0; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; background:linear-gradient(90deg,var(--indigo),var(--violet)); color:white; border:none; padding:12px 30px; border-radius:999px; cursor:pointer; box-shadow:0 4px 0 #4c47c9; }
+  #quizBtn:active{ transform:translateY(2px); box-shadow:0 2px 0 #4c47c9; }
+  #result{ text-align:center; margin-top:18px; display:none; }
+  #result .score{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:26px; }
+  #result p{ font-weight:700; color:#4a5a78; }
+  footer{ text-align:center; font-size:13px; color:#6b7a94; margin-top:8px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="rainbow-strip"></div>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="module-badge">🌈 DARKINV RAINBOW ENGINE · MODULE 6</span>
+    <h1>Live Walkthrough + Graduation</h1>
+    <p>Week 3 · Session 6 — Full Live Execution, Journal & Your 30-Day Roadmap</p>
+  </div>
+
+  <!-- 11 STEP -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--indigo)">THIS IS THE MOMENT</span>
+    <h2>The Complete Trade Setup — 11 Steps</h2>
+    <div class="kid-box">Tonight we execute everything we've learned. LIVE. Every step called out loud. This is not theory anymore — this is how you will trade for the rest of your career.</div>
+    <div class="steps">
+      <div class="step"><span class="n">1</span>Check daily chart — what's the trend? Above or below 200MA? Where is major S/R?</div>
+      <div class="step"><span class="n">2</span>Check the Engine — Green, Red, or Yellow? If Yellow, stop here and wait.</div>
+      <div class="step"><span class="n">3</span>Confirm structure — clear support (long) or resistance (short)?</div>
+      <div class="step"><span class="n">4</span>Wait for signal candle — Hammer at support (long), Shooting Star at resistance (short).</div>
+      <div class="step"><span class="n">5</span>Check indicators — do at least 2 (RSI, MACD, Stoch RSI, DMI) agree with the Engine?</div>
+      <div class="step"><span class="n">6</span>Set your stop loss — below recent low (long) or above recent high (short). Place it FIRST.</div>
+      <div class="step"><span class="n">7</span>Set your target — minimum 2:1 reward-to-risk, at next major S/R.</div>
+      <div class="step"><span class="n">8</span>Calculate position size — how many contracts keeps risk under 2%?</div>
+      <div class="step"><span class="n">9</span><b>Enter the trade</b> — candle has closed, checklist complete. Execute.</div>
+      <div class="step"><span class="n">10</span>Manage the trade — watch but don't touch. No moving stops against you.</div>
+      <div class="step"><span class="n">11</span>Journal the trade — screenshot, entry, exit, P&L, and what you felt. Win or loss.</div>
+    </div>
+  </div>
+
+  <!-- LIVE CHART -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--red)">LIVE WALKTHROUGH</span>
+    <h2>Full trade setup, called out loud</h2>
+    <p>This is a real, live-updating NQ/MNQ chart. Follow along — call out your own read on trend, Engine signal, structure, and where you'd place your stop and target.</p>
+    <span class="live-tag"><span class="live-dot"></span>LIVE</span>
+    <div class="chart-frame">
+      <div class="tradingview-widget-container">
+        <div id="tv_chart_module6"></div>
+        <script src="https://s3.tradingview.com/tv.js"></script>
+        <script type="text/javascript">
+          new TradingView.widget({
+            "width": "100%",
+            "height": 460,
+            "symbol": "CME_MINI:MNQ1!",
+            "interval": "5",
+            "timezone": "America/New_York",
+            "theme": "light",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "allow_symbol_change": true,
+            "studies": ["MAExp@tv-basicstudies", "MACD@tv-basicstudies", "RSI@tv-basicstudies"],
+            "container_id": "tv_chart_module6"
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOURNAL TEMPLATE -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--green)">YOUR TOOL FOR LIFE</span>
+    <h2>Trade Journal Template</h2>
+    <p>Fill this in after every trade, win or lose — champions watch the film.</p>
+    <table class="journal-table">
+      <tr><th>Date & Time</th><td><input type="text" placeholder="e.g. Aug 12, 9:47 AM"></td></tr>
+      <tr><th>Instrument (MNQ, MES, etc.)</th><td><input type="text"></td></tr>
+      <tr><th>Direction (Long / Short)</th><td><input type="text"></td></tr>
+      <tr><th>Engine Signal (Green/Red/Yellow)</th><td><input type="text"></td></tr>
+      <tr><th>Entry Price</th><td><input type="text"></td></tr>
+      <tr><th>Stop Loss Price</th><td><input type="text"></td></tr>
+      <tr><th>Target Price</th><td><input type="text"></td></tr>
+      <tr><th>Number of Contracts</th><td><input type="text"></td></tr>
+      <tr><th>Risk $ Amount</th><td><input type="text"></td></tr>
+      <tr><th>Indicators Checked</th><td><input type="text"></td></tr>
+      <tr><th>Checklist Complete? (Y/N)</th><td><input type="text"></td></tr>
+      <tr><th>Exit Price</th><td><input type="text"></td></tr>
+      <tr><th>P&L (+ or -)</th><td><input type="text"></td></tr>
+      <tr><th>What went RIGHT</th><td><input type="text"></td></tr>
+      <tr><th>What went WRONG</th><td><input type="text"></td></tr>
+      <tr><th>Emotion During Trade (1-10, 10=calm)</th><td><input type="text"></td></tr>
+      <tr><th>Would I take this trade again?</th><td><input type="text"></td></tr>
+    </table>
+  </div>
+
+  <!-- 30 DAY ROADMAP -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--violet)">AFTER GRADUATION</span>
+    <h2>Your 30-Day Practice Roadmap</h2>
+    <div class="phase-grid">
+      <div class="phase-card" style="background:linear-gradient(135deg,#3fa9ff,#6c6cf5);">
+        <h4>Days 1–10 · Foundation</h4>
+        <p>Paper trade ONLY. Run the full checklist every trade. Journal everything.</p>
+        <p><b>Target:</b> 20 completed paper trades, 70%+ checklist compliance.</p>
+      </div>
+      <div class="phase-card" style="background:linear-gradient(135deg,#2fd06f,#1d9a53);">
+        <h4>Days 11–20 · Confidence</h4>
+        <p>Review your journal. Find your 2-3 best setups. Identify your emotional triggers.</p>
+        <p><b>Target:</b> Know your win rate and best setups for you.</p>
+      </div>
+      <div class="phase-card" style="background:linear-gradient(135deg,#ff9f43,#ff5c5c);">
+        <h4>Days 21–30 · Transition</h4>
+        <p>If paper results are strong (60%+ win rate, 2:1 RR), consider 1 micro contract live.</p>
+        <p><b>Target:</b> 1 micro contract only — treat it as expensive education.</p>
+      </div>
+    </div>
+    <div class="rule-box">"I trade the plan. I protect my capital. I learn every session." — Daily DARKINV affirmation</div>
+  </div>
+
+  <!-- CERTIFICATE -->
+  <div class="card">
+    
+  <!-- READINESS TO TRADE LIVE COMPANION -->
+  <div class="card">
+    <span class="eyebrow" style="background:var(--green)">◈ COMPANION · READINESS TO TRADE LIVE</span>
+    <h2>Are You Ready? Be Honest.</h2>
+    <div class="kid-box">Going live is not about confidence. It's about readiness. These are the real questions. Answer them honestly — your capital depends on it.</div>
+
+    <div style="margin:14px 0;display:flex;flex-direction:column;gap:10px;" id="readiness-checks">
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#f6f8fd;border:2px solid #e7effa;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-weight:700;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='#e7effa'">
+        <input type="checkbox" style="width:18px;height:18px;margin-top:2px;accent-color:var(--green);flex-shrink:0;">
+        <span>I can explain the 3ATM bundle without looking at my notes</span>
+      </label>
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#f6f8fd;border:2px solid #e7effa;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-weight:700;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='#e7effa'">
+        <input type="checkbox" style="width:18px;height:18px;margin-top:2px;accent-color:var(--green);flex-shrink:0;">
+        <span>I can identify a demand zone and supply zone on a live chart</span>
+      </label>
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#f6f8fd;border:2px solid #e7effa;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-weight:700;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='#e7effa'">
+        <input type="checkbox" style="width:18px;height:18px;margin-top:2px;accent-color:var(--green);flex-shrink:0;">
+        <span>I set my stop loss BEFORE entering every paper trade</span>
+      </label>
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#f6f8fd;border:2px solid #e7effa;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-weight:700;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='#e7effa'">
+        <input type="checkbox" style="width:18px;height:18px;margin-top:2px;accent-color:var(--green);flex-shrink:0;">
+        <span>I have completed 20+ paper trades and journaled every one</span>
+      </label>
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#f6f8fd;border:2px solid #e7effa;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-weight:700;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='#e7effa'">
+        <input type="checkbox" style="width:18px;height:18px;margin-top:2px;accent-color:var(--green);flex-shrink:0;">
+        <span>My paper trade win rate is above 60% with at least 2:1 reward-to-risk</span>
+      </label>
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#f6f8fd;border:2px solid #e7effa;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-weight:700;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='#e7effa'">
+        <input type="checkbox" style="width:18px;height:18px;margin-top:2px;accent-color:var(--green);flex-shrink:0;">
+        <span>I can sit on my hands and NOT trade when there is no signal</span>
+      </label>
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#f6f8fd;border:2px solid #e7effa;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-weight:700;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='#e7effa'">
+        <input type="checkbox" style="width:18px;height:18px;margin-top:2px;accent-color:var(--green);flex-shrink:0;">
+        <span>I rate 7 or above on the emotion scale (calm) before entering trades</span>
+      </label>
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#f6f8fd;border:2px solid #e7effa;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-weight:700;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='#e7effa'">
+        <input type="checkbox" style="width:18px;height:18px;margin-top:2px;accent-color:var(--green);flex-shrink:0;">
+        <span>I have money I can afford to LOSE — not bill money or emergency funds</span>
+      </label>
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#f6f8fd;border:2px solid #e7effa;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-weight:700;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='#e7effa'">
+        <input type="checkbox" style="width:18px;height:18px;margin-top:2px;accent-color:var(--green);flex-shrink:0;">
+        <span>I will start with 1 micro contract ONLY — no exceptions</span>
+      </label>
+      <label style="display:flex;gap:12px;align-items:flex-start;background:#f6f8fd;border:2px solid #e7effa;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:14.5px;font-weight:700;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='#e7effa'">
+        <input type="checkbox" style="width:18px;height:18px;margin-top:2px;accent-color:var(--green);flex-shrink:0;">
+        <span>I understand that losses are part of the process — not failure</span>
+      </label>
+    </div>
+
+    <div style="text-align:center;margin-top:16px;">
+      <button onclick="checkReadiness()" style="font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;background:linear-gradient(90deg,var(--green),var(--blue));color:white;border:none;padding:12px 30px;border-radius:999px;cursor:pointer;box-shadow:0 4px 0 #1a9a4a;">Check My Readiness ✓</button>
+      <div id="readiness-result" style="margin-top:16px;display:none;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:20px;"></div>
+    </div>
+    <div class="rule-box" style="margin-top:16px;background:#edfaf4;border-color:var(--green);">"Going live too early is the #1 reason traders quit. Be honest with yourself." — Coach K</div>
+  </div>
+
+  <script>
+  function checkReadiness(){
+    const checks=document.querySelectorAll('#readiness-checks input[type=checkbox]');
+    const checked=Array.from(checks).filter(c=>c.checked).length;
+    const el=document.getElementById('readiness-result');
+    el.style.display='block';
+    if(checked===checks.length){el.textContent='🌈 YOU ARE READY. Welcome to live trading.';el.style.color='var(--green)';}
+    else if(checked>=7){el.textContent=`Almost! ${checks.length-checked} item(s) still need work.`;el.style.color='var(--orange)';}
+    else{el.textContent=`${checked}/${checks.length} — Keep building. You're on the right path.`;el.style.color='var(--red)';}
+    el.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  </script>
+
+  <div class="card">
+    <span class="eyebrow" style="background:var(--orange)">🎓 GRADUATION</span>
+    <h2>Certificate of Completion</h2>
+    <div class="cert">
+      <svg class="medal" width="56" height="56" viewBox="0 0 56 56">
+        <circle cx="28" cy="22" r="16" fill="#d4af37"/>
+        <circle cx="28" cy="22" r="11" fill="#fff6d9"/>
+        <path d="M20 34 L14 52 L28 45 L42 52 L36 34" fill="#ff5c5c"/>
+      </svg>
+      <div class="brand">DARKINV TRADING ACADEMY</div>
+      <h2>Futures Trader — Certificate of Completion</h2>
+      <div class="sub">Futures for Beginners · 3-Week Intensive · Rainbow Engine Curriculum</div>
+      <p>This certifies that</p>
+      <input type="text" placeholder="Type your name here" id="certName">
+      <p>has completed all 6 sessions of the DARKINV Futures for Beginners program.<br>
+      They can READ candles. They can IDENTIFY structure.<br>
+      They KNOW their indicators. They can USE The Engine.<br>
+      They are BEGINNING their trading journey the right way.</p>
+      <div class="quote">"The journey of a thousand trades begins with one candle." — DARKINV</div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card quiz-card" id="quizCard">
+    <span class="eyebrow" style="background:var(--red)">SELF-ASSESSMENT</span>
+    <h2>Module 6 Quiz — 5 Questions</h2>
+    <p style="margin-bottom:18px;">Pick the best answer for each question, then press Check My Answers.</p>
+    <form id="quizForm">
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--red)">1</span>In the 11-step setup, what comes right before entering the trade?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q1" value="a">Journaling the trade</label>
+          <label class="opt"><input type="radio" name="q1" value="b">Checklist complete + candle closed</label>
+          <label class="opt"><input type="radio" name="q1" value="c">Checking the 200MA only</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--orange)">2</span>Where should your stop loss be placed in the 11-step process?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q2" value="a">After the target is hit</label>
+          <label class="opt"><input type="radio" name="q2" value="b">It's optional if you're confident</label>
+          <label class="opt"><input type="radio" name="q2" value="c">Before entering, first</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--yellow)">3</span>During Days 1–10 of the 30-day roadmap, what should you be doing?</div>
+        <div class="options" data-correct="a">
+          <label class="opt"><input type="radio" name="q3" value="a">Paper trading only, full checklist every time</label>
+          <label class="opt"><input type="radio" name="q3" value="b">Trading live with 5 contracts</label>
+          <label class="opt"><input type="radio" name="q3" value="c">Skipping the journal to save time</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--green)">4</span>What win rate + risk-reward does the roadmap suggest before going live?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q4" value="a">30%+ win rate, any risk-reward</label>
+          <label class="opt"><input type="radio" name="q4" value="b">60%+ win rate, 2:1 reward-to-risk</label>
+          <label class="opt"><input type="radio" name="q4" value="c">100% win rate required</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--indigo)">5</span>Why keep a trade journal?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q5" value="a">It's required by the broker</label>
+          <label class="opt"><input type="radio" name="q5" value="b">It guarantees future wins</label>
+          <label class="opt"><input type="radio" name="q5" value="c">Champions watch the film — it's how you improve</label>
+        </div>
+      </div>
+    </form>
+    <button id="quizBtn" onclick="checkQuiz()">Check My Answers 🌈</button>
+    <div id="result">
+      <div class="score" id="scoreText"></div>
+      <p id="scoreMsg"></p>
+    </div>
+  </div>
+
+  <footer>DARKINV Trading Academy · Rainbow Engine Curriculum · Module 6 of 6 — Course Complete 🎓</footer>
+</div>
+
+<script>
+function checkQuiz(){
+  const questionBlocks = document.querySelectorAll('.question');
+  let score = 0;
+  questionBlocks.forEach(block => {
+    const optsDiv = block.querySelector('.options');
+    const correct = optsDiv.getAttribute('data-correct');
+    const opts = optsDiv.querySelectorAll('.opt');
+    let chosen = null;
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct','incorrect','selected');
+      if(input.checked){ chosen = input.value; opt.classList.add('selected'); }
+    });
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      if(input.value === correct){ opt.classList.add('correct'); }
+      else if(input.value === chosen){ opt.classList.add('incorrect'); }
+    });
+    if(chosen === correct) score++;
+  });
+  const resultDiv = document.getElementById('result');
+  document.getElementById('scoreText').textContent = score + ' / 5 correct';
+  document.getElementById('scoreMsg').textContent =
+    score === 5 ? "🌈 Perfect score! Congratulations, graduate." :
+    score >= 3 ? "Solid! Review the missed ones — then you're done." :
+    "Let's review this module again before graduating.";
+  resultDiv.style.display = 'block';
+  resultDiv.scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>
