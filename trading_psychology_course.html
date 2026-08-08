@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Strategy Sessions — Saturday Coffee & Tea</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --bg:#0d0b09;
+    --bg-2:#161210;
+    --card:#1c1712;
+    --card-border:#2e2620;
+    --gold:#c9a24a;
+    --gold-bright:#e8c874;
+    --cream:#efe6d4;
+    --cream-dim:#b8ab93;
+    --brown:#3a2a1c;
+    --teal:#5b8a78;
+    --steam:rgba(239,230,212,0.5);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(201,162,74,0.08), transparent),
+      radial-gradient(ellipse 700px 400px at 90% 30%, rgba(91,138,120,0.05), transparent),
+      var(--bg);
+    color:var(--cream);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    min-height:100vh;
+    padding-bottom:80px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:56px 20px 40px;
+    text-align:center;
+    overflow:hidden;
+    border-bottom:1px solid var(--card-border);
+  }
+
+  .eyebrow{
+    font-size:11px;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:600;
+    margin-bottom:18px;
+  }
+
+  .cup-wrap{
+    position:relative;
+    width:150px;
+    height:170px;
+    margin:0 auto 8px;
+  }
+
+  .steam-line{
+    position:absolute;
+    bottom:108px;
+    width:5px;
+    background:linear-gradient(to top, var(--steam), transparent);
+    border-radius:10px;
+    filter:blur(2.5px);
+    opacity:0;
+    animation:rise 4.5s ease-in infinite;
+  }
+  .s1{left:44px; height:70px; animation-delay:0s;}
+  .s2{left:66px; height:90px; animation-delay:1.1s;}
+  .s3{left:88px; height:70px; animation-delay:2.3s;}
+  .s4{left:76px; height:60px; animation-delay:3.2s;}
+
+  @keyframes rise{
+    0%{ transform:translateY(0) translateX(0) scaleX(1); opacity:0; }
+    15%{ opacity:0.55; }
+    50%{ transform:translateY(-45px) translateX(6px) scaleX(1.4); opacity:0.35; }
+    100%{ transform:translateY(-95px) translateX(-8px) scaleX(2); opacity:0; }
+  }
+
+  .cup-svg{ position:relative; z-index:2; }
+
+  .liquid{ animation:shimmer 3s ease-in-out infinite; }
+  @keyframes shimmer{
+    0%,100%{ opacity:1; }
+    50%{ opacity:0.85; }
+  }
+
+  h1.title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(28px, 7vw, 42px);
+    color:var(--cream);
+    letter-spacing:-0.01em;
+    margin-top:10px;
+  }
+  h1.title em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--gold-bright);
+  }
+
+  .subtitle{
+    margin-top:12px;
+    color:var(--cream-dim);
+    font-size:15px;
+    max-width:420px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .date-pill{
+    display:inline-block;
+    margin-top:20px;
+    padding:8px 18px;
+    border:1px solid var(--card-border);
+    border-radius:999px;
+    background:var(--card);
+    font-size:12px;
+    letter-spacing:0.05em;
+    color:var(--gold);
+    font-weight:600;
+  }
+
+  /* ---------- INTRO ---------- */
+  .intro{
+    max-width:560px;
+    margin:0 auto;
+    padding:36px 22px 8px;
+  }
+  .intro p{
+    color:var(--cream-dim);
+    font-size:15px;
+    margin-bottom:14px;
+  }
+  .intro strong{ color:var(--cream); font-weight:600; }
+
+  .divider{
+    max-width:560px;
+    margin:28px auto;
+    height:1px;
+    background:linear-gradient(to right, transparent, var(--card-border), transparent);
+  }
+
+  /* ---------- MODULES ---------- */
+  .modules{
+    max-width:600px;
+    margin:0 auto;
+    padding:0 16px;
+  }
+
+  .module{
+    background:var(--card);
+    border:1px solid var(--card-border);
+    border-radius:14px;
+    margin-bottom:14px;
+    overflow:hidden;
+    transition:border-color 0.3s ease;
+  }
+  .module.open{ border-color:rgba(201,162,74,0.4); }
+
+  .module-head{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:18px 18px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  .week-tag{
+    flex-shrink:0;
+    width:52px;
+    height:52px;
+    border-radius:10px;
+    background:linear-gradient(145deg, var(--brown), #241a11);
+    border:1px solid var(--card-border);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    font-family:'Fraunces', serif;
+  }
+  .week-tag .num{ font-size:18px; font-weight:700; color:var(--gold-bright); line-height:1; }
+  .week-tag .lbl{ font-size:8px; letter-spacing:0.1em; color:var(--cream-dim); text-transform:uppercase; margin-top:2px;}
+
+  .module-head-text{ flex:1; min-width:0; }
+  .module-date{
+    font-size:11px;
+    color:var(--gold);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    font-weight:600;
+    margin-bottom:3px;
+  }
+  .module-title{
+    font-family:'Fraunces', serif;
+    font-size:17px;
+    font-weight:600;
+    color:var(--cream);
+    line-height:1.25;
+  }
+
+  .chevron{
+    flex-shrink:0;
+    width:20px; height:20px;
+    color:var(--cream-dim);
+    transition:transform 0.35s ease;
+  }
+  .module.open .chevron{ transform:rotate(180deg); color:var(--gold); }
+
+  .module-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height 0.45s ease;
+  }
+  .module.open .module-body{ max-height:1400px; }
+
+  .module-inner{
+    padding:0 18px 22px;
+    border-top:1px solid var(--card-border);
+    padding-top:16px;
+  }
+
+  .module-tagline{
+    font-style:italic;
+    color:var(--gold-bright);
+    font-size:14px;
+    margin-bottom:14px;
+  }
+
+  .module-inner h4{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+    color:var(--teal);
+    margin:16px 0 8px;
+    font-weight:600;
+  }
+  .module-inner h4:first-of-type{ margin-top:0; }
+
+  .module-inner p, .module-inner li{
+    color:var(--cream-dim);
+    font-size:14px;
+  }
+
+  .module-inner ul{ padding-left:18px; margin-bottom:4px; }
+  .module-inner li{ margin-bottom:6px; }
+
+  .mind-hack{
+    margin-top:14px;
+    padding:14px 16px;
+    background:rgba(201,162,74,0.07);
+    border-left:3px solid var(--gold);
+    border-radius:6px;
+    font-size:13.5px;
+    color:var(--cream);
+  }
+  .mind-hack b{ color:var(--gold-bright); }
+
+  /* ---------- FOOTER ---------- */
+  .footer{
+    max-width:560px;
+    margin:44px auto 0;
+    padding:0 22px;
+    text-align:center;
+  }
+  .footer p{
+    color:var(--cream-dim);
+    font-size:13px;
+  }
+  .footer .signoff{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    color:var(--gold-bright);
+    font-size:16px;
+    margin-bottom:10px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="eyebrow">Saturday Coffee &amp; Tea</div>
+
+    <div class="cup-wrap">
+      <div class="steam-line s1"></div>
+      <div class="steam-line s2"></div>
+      <div class="steam-line s3"></div>
+      <div class="steam-line s4"></div>
+      <svg class="cup-svg" width="150" height="170" viewBox="0 0 150 170">
+        <ellipse cx="75" cy="150" rx="46" ry="7" fill="#000" opacity="0.35"/>
+        <path d="M35 78 L44 138 Q45 146 54 146 L96 146 Q105 146 106 138 L115 78 Z" fill="#211a13" stroke="#3a2e20" stroke-width="1.5"/>
+        <path class="liquid" d="M39 82 L41 100 Q75 108 109 100 L111 82 Z" fill="#7a4a2a"/>
+        <ellipse cx="75" cy="82" rx="40" ry="7" fill="#8a5732"/>
+        <ellipse cx="75" cy="82" rx="40" ry="7" fill="none" stroke="#3a2e20" stroke-width="1.5"/>
+        <path d="M113 90 Q136 90 134 112 Q132 132 108 128" fill="none" stroke="#211a13" stroke-width="7" stroke-linecap="round"/>
+        <rect x="26" y="150" width="98" height="9" rx="3" fill="#171310" stroke="#3a2e20" stroke-width="1"/>
+      </svg>
+    </div>
+
+    <h1 class="title">The Strategy Sessions<br><em>Trading Psychology</em></h1>
+    <p class="subtitle">A weekly fireside talk on the mind behind the market — real questions, real mind hacks, real accountability.</p>
+    <div class="date-pill">AUG 8 — SEPT 2 · EVERY SATURDAY</div>
+  </div>
+
+  <div class="intro">
+    <p><strong>Pour something warm.</strong> Pull up a chair. This isn't a class where you take notes and leave — it's a conversation you sit inside of, one Saturday at a time.</p>
+    <p>Trading isn't hard because the skill is hard. The skill is learnable in weeks. Trading is hard because of what's underneath it — the fear, the noise, the version of you that shows up the moment real money and real consequence enter the room.</p>
+    <p>Over four Saturdays we're going to name that version of you, out loud, and build the mind that can actually hold the strategy steady.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="modules">
+
+    <!-- WEEK 1 -->
+    <div class="module open">
+      <div class="module-head" onclick="toggleModule(this)">
+        <div class="week-tag"><div class="num">01</div><div class="lbl">Aug 8</div></div>
+        <div class="module-head-text">
+          <div class="module-date">Week One · Today</div>
+          <div class="module-title">Getting Started, Mind Hacks &amp; Listening Within</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body">
+        <div class="module-inner">
+          <p class="module-tagline">"You already know the answer. You just don't like how it was given."</p>
+
+          <h4>What We're Really Asking</h4>
+          <ul>
+            <li>What does it actually take to begin — not someday, but this week?</li>
+            <li>Why do we treat the first step like it needs permission from someone else?</li>
+            <li>What is "faith in ourselves" when there's no proof yet — just a decision?</li>
+          </ul>
+
+          <h4>The Core Idea</h4>
+          <p>Starting isn't a knowledge problem. Nobody fails to begin because they're missing one more piece of information. Starting is a <em>trust</em> problem — trusting that you're allowed to be a beginner in public, and that the beginner version of you is still worth backing.</p>
+
+          <h4>Listening Within</h4>
+          <p>Before any chart, any strategy, any system — there's a quieter signal underneath the noise. Faith here isn't blind hope. It's the discipline of trusting your own decision long enough to let it produce a result, instead of abandoning it at the first discomfort.</p>
+
+          <div class="mind-hack"><b>Mind Hack:</b> Replace "I need to be ready" with "I need to be in motion." Readiness is a feeling. Motion is a fact. Only one of them builds a track record.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 2 -->
+    <div class="module">
+      <div class="module-head" onclick="toggleModule(this)">
+        <div class="week-tag"><div class="num">02</div><div class="lbl">Aug 15</div></div>
+        <div class="module-head-text">
+          <div class="module-date">Week Two</div>
+          <div class="module-title">Why Starting Feels So Hard</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body">
+        <div class="module-inner">
+          <p class="module-tagline">"The move means change. Change means the old you has to step aside."</p>
+
+          <h4>What We're Really Asking</h4>
+          <ul>
+            <li>Is it the market that scares us, or what starting says about who we've become?</li>
+            <li>What are we actually protecting by staying stuck?</li>
+            <li>Who benefits from us not moving?</li>
+          </ul>
+
+          <h4>The Core Idea</h4>
+          <p>Trading feels hard because it's the first honest scoreboard in a lot of people's lives. Every trade gives you a real, measurable answer — and a measurable answer means you can no longer hide behind "I could have, if I wanted to." That exposure is what we call hard. It isn't the candlesticks.</p>
+
+          <div class="mind-hack"><b>Mind Hack:</b> Ask "Am I afraid of failing — or afraid of what succeeding will require of me?" Sit with that one all week before you answer it.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 3 -->
+    <div class="module">
+      <div class="module-head" onclick="toggleModule(this)">
+        <div class="week-tag"><div class="num">03</div><div class="lbl">Aug 22</div></div>
+        <div class="module-head-text">
+          <div class="module-date">Week Three</div>
+          <div class="module-title">The Skill Is Easy — Fear Is the Actual Opponent</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body">
+        <div class="module-inner">
+          <p class="module-tagline">"The fight isn't with the market. The market doesn't know your name."</p>
+
+          <h4>What We're Really Asking</h4>
+          <ul>
+            <li>What does a successful trader actually have that a struggling one doesn't?</li>
+            <li>If the mechanics are learnable in weeks, why do most people still lose money for years?</li>
+            <li>What is fear actually protecting us from feeling?</li>
+          </ul>
+
+          <h4>The Core Idea</h4>
+          <p>Reading a chart, sizing a position, setting a stop — that's mechanical, and mechanical things are teachable. What isn't mechanical is sitting still while your own nervous system screams at you to act. Successful traders aren't the ones who feel less fear. They're the ones who built a rule set that holds even when fear is loud.</p>
+
+          <div class="mind-hack"><b>Mind Hack:</b> Name the fear out loud before you enter or exit a trade. "I'm afraid of missing out" said out loud has far less power over your hand than the same fear left silent.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 4 -->
+    <div class="module">
+      <div class="module-head" onclick="toggleModule(this)">
+        <div class="week-tag"><div class="num">04</div><div class="lbl">Aug 29</div></div>
+        <div class="module-head-text">
+          <div class="module-date">Week Four</div>
+          <div class="module-title">Real-World Mind Hacks — Distractions, Relationships &amp; Low Vibrations</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body">
+        <div class="module-inner">
+          <p class="module-tagline">"Your relationship with yourself shows up in every single trade."</p>
+
+          <h4>Real Scenarios We're Naming</h4>
+          <ul>
+            <li>An argument at home follows you into your morning trade review</li>
+            <li>A distraction pulls you out of your plan mid-session</li>
+            <li>Jealousy over someone else's gains pushes you into a trade that isn't yours</li>
+            <li>A low-vibration mood — tired, resentful, anxious — quietly rewrites your rules</li>
+          </ul>
+
+          <h4>The Correction</h4>
+          <p>You don't fix a low-vibration state by pushing through it. You fix it by naming it before you touch a chart, and giving yourself permission to step away until the state changes. Discipline isn't forcing calm — it's refusing to make decisions from a state you know is compromised.</p>
+
+          <div class="mind-hack"><b>Mind Hack:</b> Build a personal "no-trade checklist" — three honest questions about your state (angry? distracted? proving something?) that you answer before every session. If any answer is yes, the plan is to wait, not to trade smaller.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="footer">
+    <p class="signoff">Same time, same cup, every Saturday.</p>
+    <p>Bring your coffee. Bring your tea. Bring the honest version of yourself — that's the only prerequisite.</p>
+  </div>
+
+<script>
+  function toggleModule(headEl){
+    const module = headEl.parentElement;
+    const wasOpen = module.classList.contains('open');
+    document.querySelectorAll('.module.open').forEach(m => m.classList.remove('open'));
+    if(!wasOpen){ module.classList.add('open'); }
+  }
+</script>
+
+</body>
+</html>
