@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The 7 Stages of Trading — DARKINV Rainbow Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+  :root{
+    --red:#ff5c5c; --orange:#ff9f43; --yellow:#ffd23f; --green:#2fd06f;
+    --blue:#3fa9ff; --indigo:#6c6cf5; --violet:#c869e0;
+    --ink:#1c2333; --paper:#ffffff; --bg1:#eef6ff; --bg2:#fdf3ff; --muted:#4a5a78;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:linear-gradient(160deg,var(--bg1),var(--bg2)); font-family:'Nunito',sans-serif; color:var(--ink); padding:0 0 60px; }
+  .wrap{ max-width:960px; margin:0 auto; padding:0 16px; }
+  .rainbow-strip{ height:14px; background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--indigo),var(--violet)); background-size:200% 100%; animation:slide 6s linear infinite; }
+  @keyframes slide{ 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+
+  nav{ position:sticky; top:0; z-index:10; background:rgba(238,246,255,0.94); backdrop-filter:blur(6px); border-bottom:2px solid #cfe6f7; padding:10px 0; margin-bottom:8px; }
+  nav .navrow{ max-width:960px; margin:0 auto; display:flex; gap:6px; flex-wrap:wrap; justify-content:center; padding:0 8px; }
+  nav a{ text-decoration:none; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:12.5px; color:#1c2a3a; background:white; border:2px solid #dfeefc; padding:5px 11px; border-radius:999px; white-space:nowrap; }
+  nav a:hover{ border-color:var(--orange); }
+
+  section{ scroll-margin-top:66px; }
+  .hero{ text-align:center; padding:26px 0 8px; }
+  .hero h1{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:clamp(28px,6vw,44px); margin:4px 0 4px; }
+  .hero p{ color:var(--muted); font-weight:700; font-size:15.5px; margin:0 0 6px; }
+
+  .card{ background:var(--paper); border-radius:24px; padding:22px 22px 26px; margin-bottom:20px; box-shadow:0 6px 0 rgba(28,35,51,0.08),0 12px 26px rgba(28,35,51,0.07); border:3px solid #e7effa; }
+  .eyebrow{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; color:white; padding:4px 12px; border-radius:999px; margin-bottom:10px; }
+  .card h2{ font-family:'Baloo 2',sans-serif; font-size:23px; margin:0 0 8px; }
+  .card p{ font-size:15.5px; line-height:1.55; margin:6px 0; }
+
+  .roadmap{ position:relative; padding:10px 0 6px; }
+  .stop{ display:flex; align-items:center; gap:16px; padding:14px 6px; position:relative; }
+  .stop:not(:last-child)::after{ content:""; position:absolute; left:29px; top:58px; width:4px; height:52px; background:#e2e9f5; border-radius:4px; }
+  .pin{ width:58px; height:58px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:22px; color:white; box-shadow:0 4px 10px rgba(0,0,0,0.12); }
+  .stop-text h4{ font-family:'Baloo 2',sans-serif; font-size:16px; margin:0 0 3px; }
+  .stop-text p{ margin:0; font-size:13px; color:var(--muted); font-weight:700; }
+  .stop-text .m{ font-size:12px; font-style:italic; color:#8a97ad; margin-top:2px; }
+
+  .stage-head{ display:flex; align-items:center; gap:16px; margin-bottom:12px; }
+  .stage-badge{ width:64px; height:64px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:26px; color:white; }
+  .stage-head h2{ margin:0; font-size:26px; }
+  .stage-head .stagesub{ font-size:13px; font-weight:700; color:var(--muted); margin-top:2px; }
+
+  .mindset-box{ border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin:10px 0 16px; color:white; }
+  .mindset-box .tag{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:11.5px; letter-spacing:.06em; display:block; margin-bottom:4px; opacity:.85; }
+
+  .two-col{ display:flex; gap:18px; flex-wrap:wrap; margin-top:6px; }
+  .two-col > div{ flex:1 1 260px; background:#f7fbff; border:2px solid #e4f0fb; border-radius:16px; padding:14px 16px; }
+  .two-col h4{ font-family:'Baloo 2',sans-serif; font-size:14.5px; margin:0 0 8px; }
+  .two-col ul{ margin:0; padding-left:18px; font-size:13.5px; line-height:1.55; }
+  .two-col li{ margin-bottom:6px; }
+
+  .breakthrough{ margin-top:14px; border-radius:16px; padding:14px 16px; border:2px dashed; }
+  .breakthrough .tag{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; letter-spacing:.05em; display:block; margin-bottom:6px; }
+  .breakthrough ol{ margin:0; padding-left:20px; font-size:14px; line-height:1.6; }
+  .breakthrough li{ margin-bottom:6px; font-weight:700; }
+  .breakthrough li span{ font-weight:400; }
+
+  .selfcheck{ margin-top:14px; background:#f3f0ff; border-left:5px solid var(--indigo); border-radius:12px; padding:12px 14px; font-size:13.5px; font-style:italic; font-weight:700; color:#3a3560; }
+
+  .divider{ text-align:center; margin:30px 0 16px; }
+  .divider span{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; letter-spacing:.08em; color:#8fa8bf; }
+
+  footer.finale{ text-align:center; margin-top:24px; padding:22px 18px; background:white; border-radius:24px; border:3px solid #dfeefc; }
+  footer.finale h3{ font-family:'Baloo 2',sans-serif; font-size:20px; margin:0 0 8px; }
+  footer.finale p{ font-size:14.5px; color:var(--muted); font-weight:600; margin:4px 0; }
+</style>
+</head>
+<body>
+<div class="rainbow-strip"></div>
+
+<nav>
+  <div class="navrow">
+    <a href="#roadmap">🗺️ Roadmap</a>
+    <a href="#s1">① Someday</a>
+    <a href="#s2">② Gambler</a>
+    <a href="#s3">③ Indicator Junkie</a>
+    <a href="#s4">④ Hamster Wheel</a>
+    <a href="#s5">⑤ Self-Sabotager</a>
+    <a href="#s6">⑥ Real Trader</a>
+    <a href="#s7">⑦ CEO Trader</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>🌈 The 7 Stages of Trading</h1>
+    <p>Where are you currently at in your trading journey?</p>
+  </div>
+
+  <section id="roadmap">
+    <div class="card">
+      <span class="eyebrow" style="background:var(--indigo)">DARKINV RAINBOW ENGINE · PSYCHOLOGY TRACK</span>
+      <h2>The Full Journey, At a Glance</h2>
+      <p>Every trader passes through some version of this road. Most people get stuck for years at one stop without realizing it's a stage — not a personality. Find your stop below, then jump to that module.</p>
+      <div class="roadmap">
+        <div class="stop"><div class="pin" style="background:var(--red)">1</div><div class="stop-text"><h4>The Someday Trader</h4><p>Talks about trading, never takes action.</p><div class="m">"Someday I'll start."</div></div></div>
+        <div class="stop"><div class="pin" style="background:var(--orange)">2</div><div class="stop-text"><h4>The Gambler</h4><p>Jumps in without a plan, chases wins, hopes for luck.</p><div class="m">"Big win will change everything."</div></div></div>
+        <div class="stop"><div class="pin" style="background:var(--yellow); color:#4a3200;">3</div><div class="stop-text"><h4>The Indicator Junkie</h4><p>Relies on indicators to make decisions for them.</p><div class="m">"If I find the right indicator, I'll be profitable."</div></div></div>
+        <div class="stop"><div class="pin" style="background:var(--green)">4</div><div class="stop-text"><h4>The Hamster Wheel Trader</h4><p>Busy trading constantly, never gets ahead.</p><div class="m">"More trades will finally make it work."</div></div></div>
+        <div class="stop"><div class="pin" style="background:var(--blue)">5</div><div class="stop-text"><h4>The Self-Sabotager</h4><p>Knows what to do, but their own mind gets in the way.</p><div class="m">"I know better, but I still mess it up."</div></div></div>
+        <div class="stop"><div class="pin" style="background:var(--indigo)">6</div><div class="stop-text"><h4>The Real Trader</h4><p>Has a system, manages risk, trades with discipline.</p><div class="m">"Consistency over everything."</div></div></div>
+        <div class="stop"><div class="pin" style="background:var(--violet)">7</div><div class="stop-text"><h4>The CEO Trader</h4><p>Thinks like a business owner, scales smart, builds freedom.</p><div class="m">"I'm in control. I build wealth."</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><span>↓ STAGE-BY-STAGE MODULES ↓</span></div>
+
+  <section id="s1">
+    <div class="card">
+      <div class="stage-head">
+        <div class="stage-badge" style="background:var(--red)">1</div>
+        <div><h2>The Someday Trader</h2><div class="stagesub">Stage 1 of 7 — The Starting Line</div></div>
+      </div>
+      <div class="mindset-box" style="background:var(--red)"><span class="tag">THE MINDSET</span>"Someday I'll start." You watch videos, save charts, follow traders on social media, and tell people you're "getting into trading" — but months pass and you still haven't opened a platform.</div>
+      <div class="two-col">
+        <div>
+          <h4 style="color:#a3243f">What This Stage Looks Like</h4>
+          <ul>
+            <li>Endless research with no execution</li>
+            <li>Waiting to "know enough" before starting</li>
+            <li>Buying courses but not opening a chart</li>
+            <li>Fear of losing money keeps you frozen at zero risk — and zero progress</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#a3243f">Why You Get Stuck Here</h4>
+          <ul>
+            <li>You're treating trading as something you need to master before you begin, instead of a skill built through reps</li>
+            <li>Perfectionism disguised as "preparation"</li>
+            <li>No accountability or deadline forcing the first move</li>
+          </ul>
+        </div>
+      </div>
+      <div class="breakthrough" style="border-color:var(--red); background:#fff3f3;">
+        <span class="tag" style="color:#a3243f">HOW TO BREAK THROUGH</span>
+        <ol>
+          <li>Set a hard start date — <span>not "soon," an actual calendar date to open a paper trading account.</span></li>
+          <li>Remove the financial fear first — <span>paper trade before risking real money. There's no "someday" excuse left once real money isn't on the line.</span></li>
+          <li>Shrink the goal — <span>commit to one 20-minute chart session a day instead of "mastering trading."</span></li>
+          <li>Get an accountability partner or cohort — <span>a class, group, or trading buddy who expects to hear from you turns "someday" into "Tuesday."</span></li>
+        </ol>
+      </div>
+      <div class="selfcheck">Ask yourself: "What is the actual first click I've been avoiding?" Do that click today.</div>
+    </div>
+  </section>
+
+  <section id="s2">
+    <div class="card">
+      <div class="stage-head">
+        <div class="stage-badge" style="background:var(--orange)">2</div>
+        <div><h2>The Gambler</h2><div class="stagesub">Stage 2 of 7 — Action Without a Plan</div></div>
+      </div>
+      <div class="mindset-box" style="background:var(--orange)"><span class="tag">THE MINDSET</span>"Big win will change everything." You finally started — but you're trading on gut feeling, tips, and adrenaline instead of a plan.</div>
+      <div class="two-col">
+        <div>
+          <h4 style="color:#a3651a">What This Stage Looks Like</h4>
+          <ul>
+            <li>Entering trades with no predefined stop loss</li>
+            <li>Sizing positions on emotion, not math</li>
+            <li>Chasing green candles because they're moving</li>
+            <li>One big win convinces you gambling "works"</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#a3651a">Why You Get Stuck Here</h4>
+          <ul>
+            <li>The dopamine hit of a lucky win reinforces the exact behavior that will eventually blow up your account</li>
+            <li>No written rules means every trade is improvised</li>
+            <li>Confusing excitement with edge</li>
+          </ul>
+        </div>
+      </div>
+      <div class="breakthrough" style="border-color:var(--orange); background:#fff8ef;">
+        <span class="tag" style="color:#a3651a">HOW TO BREAK THROUGH</span>
+        <ol>
+          <li>Write a one-page trading plan — <span>your symbols, your setups, your risk per trade, before you take another position.</span></li>
+          <li>Never enter without a stop loss placed FIRST — <span>the DARKINV 1-2% rule: no exceptions, no "I'll set it after."</span></li>
+          <li>Run the 8-point pre-trade checklist every time — <span>a checklist turns impulse into process.</span></li>
+          <li>Track every trade in a journal — <span>seeing your actual win rate on paper kills the "big win" fantasy fast.</span></li>
+        </ol>
+      </div>
+      <div class="selfcheck">Ask yourself: "Could I explain why I took my last trade in one sentence, using a rule — not a feeling?" If not, you're still gambling.</div>
+    </div>
+  </section>
+
+  <section id="s3">
+    <div class="card">
+      <div class="stage-head">
+        <div class="stage-badge" style="background:var(--yellow); color:#4a3200;">3</div>
+        <div><h2>The Indicator Junkie</h2><div class="stagesub">Stage 3 of 7 — Searching for the Magic Formula</div></div>
+      </div>
+      <div class="mindset-box" style="background:var(--yellow); color:#4a3200;"><span class="tag">THE MINDSET</span>"If I find the right indicator, I'll be profitable." You've stopped gambling blind, but now you're stacking indicator after indicator, hoping one combination is the secret code.</div>
+      <div class="two-col">
+        <div>
+          <h4 style="color:#a3820a">What This Stage Looks Like</h4>
+          <ul>
+            <li>A chart so cluttered with indicators you can barely see price</li>
+            <li>Switching strategies every time one has a losing week</li>
+            <li>Believing the indicator should make the decision for you</li>
+            <li>Analysis paralysis — too many signals, no clear answer</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#a3820a">Why You Get Stuck Here</h4>
+          <ul>
+            <li>Indicators feel objective and safe — they let you avoid trusting your own read of price</li>
+            <li>No indicator works in isolation, so each new one "failing" just sends you to the next</li>
+            <li>Confusing more tools with more edge</li>
+          </ul>
+        </div>
+      </div>
+      <div class="breakthrough" style="border-color:var(--yellow); background:#fffbe6;">
+        <span class="tag" style="color:#a3820a">HOW TO BREAK THROUGH</span>
+        <ol>
+          <li>Cut down to 2-3 indicators, max — <span>from the DARKINV 7, pick the ones that fit your style and master only those.</span></li>
+          <li>Indicators confirm, they don't decide — <span>lead with candles and structure (Modules 2-3), use indicators to confirm what price is already telling you.</span></li>
+          <li>Keep an indicator journal — <span>note every false signal so you learn each tool's real behavior instead of blaming and swapping it.</span></li>
+          <li>Study one indicator for two full weeks before judging it — <span>consistency in testing beats hopping every losing trade.</span></li>
+        </ol>
+      </div>
+      <div class="selfcheck">Ask yourself: "If I turned off every indicator right now, could I still read this candle and this level?" That's the skill underneath the tools.</div>
+    </div>
+  </section>
+
+  <section id="s4">
+    <div class="card">
+      <div class="stage-head">
+        <div class="stage-badge" style="background:var(--green)">4</div>
+        <div><h2>The Hamster Wheel Trader</h2><div class="stagesub">Stage 4 of 7 — Busy, But Not Building</div></div>
+      </div>
+      <div class="mindset-box" style="background:var(--green)"><span class="tag">THE MINDSET</span>"More trades will finally make it work." You're at your screen constantly, taking trade after trade, but your account balance barely moves — or slowly bleeds.</div>
+      <div class="two-col">
+        <div>
+          <h4 style="color:#1d7a48">What This Stage Looks Like</h4>
+          <ul>
+            <li>10+ trades a day "just in case one works"</li>
+            <li>Overtrading during choppy, low-quality conditions</li>
+            <li>Winners are small, losers cancel them out</li>
+            <li>Exhaustion mistaken for effort and progress</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#1d7a48">Why You Get Stuck Here</h4>
+          <ul>
+            <li>Volume feels like control, but more trades just means more exposure to the same unrefined process</li>
+            <li>No max-trades-per-day rule, so every setup — good or marginal — gets taken</li>
+            <li>Mistaking activity for skill development</li>
+          </ul>
+        </div>
+      </div>
+      <div class="breakthrough" style="border-color:var(--green); background:#eefcf3;">
+        <span class="tag" style="color:#1d7a48">HOW TO BREAK THROUGH</span>
+        <ol>
+          <li>Enforce a hard max-trades-per-day limit — <span>the DARKINV rule: 3 max for beginners. Quality over quantity, no exceptions.</span></li>
+          <li>Set a daily loss limit — <span>hit it, you're done for the day. Protects you from "revenge volume."</span></li>
+          <li>Track checklist compliance, not just P&L — <span>measure how many trades followed your full process, not just how many you took.</span></li>
+          <li>Schedule review-only days — <span>one day a week: no trading, only chart study and journal review.</span></li>
+        </ol>
+      </div>
+      <div class="selfcheck">Ask yourself: "Did today's extra trades come from a real setup, or from needing to feel busy?" Busy and profitable are not the same thing.</div>
+    </div>
+  </section>
+
+  <section id="s5">
+    <div class="card">
+      <div class="stage-head">
+        <div class="stage-badge" style="background:var(--blue)">5</div>
+        <div><h2>The Self-Sabotager</h2><div class="stagesub">Stage 5 of 7 — The Mind Becomes the Obstacle</div></div>
+      </div>
+      <div class="mindset-box" style="background:var(--blue)"><span class="tag">THE MINDSET</span>"I know better, but I still mess it up." You understand the rules. You even wrote them yourself. But under pressure you override your own plan — every time.</div>
+      <div class="two-col">
+        <div>
+          <h4 style="color:#0f5f9c">What This Stage Looks Like</h4>
+          <ul>
+            <li>Moving your stop loss further away mid-trade</li>
+            <li>Exiting winners early out of fear, letting losers run out of hope</li>
+            <li>Revenge trading immediately after a loss</li>
+            <li>Knowing exactly what you did wrong — right after you did it, every time</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#0f5f9c">Why You Get Stuck Here</h4>
+          <ul>
+            <li>Knowledge and behavior live in different parts of the brain — reading a rule doesn't install the habit under stress</li>
+            <li>No cool-down protocol after losses or big wins</li>
+            <li>Emotions (fear, greed, revenge, FOMO) are running the trade instead of the plan</li>
+          </ul>
+        </div>
+      </div>
+      <div class="breakthrough" style="border-color:var(--blue); background:#eff8ff;">
+        <span class="tag" style="color:#0f5f9c">HOW TO BREAK THROUGH</span>
+        <ol>
+          <li>Journal the emotion, not just the trade — <span>rate your emotional state 1-10 on every entry (from the DARKINV journal template) to spot your real triggers.</span></li>
+          <li>Install a mandatory cool-off — <span>30+ minutes off the platform after any loss, before you're allowed to look at another setup.</span></li>
+          <li>Pre-commit your exits before entry — <span>write the stop and target down before you click buy, so there's nothing left to "decide" emotionally mid-trade.</span></li>
+          <li>Name your enemy in the moment — <span>use the Module 5 Trading Brain framework: is this fear, greed, revenge, or FOMO talking right now? Naming it breaks its grip.</span></li>
+        </ol>
+      </div>
+      <div class="selfcheck">Ask yourself: "Whose voice made that last decision — my plan, or my emotion?" If you can't tell, that's the work.</div>
+    </div>
+  </section>
+
+  <section id="s6">
+    <div class="card">
+      <div class="stage-head">
+        <div class="stage-badge" style="background:var(--indigo)">6</div>
+        <div><h2>The Real Trader</h2><div class="stagesub">Stage 6 of 7 — Discipline Becomes Identity</div></div>
+      </div>
+      <div class="mindset-box" style="background:var(--indigo)"><span class="tag">THE MINDSET</span>"Consistency over everything." You have a system. You manage risk automatically. You trade the plan even when it's boring — especially when it's boring.</div>
+      <div class="two-col">
+        <div>
+          <h4 style="color:#4c47c9">What This Stage Looks Like</h4>
+          <ul>
+            <li>A written, tested strategy you actually follow</li>
+            <li>Position sizing and stops are automatic, not debated</li>
+            <li>Losses are expected and absorbed, not emotional events</li>
+            <li>You judge yourself on process compliance, not on any single trade's outcome</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#4c47c9">The Risk of Staying Here Too Passively</h4>
+          <ul>
+            <li>Comfort can quietly turn into complacency — skipping journal reviews because "things are fine"</li>
+            <li>Treating trading as a job with a ceiling instead of a business with room to grow</li>
+            <li>Not yet tracking the business-level metrics that let you scale safely</li>
+          </ul>
+        </div>
+      </div>
+      <div class="breakthrough" style="border-color:var(--indigo); background:#f2f2ff;">
+        <span class="tag" style="color:#4c47c9">HOW TO MOVE TOWARD STAGE 7</span>
+        <ol>
+          <li>Track expectancy, not just win rate — <span>know your average win, average loss, and true edge in dollar terms over 50+ trades.</span></li>
+          <li>Scale size gradually and on evidence — <span>follow a roadmap like DARKINV's 30-day plan: increase size only after a defined sample proves the edge.</span></li>
+          <li>Document your system as an SOP — <span>write your process so clearly someone else could follow it. That's what makes it scalable later.</span></li>
+          <li>Keep reviewing even when winning — <span>a monthly audit of your journal catches drift before it becomes a slump.</span></li>
+        </ol>
+      </div>
+      <div class="selfcheck">Ask yourself: "Am I running a repeatable process, or riding a good streak?" Real Traders can tell the difference on demand.</div>
+    </div>
+  </section>
+
+  <section id="s7">
+    <div class="card">
+      <div class="stage-head">
+        <div class="stage-badge" style="background:var(--violet)">7</div>
+        <div><h2>The CEO Trader</h2><div class="stagesub">Stage 7 of 7 — The Finish Line</div></div>
+      </div>
+      <div class="mindset-box" style="background:var(--violet)"><span class="tag">THE MINDSET</span>"I'm in control. I build wealth." You no longer just execute trades — you run trading like a business, with systems, metrics, and long-term thinking.</div>
+      <div class="two-col">
+        <div>
+          <h4 style="color:#7a3e8c">What This Stage Looks Like</h4>
+          <ul>
+            <li>Trading is one line item in a broader wealth-building plan</li>
+            <li>Capital is diversified across strategies, not concentrated in one account's mood</li>
+            <li>You treat drawdowns as a cost of doing business, budgeted in advance</li>
+            <li>You can step away from the screen without the plan falling apart</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="color:#7a3e8c">What Keeps You Here</h4>
+          <ul>
+            <li>Quarterly reviews of your entire trading business, not just individual trades</li>
+            <li>Reinvesting profits deliberately instead of upsizing emotionally after a hot streak</li>
+            <li>Mentoring or teaching others — explaining the system out loud sharpens it further</li>
+          </ul>
+        </div>
+      </div>
+      <div class="breakthrough" style="border-color:var(--violet); background:#faf3fd;">
+        <span class="tag" style="color:#7a3e8c">HOW TO STAY AT STAGE 7</span>
+        <ol>
+          <li>Run quarterly business reviews — <span>treat your trading account like a company: revenue, costs, drawdown budget, next quarter's targets.</span></li>
+          <li>Build in redundancy — <span>more than one strategy or market so no single regime change wipes out your whole plan.</span></li>
+          <li>Protect the downside first, always — <span>the CEO Trader still follows the same 1-2% rule from Stage 1 — discipline never gets "graduated out of."</span></li>
+          <li>Teach what you know — <span>explaining your system to a newer trader (like a Someday Trader at Stage 1) is the fastest way to catch the gaps in your own process.</span></li>
+        </ol>
+      </div>
+      <div class="selfcheck">Ask yourself: "If I couldn't trade for three months, would my system, capital, and knowledge still be intact?" That's the real test of Stage 7.</div>
+    </div>
+  </section>
+
+  <footer class="finale">
+    <h3>🏁 The Journey in One Line</h3>
+    <p>Someday → Gambler → Indicator Junkie → Hamster Wheel → Self-Sabotager → Real Trader → CEO Trader — every stage is a mindset to outgrow, not a label to wear. Find your stop, run its breakthrough steps, and keep moving.</p>
+  </footer>
+</div>
+</body>
+</html>
