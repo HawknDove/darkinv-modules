@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Options Module 3: Reading the Options Chain — DARKINV Rainbow Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+  :root{
+    --red:#ff5c5c; --orange:#ff9f43; --yellow:#ffd23f; --green:#2fd06f;
+    --blue:#3fa9ff; --indigo:#6c6cf5; --violet:#c869e0;
+    --ink:#1c2333; --paper:#ffffff; --bg1:#eef6ff; --bg2:#fdf3ff;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:linear-gradient(160deg,var(--bg1),var(--bg2)); font-family:'Nunito',sans-serif; color:var(--ink); padding:0 0 60px; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 16px; }
+  .rainbow-strip{ height:14px; background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--indigo),var(--violet)); background-size:200% 100%; animation:slide 6s linear infinite; }
+  @keyframes slide{ 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+  .hero{ text-align:center; padding:20px 0 6px; }
+  .module-badge{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; background:white; color:var(--indigo); border:2px solid var(--indigo); padding:4px 14px; border-radius:999px; margin-bottom:10px; }
+  h1{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:clamp(22px,5vw,38px); margin:4px 0 2px; background:linear-gradient(90deg,var(--red),var(--indigo)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p{ color:#4a5a78; font-weight:700; font-size:15.5px; margin:4px 0 10px; }
+
+  .card{ background:var(--paper); border-radius:24px; padding:22px 22px 26px; margin-bottom:20px; box-shadow:0 6px 0 rgba(28,35,51,0.08),0 12px 26px rgba(28,35,51,0.07); border:3px solid #e7effa; }
+  .eyebrow{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; color:white; padding:4px 12px; border-radius:999px; margin-bottom:10px; }
+  .card h2{ font-family:'Baloo 2',sans-serif; font-size:22px; margin:0 0 8px; }
+  .card p{ font-size:15.5px; line-height:1.55; margin:6px 0; }
+
+  .kid-box{ background:#eef2ff; border:2px solid var(--indigo); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin:8px 0 14px; }
+  .kid-box .tag{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:var(--indigo); letter-spacing:.05em; display:block; margin-bottom:4px; }
+
+  .chain-frame{ background:#0e1220; border:4px solid #ffd23f; border-radius:16px; padding:14px; margin-top:12px; overflow-x:auto; }
+  .chain-tabs{ display:flex; gap:14px; font-size:11px; color:#8592ad; font-family:'Nunito',sans-serif; font-weight:700; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #2a3350; }
+  .chain-tabs span.active{ color:#ffd23f; }
+  .chain-symbol{ color:white; font-weight:800; font-size:14px; margin-bottom:8px; font-family:'Baloo 2',sans-serif; }
+  table.chain{ width:100%; border-collapse:collapse; font-size:12.5px; color:#e6ecf7; min-width:560px; }
+  table.chain th{ text-align:right; padding:5px 8px; color:#8592ad; font-weight:700; font-size:11px; }
+  table.chain th:first-child, table.chain td:first-child{ text-align:left; }
+  table.chain td{ padding:5px 8px; text-align:right; }
+  table.chain .call-code{ color:#9fb4ce; text-align:left; }
+  table.chain .call-mark.up{ color:#2fd06f; }
+  table.chain .call-mark.down{ color:#ff5c5c; }
+  table.chain .strike{ color:#ffd23f; font-weight:800; }
+  table.chain .put-mark.up{ color:#2fd06f; }
+  table.chain .put-mark.down{ color:#ff5c5c; }
+  table.chain .put-code{ color:#9fb4ce; text-align:right; }
+  .chain-header-row{ background:#171d33; }
+
+  .callout-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin-top:14px; }
+  .callout{ border-radius:14px; padding:12px 14px; }
+  .callout h4{ font-family:'Baloo 2',sans-serif; font-size:14px; margin:0 0 6px; }
+  .callout p{ font-size:13px; margin:0; line-height:1.5; }
+
+  .rule-box{ background:#fff8e0; border:2px dashed var(--orange); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin-top:12px; }
+
+  .code-example{ background:#f7fbff; border:2px solid #e4f0fb; border-radius:14px; padding:12px 14px; margin-top:10px; font-family:'Courier New', monospace; font-size:13px; }
+
+  .chart-frame{ border-radius:16px; overflow:hidden; border:3px solid #e4f0fb; margin-top:10px; }
+  .live-tag{ display:inline-flex; align-items:center; gap:6px; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:white; background:var(--red); padding:3px 10px; border-radius:999px; margin-bottom:8px; }
+  .live-dot{ width:8px; height:8px; border-radius:50%; background:white; animation:pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+  .quiz-card{ background:linear-gradient(180deg,#fff,#fbf9ff); }
+  .qnum{ display:inline-flex; align-items:center; justify-content:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:15px; color:white; width:28px; height:28px; border-radius:50%; margin-right:8px; flex-shrink:0; }
+  .question{ margin-bottom:20px; }
+  .question .qtext{ font-weight:800; font-size:16px; display:flex; align-items:flex-start; gap:2px; margin-bottom:10px; }
+  .options{ display:grid; gap:8px; margin-left:36px; }
+  .opt{ display:flex; align-items:center; gap:10px; background:#f6f8fd; border:2px solid #e7ebf7; border-radius:12px; padding:10px 12px; cursor:pointer; font-weight:700; font-size:14.5px; transition:all .15s ease; }
+  .opt:hover{ border-color:var(--indigo); }
+  .opt.selected{ border-color:var(--indigo); background:#eef0ff; }
+  .opt.correct{ border-color:var(--green); background:#e7fbef; }
+  .opt.incorrect{ border-color:var(--red); background:#ffeeee; }
+  .opt input{ accent-color:var(--indigo); }
+  #quizBtn{ display:block; margin:18px auto 0; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; background:linear-gradient(90deg,var(--indigo),var(--violet)); color:white; border:none; padding:12px 30px; border-radius:999px; cursor:pointer; box-shadow:0 4px 0 #4c47c9; }
+  #quizBtn:active{ transform:translateY(2px); box-shadow:0 2px 0 #4c47c9; }
+  #result{ text-align:center; margin-top:18px; display:none; }
+  #result .score{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:26px; }
+  #result p{ font-weight:700; color:#4a5a78; }
+  footer{ text-align:center; font-size:13px; color:#6b7a94; margin-top:8px; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="rainbow-strip"></div>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="module-badge">🌈 DARKINV RAINBOW ENGINE · OPTIONS MODULE 3</span>
+    <h1>Reading the Options Chain</h1>
+    <p>Same Barchart Platform As Futures — Now Applied to Options</p>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow" style="background:var(--indigo)">KEY CONCEPT</span>
+    <h2>What Is an Options Chain?</h2>
+    <p>An options chain is a table showing every available option contract for a stock — every strike price and every expiration date, for both calls and puts, side by side.</p>
+    <div class="kid-box">
+      <span class="tag">THE KID VERSION</span>
+      "Think of it like a menu at a restaurant, except instead of food prices, it lists every possible 'reservation price' (strike) you could lock in, and how much each reservation (premium) costs today. CALLS sit on the left, PUTS sit on the right, and strikes run down the middle — same layout every time, on every stock."
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow" style="background:var(--yellow); color:#4a3200;">BARCHART WALKTHROUGH</span>
+    <h2>The Options Chain, Labeled</h2>
+    <p>This is the same Barchart platform used in the Futures course — Options, Futures, and Indicators all live under the same tabs. Here's SPY's chain for December 4th, 2023:</p>
+
+    <div class="chain-frame">
+      <div class="chain-tabs">
+        <span>All</span><span>Recent</span><span>Positions</span><span>Futures</span><span class="active">Options</span><span>Indices</span><span>Indicators</span><span>FX</span><span>Lookup</span><span>Personal</span>
+      </div>
+      <div class="chain-symbol">SPY — SPDR S&amp;P 500 ETF TRUST TR UNIT ETF</div>
+      <table class="chain">
+        <tr class="chain-header-row">
+          <th>Option Code</th><th>Mark</th><th>Exp</th><th class="strike">Strike</th><th>Mark</th><th>Option Code</th>
+        </tr>
+        <tr><td class="call-code">SPY231204C451</td><td class="call-mark up">5.365</td><td>4 DEC 23</td><td class="strike">451</td><td class="put-mark down">.005</td><td class="put-code">SPY231204P451</td></tr>
+        <tr><td class="call-code">SPY231204C452</td><td class="call-mark up">4.295</td><td>4 DEC 23</td><td class="strike">452</td><td class="put-mark down">.005</td><td class="put-code">SPY231204P452</td></tr>
+        <tr><td class="call-code">SPY231204C453</td><td class="call-mark up">3.540</td><td>4 DEC 23</td><td class="strike">453</td><td class="put-mark down">.005</td><td class="put-code">SPY231204P453</td></tr>
+        <tr><td class="call-code">SPY231204C454</td><td class="call-mark down">2.290</td><td>4 DEC 23</td><td class="strike">454</td><td class="put-mark down">.005</td><td class="put-code">SPY231204P454</td></tr>
+        <tr><td class="call-code">SPY231204C455</td><td class="call-mark down">1.325</td><td>4 DEC 23</td><td class="strike">455</td><td class="put-mark down">.005</td><td class="put-code">SPY231204P455</td></tr>
+        <tr><td class="call-code">SPY231204C456</td><td class="call-mark down">.335</td><td>4 DEC 23</td><td class="strike">456</td><td class="put-mark down">.015</td><td class="put-code">SPY231204P456</td></tr>
+        <tr><td class="call-code">SPY231204C457</td><td class="call-mark down">.005</td><td>4 DEC 23</td><td class="strike">457</td><td class="put-mark up">.715</td><td class="put-code">SPY231204P457</td></tr>
+        <tr><td class="call-code">SPY231204C458</td><td class="call-mark down">.005</td><td>4 DEC 23</td><td class="strike">458</td><td class="put-mark up">1.760</td><td class="put-code">SPY231204P458</td></tr>
+        <tr><td class="call-code">SPY231204C459</td><td class="call-mark down">.005</td><td>4 DEC 23</td><td class="strike">459</td><td class="put-mark up">2.840</td><td class="put-code">SPY231204P459</td></tr>
+      </table>
+    </div>
+
+    <div class="callout-grid">
+      <div class="callout" style="background:linear-gradient(135deg,#ffd23f,#ff9f43); color:#4a3200;">
+        <h4>Strike Price</h4>
+        <p>The price the option holder can buy (call) or sell (put) the stock at. Here, 453 is a projected share price level.</p>
+      </div>
+      <div class="callout" style="background:linear-gradient(135deg,#ff5c5c,#c93838); color:white;">
+        <h4>Expiration Date</h4>
+        <p>The date the contract expires. Here, Dec 4th 2023 is when this specific row's options expire.</p>
+      </div>
+      <div class="callout" style="background:linear-gradient(135deg,#2fd06f,#1d9a53); color:white;">
+        <h4>Premium (Mark)</h4>
+        <p>The price paid for the contract. Always multiply by 100 — <b>.335 × 100 = $33.50</b> for one contract.</p>
+      </div>
+    </div>
+
+    <div class="code-example">
+      SPY 2 3 1 2 0 4 C 4 5 1<br>
+      <span style="color:#8592ad">└SYM┘ └EXP DATE┘ └C/P┘└STRK┘</span><br>
+      <span style="color:#4a5a78">SPY · expires 12/04/23 · Call · strike $451</span>
+    </div>
+
+    <div class="rule-box">🌈 Rainbow Engine rule: before an option expires, its owner can (1) exercise it, (2) close the position to lock in profit/loss, or (3) let it expire worthless. Doing nothing is a real choice — and often the costly one.</div>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow" style="background:var(--green)">LIVE CHART PRACTICE</span>
+    <h2>Same Chart Tools As Futures — Now on a Stock</h2>
+    <p>This is a real, live-updating SPY chart. The candle reading, support/resistance, and indicators from the Futures course (Modules 2 &amp; 3) work exactly the same way here — the underlying asset changed, the tools didn't.</p>
+    <span class="live-tag"><span class="live-dot"></span>LIVE</span>
+    <div class="chart-frame">
+      <div class="tradingview-widget-container">
+        <div id="tv_chart_opt3"></div>
+        <script src="https://s3.tradingview.com/tv.js"></script>
+        <script type="text/javascript">
+          new TradingView.widget({
+            "width": "100%",
+            "height": 420,
+            "symbol": "AMEX:SPY",
+            "interval": "15",
+            "timezone": "America/New_York",
+            "theme": "light",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "allow_symbol_change": true,
+            "studies": ["RSI@tv-basicstudies"],
+            "container_id": "tv_chart_opt3"
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <div class="card quiz-card" id="quizCard">
+    <span class="eyebrow" style="background:var(--red)">SELF-ASSESSMENT</span>
+    <h2>Options Module 3 Quiz — 5 Questions</h2>
+    <p style="margin-bottom:18px;">Pick the best answer for each question, then press Check My Answers.</p>
+    <form id="quizForm">
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--red)">1</span>In the options chain layout, where do calls and puts sit?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q1" value="a">Calls on the right, puts on the left</label>
+          <label class="opt"><input type="radio" name="q1" value="b">Calls on the left, puts on the right, strikes down the middle</label>
+          <label class="opt"><input type="radio" name="q1" value="c">Calls on top, puts on the bottom</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--orange)">2</span>If the Mark price shows .335, what is the actual dollar cost of one contract?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q2" value="a">$0.335</label>
+          <label class="opt"><input type="radio" name="q2" value="b">$3.35</label>
+          <label class="opt"><input type="radio" name="q2" value="c">$33.50</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--yellow)">3</span>In the option code SPY231204C451, what does the "C" mean?</div>
+        <div class="options" data-correct="a">
+          <label class="opt"><input type="radio" name="q3" value="a">Call</label>
+          <label class="opt"><input type="radio" name="q3" value="b">Contract count</label>
+          <label class="opt"><input type="radio" name="q3" value="c">Closing price</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--green)">4</span>What are the three choices an owner has before an option expires?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q4" value="a">Buy more, sell more, or hold forever</label>
+          <label class="opt"><input type="radio" name="q4" value="b">Exercise it, close the position, or let it expire worthless</label>
+          <label class="opt"><input type="radio" name="q4" value="c">Convert it to a futures contract</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--indigo)">5</span>The chart tools from the Futures course (candles, S/R, indicators) on a stock like SPY are:</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q5" value="a">Completely different and don't apply</label>
+          <label class="opt"><input type="radio" name="q5" value="b">Only used for options, never for stocks</label>
+          <label class="opt"><input type="radio" name="q5" value="c">The exact same tools, applied to a different underlying asset</label>
+        </div>
+      </div>
+    </form>
+    <button id="quizBtn" onclick="checkQuiz()">Check My Answers 🌈</button>
+    <div id="result">
+      <div class="score" id="scoreText"></div>
+      <p id="scoreMsg"></p>
+    </div>
+  </div>
+
+  <footer>DARKINV Trading Academy · Rainbow Engine Curriculum · Options Module 3</footer>
+</div>
+
+<script>
+function checkQuiz(){
+  const questionBlocks = document.querySelectorAll('.question');
+  let score = 0;
+  questionBlocks.forEach(block => {
+    const optsDiv = block.querySelector('.options');
+    const correct = optsDiv.getAttribute('data-correct');
+    const opts = optsDiv.querySelectorAll('.opt');
+    let chosen = null;
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct','incorrect','selected');
+      if(input.checked){ chosen = input.value; opt.classList.add('selected'); }
+    });
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      if(input.value === correct){ opt.classList.add('correct'); }
+      else if(input.value === chosen){ opt.classList.add('incorrect'); }
+    });
+    if(chosen === correct) score++;
+  });
+  const resultDiv = document.getElementById('result');
+  document.getElementById('scoreText').textContent = score + ' / 5 correct';
+  document.getElementById('scoreMsg').textContent =
+    score === 5 ? "🌈 Perfect! You're ready for Options Module 4." :
+    score >= 3 ? "Solid! Review the missed ones, then move on." :
+    "Let's review this module again before moving forward.";
+  resultDiv.style.display = 'block';
+  resultDiv.scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>

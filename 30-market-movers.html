@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>30 Market Movers — DARKINV Rainbow Engine</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap');
+  :root{
+    --red:#ff5c5c; --orange:#ff9f43; --yellow:#ffd23f; --green:#2fd06f;
+    --blue:#3fa9ff; --indigo:#6c6cf5; --violet:#c869e0;
+    --ink:#1c2333; --paper:#ffffff; --bg1:#eef6ff; --bg2:#fdf3ff; --muted:#4a5a78;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{ margin:0; background:linear-gradient(160deg,var(--bg1),var(--bg2)); font-family:'Nunito',sans-serif; color:var(--ink); padding:0 0 60px; }
+  .wrap{ max-width:980px; margin:0 auto; padding:0 16px; }
+  .rainbow-strip{ height:14px; background:linear-gradient(90deg,var(--red),var(--orange),var(--yellow),var(--green),var(--blue),var(--indigo),var(--violet)); background-size:200% 100%; animation:slide 6s linear infinite; }
+  @keyframes slide{ 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+
+  nav{ position:sticky; top:0; z-index:10; background:rgba(238,246,255,0.94); backdrop-filter:blur(6px); border-bottom:2px solid #cfe6f7; padding:10px 0; margin-bottom:8px; }
+  nav .navrow{ max-width:980px; margin:0 auto; display:flex; gap:6px; flex-wrap:wrap; justify-content:center; padding:0 8px; }
+  nav a{ text-decoration:none; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:12px; color:#1c2a3a; background:white; border:2px solid #dfeefc; padding:5px 10px; border-radius:999px; white-space:nowrap; }
+  nav a:hover{ border-color:var(--orange); }
+
+  section{ scroll-margin-top:66px; }
+  .hero{ text-align:center; padding:24px 0 6px; }
+  .module-badge{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; background:white; color:var(--indigo); border:2px solid var(--indigo); padding:4px 14px; border-radius:999px; margin-bottom:10px; }
+  h1{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:clamp(26px,6vw,42px); margin:4px 0 4px; background:linear-gradient(90deg,var(--red),var(--indigo)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p{ color:var(--muted); font-weight:700; font-size:15.5px; margin:4px 0 6px; }
+
+  .card{ background:var(--paper); border-radius:24px; padding:22px 22px 26px; margin-bottom:20px; box-shadow:0 6px 0 rgba(28,35,51,0.08),0 12px 26px rgba(28,35,51,0.07); border:3px solid #e7effa; }
+  .eyebrow{ display:inline-block; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em; color:white; padding:4px 12px; border-radius:999px; margin-bottom:10px; }
+  .card h2{ font-family:'Baloo 2',sans-serif; font-size:22px; margin:0 0 8px; }
+  .card p{ font-size:15.5px; line-height:1.55; margin:6px 0; }
+
+  .kid-box{ background:#eef2ff; border:2px solid var(--indigo); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin:8px 0 14px; }
+  .kid-box .tag{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; color:var(--indigo); letter-spacing:.05em; display:block; margin-bottom:4px; }
+
+  .mover-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; margin-top:14px; }
+  .mover{ background:#f7fbff; border:2px solid #e4f0fb; border-radius:14px; padding:12px 14px; }
+  .mover h4{ font-family:'Baloo 2',sans-serif; font-size:14px; margin:0 0 5px; }
+  .mover p{ font-size:12.5px; margin:0; line-height:1.5; color:var(--muted); }
+  .mover .stat{ font-weight:800; color:var(--ink); }
+
+  .rule-box{ background:#fff8e0; border:2px dashed var(--orange); border-radius:16px; padding:14px 16px; font-weight:700; font-size:15px; margin-top:12px; }
+
+  .stat-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:14px 0; text-align:center; }
+  .stat-box{ background:#f7fbff; border:2px solid #e4f0fb; border-radius:14px; padding:14px 8px; }
+  .stat-box .num{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:24px; }
+  .stat-box .lbl{ font-size:11.5px; font-weight:700; color:var(--muted); margin-top:2px; }
+
+  .divider{ text-align:center; margin:26px 0 14px; }
+  .divider span{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:12px; letter-spacing:.08em; color:#8fa8bf; }
+
+  .quiz-card{ background:linear-gradient(180deg,#fff,#fbf9ff); }
+  .qnum{ display:inline-flex; align-items:center; justify-content:center; font-family:'Baloo 2',sans-serif; font-weight:800; font-size:15px; color:white; width:28px; height:28px; border-radius:50%; margin-right:8px; flex-shrink:0; }
+  .question{ margin-bottom:20px; }
+  .question .qtext{ font-weight:800; font-size:16px; display:flex; align-items:flex-start; gap:2px; margin-bottom:10px; }
+  .options{ display:grid; gap:8px; margin-left:36px; }
+  .opt{ display:flex; align-items:center; gap:10px; background:#f6f8fd; border:2px solid #e7ebf7; border-radius:12px; padding:10px 12px; cursor:pointer; font-weight:700; font-size:14.5px; transition:all .15s ease; }
+  .opt:hover{ border-color:var(--indigo); }
+  .opt.selected{ border-color:var(--indigo); background:#eef0ff; }
+  .opt.correct{ border-color:var(--green); background:#e7fbef; }
+  .opt.incorrect{ border-color:var(--red); background:#ffeeee; }
+  .opt input{ accent-color:var(--indigo); }
+  #quizBtn{ display:block; margin:18px auto 0; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:16px; background:linear-gradient(90deg,var(--indigo),var(--violet)); color:white; border:none; padding:12px 30px; border-radius:999px; cursor:pointer; box-shadow:0 4px 0 #4c47c9; }
+  #quizBtn:active{ transform:translateY(2px); box-shadow:0 2px 0 #4c47c9; }
+  #result{ text-align:center; margin-top:18px; display:none; }
+  #result .score{ font-family:'Baloo 2',sans-serif; font-weight:800; font-size:26px; }
+  #result p{ font-weight:700; color:var(--muted); }
+
+  footer.finale{ text-align:center; margin-top:24px; padding:22px 18px; background:white; border-radius:24px; border:3px solid #dfeefc; }
+  footer.finale h3{ font-family:'Baloo 2',sans-serif; font-size:20px; margin:0 0 8px; }
+  footer.finale p{ font-size:14.5px; color:var(--muted); font-weight:600; margin:4px 0; }
+</style>
+</head>
+<body>
+<div class="rainbow-strip"></div>
+
+<nav>
+  <div class="navrow">
+    <a href="#c1">🏢 Company-Specific</a>
+    <a href="#c2">🌍 Macro Forces</a>
+    <a href="#c3">⚡ World Events</a>
+    <a href="#c4">🧠 Psychology</a>
+    <a href="#c5">📊 Analysts</a>
+    <a href="#c6">🌐 Market Conditions</a>
+    <a href="#quizCard">📝 Quiz</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <span class="module-badge">🌈 DARKINV RAINBOW ENGINE · MARKET FUNDAMENTALS</span>
+    <h1>30 Market Movers</h1>
+    <p>Understanding What Drives Stock Prices — from a single headline to the entire global economy</p>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow" style="background:var(--indigo)">THE BIG IDEA</span>
+    <h2>No Single Thing Moves a Stock</h2>
+    <div class="kid-box">
+      <span class="tag">THE KID VERSION</span>
+      "A stock's price is like the weather. Sunshine (good news), wind (interest rates), storms (world events), and even the mood of the people outside (investor sentiment) all mix together to decide what actually happens. You can't predict the weather from just ONE thing — and you can't predict a stock's price from just one thing either. This module walks through the 30 biggest ingredients in that mix, grouped into 6 categories."
+    </div>
+    <p>Every factor below is real and documented — but they rarely act alone. The skill isn't memorizing 30 rules, it's recognizing which ones are actively pulling on a stock <i>right now</i>, and whether they're pulling the same direction or fighting each other.</p>
+  </div>
+
+  <div class="divider"><span>↓ 30 FACTORS, 6 CATEGORIES ↓</span></div>
+
+  <!-- CATEGORY 1 -->
+  <section id="c1">
+    <div class="card">
+      <span class="eyebrow" style="background:var(--red)">CATEGORY 1 OF 6</span>
+      <h2>🏢 Company-Specific Factors</h2>
+      <p>These come directly from the company itself — its news, numbers, products, people, and decisions.</p>
+      <div class="mover-grid">
+        <div class="mover"><h4>Company News</h4><p>A single headline can move price within minutes. <span class="stat">Positive catalysts: +5-15%</span> in a session. <span class="stat">Negative events: -10-30%.</span> Impact fades over time as the news gets "priced in."</p></div>
+        <div class="mover"><h4>Earnings Reports</h4><p>The quarterly "judgment day." Watch EPS vs. estimates, revenue growth, margins, and forward guidance. The unofficial "whisper number" often matters more than the official estimate.</p></div>
+        <div class="mover"><h4>Dividends</h4><p>New dividend: <span class="stat">+2-5%</span>. Dividend increase: <span class="stat">+1-3%</span>. Dividend cut: <span class="stat">-5-15%</span> — cuts are read as a red flag on financial health.</p></div>
+        <div class="mover"><h4>Products</h4><p>Launches and recalls swing price hard. Apple <span class="stat">+8.5%</span> on the original iPhone reveal; Samsung lost <span class="stat">$17B</span> in the Note 7 battery crisis; Peloton <span class="stat">-35%</span> on treadmill recalls.</p></div>
+        <div class="mover"><h4>Layoffs</h4><p>Counterintuitively often <span class="stat">+2-5%</span> — investors like lower costs. Context matters: company-specific cuts during a growth phase read as a red flag.</p></div>
+        <div class="mover"><h4>CEO / Leadership Activity</h4><p>Planned successions: minimal disruption. Unexpected exits: <span class="stat">5-10%</span> volatility. Executive misconduct: <span class="stat">-10-25%</span> with lasting reputational damage.</p></div>
+        <div class="mover"><h4>Insider Transactions</h4><p>Executives buying their own stock: <span class="stat">+1-3%</span> confidence signal. Multiple executives selling at once often precedes bad news.</p></div>
+        <div class="mover"><h4>Share Buybacks</h4><p>Reduces the number of shares in circulation — all else equal, that scarcity alone can lift the price per share.</p></div>
+        <div class="mover"><h4>Mergers & Acquisitions</h4><p>Target company: <span class="stat">+20-50%</span> on announcement. Acquiring company: often <span class="stat">-2-5%</span> as the market questions overpayment. Failed deals can crash back to pre-announcement levels.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 2 -->
+  <section id="c2">
+    <div class="card">
+      <span class="eyebrow" style="background:var(--orange)">CATEGORY 2 OF 6</span>
+      <h2>🌍 Macro Economic Forces</h2>
+      <p>These live above any single company — they shift the entire market's floor and ceiling at once.</p>
+      <div class="mover-grid">
+        <div class="mover"><h4>Interest Rates</h4><p>"The economy's thermostat." Hikes pressure growth stocks, help financials. Cuts help dividend stocks and real estate. Bond yields compete directly with stocks for investor capital.</p></div>
+        <div class="mover"><h4>Inflation</h4><p>"The silent wealth eroder." Squeezes margins for companies that can't pass costs to customers. Central banks fight it with rate hikes. Hard assets (commodities, real estate) often do better.</p></div>
+        <div class="mover"><h4>Deflation</h4><p>"The demand destroyer." Consumers delay purchases waiting for lower prices; debt burdens grow in real terms. Japan's "Lost Decades" is the textbook cautionary example.</p></div>
+        <div class="mover"><h4>GDP</h4><p>Above-forecast growth boosts cyclical stocks; below-forecast helps defensive sectors. Two straight quarters of negative GDP has historically correlated with <span class="stat">20-30%</span> market declines.</p></div>
+        <div class="mover"><h4>Unemployment</h4><p>Rising unemployment pressures consumer discretionary stocks. Falling unemployment tends to benefit retailers and financials. Wage growth data hints at future inflation.</p></div>
+        <div class="mover"><h4>Exchange Rates</h4><p>A strong dollar shrinks the reported value of overseas earnings; a weak dollar boosts them. Roughly <span class="stat">40%</span> of S&amp;P 500 revenue comes from international operations.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 3 -->
+  <section id="c3">
+    <div class="card">
+      <span class="eyebrow" style="background:var(--yellow); color:#4a3200;">CATEGORY 3 OF 6</span>
+      <h2>⚡ World Events & Shocks</h2>
+      <p>Unpredictable, high-impact, and often global in reach.</p>
+      <div class="mover-grid">
+        <div class="mover"><h4>Geopolitical Events</h4><p>Initial shock: <span class="stat">-1-5%</span>. Capital flees to safe havens (Treasuries, gold, Swiss franc, yen). VIX often spikes <span class="stat">20-40%</span>. Markets typically recover within 1-3 months if fundamentals aren't actually hit.</p></div>
+        <div class="mover"><h4>Political Climate</h4><p>Policy shifts, elections, and international relations changes ripple through regulation and investor confidence sector by sector.</p></div>
+        <div class="mover"><h4>Natural & Man-Made Disasters</h4><p>Disasters near major economic hubs spook markets over feared broader economic damage — even when the direct financial exposure is limited.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 4 -->
+  <section id="c4">
+    <div class="card">
+      <span class="eyebrow" style="background:var(--green)">CATEGORY 4 OF 6</span>
+      <h2>🧠 Trading Patterns & Investor Psychology</h2>
+      <p>The market's mood and its daily/weekly habits move price just as much as the "hard" numbers do.</p>
+      <div class="stat-row">
+        <div class="stat-box"><div class="num" style="color:var(--green)">30%</div><div class="lbl">Avg. S&amp;P annual gain during extreme optimism</div></div>
+        <div class="stat-box"><div class="num" style="color:var(--red)">-14%</div><div class="lbl">Avg. drawdown during extreme fear</div></div>
+        <div class="stat-box"><div class="num" style="color:var(--indigo)">78%</div><div class="lbl">Of the time, buying during extreme fear was positive 12mo later</div></div>
+      </div>
+      <div class="mover-grid">
+        <div class="mover"><h4>Investor Sentiment</h4><p>Tracked via the VIX, put/call ratios, and surveys like AAII's bull/bear spread. Extreme readings often signal a turning point is close.</p></div>
+        <div class="mover"><h4>Midday Trading Lull</h4><p>Volume drops 11:30am-1:30pm ET as traders take a break. Opening (9:30-10:30) and closing (3-4pm) hours carry the heaviest volume — moves during the lull often reverse once volume returns.</p></div>
+        <div class="mover"><h4>Friday Trading Effect</h4><p>Selling pressure builds Friday afternoon as traders de-risk before the weekend. Monday gaps often reflect weekend news. Monthly options expiration Fridays add extra volatility.</p></div>
+        <div class="mover"><h4>Trends</h4><p>A stock moving up can gather its own momentum — "success breeds success" as more buyers pile into what's already working.</p></div>
+        <div class="mover"><h4>Liquidity</h4><p>How easily a stock trades hands. Highly liquid stocks react fast and cleanly to news; illiquid stocks can gap violently on the same news.</p></div>
+        <div class="mover"><h4>Volatility</h4><p>How much and how fast price swings. Higher volatility means bigger risk — and bigger potential reward.</p></div>
+        <div class="mover"><h4>Demand & Supply</h4><p>The most basic force underneath everything else: more buyers than sellers pushes price up, and vice versa.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 5 -->
+  <section id="c5">
+    <div class="card">
+      <span class="eyebrow" style="background:var(--blue)">CATEGORY 5 OF 6</span>
+      <h2>📊 Analyst & Institutional Influence</h2>
+      <p>Wall Street's own opinions become a market-moving force in themselves.</p>
+      <div class="mover-grid">
+        <div class="mover"><h4>Analyst Upgrades</h4><p><span class="stat">+2-5%</span> typical move; multiple upgrades compound the effect.</p></div>
+        <div class="mover"><h4>Analyst Downgrades</h4><p><span class="stat">-3-7%</span>, worse when paired with cut earnings estimates.</p></div>
+        <div class="mover"><h4>Price Target Changes</h4><p>Even without a rating change, a target revision alone can move price <span class="stat">1-3%</span>.</p></div>
+        <div class="mover"><h4>New Coverage Initiation</h4><p><span class="stat">+1-4%</span> just from the added visibility and trading volume, regardless of the actual rating.</p></div>
+        <div class="mover"><h4>Industry Performance</h4><p>Sector rotation moves capital between industries. Leading stocks act as bellwethers; commodity-dependent industries (energy, airlines) move with input costs.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY 6 -->
+  <section id="c6">
+    <div class="card">
+      <span class="eyebrow" style="background:var(--violet)">CATEGORY 6 OF 6</span>
+      <h2>🌐 Broader Market Conditions</h2>
+      <p>The overall backdrop everything else is trading against.</p>
+      <div class="mover-grid">
+        <div class="mover"><h4>Retail Sales</h4><p>A direct read on consumer health. A sustained drop-off signals a slowing economy; an upswing is read as bullish.</p></div>
+        <div class="mover"><h4>Market Conditions</h4><p>The overall bull/bear backdrop shapes investor confidence — and can be broken down further by sector and industry.</p></div>
+        <div class="mover"><h4>Hype</h4><p>Advertising, PR, and social buzz can inflate a stock beyond its fundamentals. Often the most volatile and least durable driver on this whole list.</p></div>
+      </div>
+      <div class="rule-box">🌈 Rainbow Engine rule: hype-driven moves are the ones most likely to fully reverse. If a rally has no earnings, no structural news, and no macro support underneath it — treat it as fragile.</div>
+    </div>
+  </section>
+
+  <div class="divider"><span>↓ PUTTING IT TOGETHER ↓</span></div>
+
+  <div class="card">
+    <span class="eyebrow" style="background:var(--indigo)">KEY TAKEAWAYS</span>
+    <h2>Mastering Market Dynamics</h2>
+    <div class="mover-grid">
+      <div class="mover"><h4>Multifactor Analysis</h4><p>No single factor determines price. Integrate company fundamentals, economic indicators, and sentiment into one read.</p></div>
+      <div class="mover"><h4>Time Horizon Matters</h4><p>Short-term moves often reflect news and sentiment; long-term performance aligns more with real fundamentals.</p></div>
+      <div class="mover"><h4>Interconnected Influences</h4><p>These factors feed each other — interest rates affect currencies, which affect earnings, which affect sentiment, which drives trends.</p></div>
+      <div class="mover"><h4>Information Advantage</h4><p>Your edge comes from the speed and quality of how you process these signals, not from knowing any single one.</p></div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card quiz-card" id="quizCard">
+    <span class="eyebrow" style="background:var(--red)">SELF-ASSESSMENT</span>
+    <h2>30 Market Movers Quiz — 5 Questions</h2>
+    <p style="margin-bottom:18px;">Pick the best answer for each question, then press Check My Answers.</p>
+    <form id="quizForm">
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--red)">1</span>A dividend CUT typically causes what kind of price move?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q1" value="a">A small +1-3% bump</label>
+          <label class="opt"><input type="radio" name="q1" value="b">No reaction at all</label>
+          <label class="opt"><input type="radio" name="q1" value="c">A 5-15% selloff as investors question financial stability</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--orange)">2</span>Two consecutive quarters of negative GDP (a technical recession) has historically correlated with what?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q2" value="a">A guaranteed market rally</label>
+          <label class="opt"><input type="radio" name="q2" value="b">20-30% market declines</label>
+          <label class="opt"><input type="radio" name="q2" value="c">No historical pattern at all</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--yellow)">3</span>According to the sentiment data, buying during periods of extreme fear has historically been positive 12 months later what percent of the time?</div>
+        <div class="options" data-correct="a">
+          <label class="opt"><input type="radio" name="q3" value="a">78%</label>
+          <label class="opt"><input type="radio" name="q3" value="b">14%</label>
+          <label class="opt"><input type="radio" name="q3" value="c">30%</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--green)">4</span>When a stock is being ACQUIRED (it's the target), what typically happens to its price on announcement?</div>
+        <div class="options" data-correct="b">
+          <label class="opt"><input type="radio" name="q4" value="a">It drops 2-5%</label>
+          <label class="opt"><input type="radio" name="q4" value="b">It surges 20-50%</label>
+          <label class="opt"><input type="radio" name="q4" value="c">It's halted permanently</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="qtext"><span class="qnum" style="background:var(--indigo)">5</span>Why should a hype-driven rally with no earnings or macro support be treated as fragile?</div>
+        <div class="options" data-correct="c">
+          <label class="opt"><input type="radio" name="q5" value="a">Hype rallies always turn into recessions</label>
+          <label class="opt"><input type="radio" name="q5" value="b">Hype is illegal in the stock market</label>
+          <label class="opt"><input type="radio" name="q5" value="c">Without real fundamentals underneath, hype-driven moves are the most likely to fully reverse</label>
+        </div>
+      </div>
+    </form>
+    <button id="quizBtn" onclick="checkQuiz()">Check My Answers 🌈</button>
+    <div id="result">
+      <div class="score" id="scoreText"></div>
+      <p id="scoreMsg"></p>
+    </div>
+  </div>
+
+  <footer class="finale">
+    <h3>🏁 The One-Line Takeaway</h3>
+    <p>A stock's price is the weather — company news, macro forces, world events, psychology, analysts, and market conditions all mix together. Learn to spot which ones are pulling right now, and whether they agree.</p>
+  </footer>
+</div>
+
+<script>
+function checkQuiz(){
+  const questionBlocks = document.querySelectorAll('.question');
+  let score = 0;
+  questionBlocks.forEach(block => {
+    const optsDiv = block.querySelector('.options');
+    const correct = optsDiv.getAttribute('data-correct');
+    const opts = optsDiv.querySelectorAll('.opt');
+    let chosen = null;
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      opt.classList.remove('correct','incorrect','selected');
+      if(input.checked){ chosen = input.value; opt.classList.add('selected'); }
+    });
+    opts.forEach(opt => {
+      const input = opt.querySelector('input');
+      if(input.value === correct){ opt.classList.add('correct'); }
+      else if(input.value === chosen){ opt.classList.add('incorrect'); }
+    });
+    if(chosen === correct) score++;
+  });
+  const resultDiv = document.getElementById('result');
+  document.getElementById('scoreText').textContent = score + ' / 5 correct';
+  document.getElementById('scoreMsg').textContent =
+    score === 5 ? "🌈 Perfect score! You've got the full picture." :
+    score >= 3 ? "Solid! Review the missed ones to lock it in." :
+    "Worth a re-read — these factors show up in every real trade.";
+  resultDiv.style.display = 'block';
+  resultDiv.scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+</body>
+</html>
