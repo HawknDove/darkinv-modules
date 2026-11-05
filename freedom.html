@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freedom Management Questionnaire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+/* Layout: one dark column; each of the 8 parts owns one rainbow hue, red to violet, and the action plan wears the whole spectrum. */
+:root{
+  color-scheme: dark;
+  --bg:#08080d;
+  --panel:#12121b;
+  --field:#1a1a26;
+  --line:#2a2a3a;
+  --ink:#f2f1f7;
+  --muted:#a3a2b8;
+  --rainbow:linear-gradient(90deg,#ff4d6d,#ff8c42,#ffd23f,#3ddc84,#2ee6d6,#4d9fff,#7b6cff,#d16bff);
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55}
+body{padding:0 16px 80px}
+.wrap{max-width:820px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:5;background:rgba(8,8,13,.92);backdrop-filter:blur(8px);margin:0 -16px;padding:10px 16px 12px;border-bottom:1px solid var(--line)}
+.top .row{max-width:820px;margin:0 auto;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.bar{flex:1;min-width:140px;height:8px;border-radius:99px;background:var(--field);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--rainbow);transition:width .4s}
+.count{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.nav{display:flex;gap:6px}
+.nav a{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font:700 11px var(--display);color:#08080d;text-decoration:none}
+.nav a:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* hero */
+.hero{padding:48px 0 28px}
+.hero .kick{font:500 13px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hero h1{font-size:clamp(34px,7vw,58px);line-height:1.04;font-weight:800;margin:12px 0 18px;background:var(--rainbow);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:62ch;color:var(--muted);margin:0 0 10px}
+.name{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.name label{flex:1;min-width:200px;font-size:14px;color:var(--muted)}
+.tips{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:24px}
+.tips div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:15px}
+.tips b{display:block;font-family:var(--display);font-size:13px;margin-bottom:2px}
+
+/* parts */
+section.part{margin-top:34px;background:var(--panel);border-radius:18px;border:1px solid var(--line);border-top:5px solid var(--c);padding:26px 22px;position:relative;overflow:hidden}
+section.part::before{content:"";position:absolute;inset:0 0 auto 0;height:140px;background:radial-gradient(ellipse at top left,color-mix(in srgb,var(--c) 22%,transparent),transparent 70%);pointer-events:none}
+.tag{font:700 12px var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+section.part h2{font-size:clamp(22px,4vw,30px);margin:6px 0 10px;position:relative}
+.intro{color:var(--muted);max-width:62ch;margin:0 0 18px;position:relative}
+h3.sub{font-size:16px;color:var(--c);margin:26px 0 4px}
+.q{margin:16px 0}
+.q label{display:flex;gap:10px;font-weight:500;margin-bottom:6px}
+.q label span.n{flex:none;width:26px;height:26px;border-radius:50%;background:color-mix(in srgb,var(--c) 22%,transparent);color:var(--c);display:grid;place-items:center;font:700 12px var(--display)}
+textarea,input[type=text],input[type=number]{width:100%;background:var(--field);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:16px var(--body)}
+textarea{min-height:64px;resize:vertical}
+textarea:focus,input:focus{outline:none;border-color:var(--c,#7b6cff);box-shadow:0 0 0 3px color-mix(in srgb,var(--c,#7b6cff) 30%,transparent)}
+.tbl{overflow-x:auto;margin:14px 0;border-radius:12px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th{font:700 12px var(--display);letter-spacing:.04em;text-align:left;padding:10px;background:color-mix(in srgb,var(--c) 16%,var(--panel));color:var(--ink)}
+td{padding:6px;border-top:1px solid var(--line);vertical-align:top}
+td.lab{padding:10px;font-weight:500;white-space:nowrap}
+td input,td textarea{padding:7px 9px;font-size:15px;min-height:0}
+td input[type=number]{max-width:90px;font-variant-numeric:tabular-nums}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px;margin-top:10px}
+.checks label{display:flex;gap:10px;align-items:center;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer}
+.checks input{accent-color:var(--c);width:18px;height:18px}
+.pledge{margin-top:18px;padding:16px;border-radius:12px;background:var(--field);border-left:4px solid var(--c);font-style:italic}
+
+/* action plan */
+.plan{margin-top:40px;border-radius:20px;padding:3px;background:var(--rainbow)}
+.plan-in{background:var(--panel);border-radius:17px;padding:26px 22px}
+.plan h2{font-size:clamp(24px,4.5vw,34px);margin:6px 0 10px;background:var(--rainbow);-webkit-background-clip:text;background-clip:text;color:transparent}
+.plan .tag{color:var(--ink)}
+.snap{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:18px 0}
+.snap div{background:var(--field);border-radius:12px;padding:12px 14px;border:1px solid var(--line)}
+.snap b{display:block;font:700 11px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.snap span{font-size:16px}
+.snap .empty{color:var(--muted);font-style:italic}
+.plan .q{--c:#d16bff}
+.plan table{--c:#4d9fff}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+button{font:700 14px var(--display);letter-spacing:.03em;border:0;border-radius:99px;padding:12px 20px;cursor:pointer;color:#08080d;background:var(--rainbow)}
+button.ghost{background:var(--field);color:var(--ink);border:1px solid var(--line)}
+button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.msg{font-size:14px;color:var(--muted);align-self:center}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:420px){section.part,.plan-in{padding:22px 16px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="row">
+  <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+  <span class="count" id="count">0 answered</span>
+  <nav class="nav" id="nav" aria-label="Jump to part"></nav>
+</div></div>
+
+<div class="wrap">
+<header class="hero">
+  <div class="kick">Freedom Management · Student Workbook</div>
+  <h1>Freedom Management Questionnaire</h1>
+  <p>You keep the freedom to do what you please by managing your time, your values, and yourself. These eight parts help you see where you stand, where you want to go, and the steps that will get you there.</p>
+  <p>Your answers save in this browser as you type. When you're done, use <b>Copy my answers</b> at the bottom and send them to your instructor.</p>
+  <div class="name">
+    <label for="student">Your name<input type="text" id="student" data-k="student"></label>
+    <label for="started">Date started<input type="text" id="started" data-k="started" placeholder="e.g. Nov 5, 2026"></label>
+  </div>
+  <div class="tips">
+    <div><b>Be honest</b>No one grades this. The only wrong answer is a dishonest one.</div>
+    <div><b>One part per sitting</b>15–30 minutes each. Rushing gives shallow answers.</div>
+    <div><b>Write it down</b>Thoughts in your head stay vague. Written answers become plans.</div>
+    <div><b>Return in 90 days</b>Answer again and compare. The gap shows your growth.</div>
+  </div>
+</header>
+
+<main id="parts"></main>
+
+<section class="plan" id="plan" aria-labelledby="plan-h">
+ <div class="plan-in">
+  <div class="tag">Built with your instructor</div>
+  <h2 id="plan-h">My Personal Action Plan</h2>
+  <p class="intro">This snapshot fills in from your answers above. Sit down with your instructor to turn it into a plan made for you.</p>
+  <div class="snap">
+    <div><b>Strongest area</b><span id="s-high" class="empty">Rate Part 1 to see this</span></div>
+    <div><b>Area needing most care</b><span id="s-low" class="empty">Rate Part 1 to see this</span></div>
+    <div><b>Biggest time gap</b><span id="s-gap" class="empty">Fill in Part 4 to see this</span></div>
+    <div><b>My top values</b><span id="s-vals" class="empty">Answer Part 2, question 3</span></div>
+    <div><b>Starting this week</b><span id="s-start" class="empty">Answer Part 8, question 2</span></div>
+    <div><b>Stopping this week</b><span id="s-stop" class="empty">Answer Part 8, question 3</span></div>
+  </div>
+
+  <div class="q"><label for="ap-focus"><span class="n">1</span>Main focus for the next 90 days</label><textarea id="ap-focus" data-k="ap-focus"></textarea></div>
+  <div class="q"><label for="ap-why"><span class="n">2</span>Why this focus matters now</label><textarea id="ap-why" data-k="ap-why"></textarea></div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Action step</th><th>Life area</th><th>Due by</th><th>How I'll measure it</th></tr></thead>
+    <tbody id="ap-steps"></tbody>
+  </table></div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Check-in</th><th>Date</th><th>What went well</th><th>What to adjust</th></tr></thead>
+    <tbody id="ap-checks"></tbody>
+  </table></div>
+
+  <div class="q"><label for="ap-support"><span class="n">3</span>Support and accountability: who, and how often</label><textarea id="ap-support" data-k="ap-support"></textarea></div>
+  <div class="q"><label for="ap-notes"><span class="n">4</span>Instructor notes</label><textarea id="ap-notes" data-k="ap-notes" placeholder="For your instructor to complete"></textarea></div>
+
+  <div class="actions">
+    <button type="button" id="copy">Copy my answers</button>
+    <button type="button" class="ghost" id="clear">Clear everything</button>
+    <span class="msg" id="msg" role="status"></span>
+  </div>
+ </div>
+</section>
+</div>
+
+<script>
+const AREAS=["Financial","Family","Business / career","Trading","Spiritual","Physical health","Personal growth","Relationships and friendships","Rest and fun"];
+const TIME=["Sleep","Work / business","Trading and market study","Talking and connecting with people","Caring for others","Putting myself first","Spiritual practice","Exercise and physical care","Learning and growth","Phone, TV, social media","Unplanned or wasted time"];
+const P=[
+ {c:"#ff4d6d",t:"Where I am now",i:"Rate each area of your life from 1 (struggling) to 10 (thriving), and say why you chose that number.",x:[
+  {tb:"rate",cols:["Life area","Rating (1–10)","Why this number?"],rows:AREAS,types:["num","text"]},
+  "Which area did you rate lowest? How does it affect the other areas?",
+  "Which area did you rate highest? What are you doing there that you could use elsewhere?",
+  "If you raised one area by 2 points in the next 90 days, which would change your life the most?"]},
+ {c:"#ff8c42",t:"Values and self",i:"Your values decide what is worth your time. Without clear values, other people's priorities fill your calendar.",x:[
+  "What does freedom mean to you, in your own words?",
+  "When do you feel most free? When do you feel most trapped?",
+  "List your top 5 values (faith, family, honesty, health, independence, growth, generosity, security, creativity…).",
+  "Look at how you spent last week. Which values did your actions actually serve?",
+  "Where do your stated values and your daily habits not match?",
+  "What do you believe about yourself that holds you back? Where did that belief come from?",
+  "What would the people who know you best say are your three greatest strengths?",
+  "What are you willing to say “no” to in order to protect what matters most?",
+  "Who are you when no one is watching? Who do you want to be?"]},
+ {c:"#ffd23f",t:"Dreams and ambitions",i:"Dream big first. Practical limits come later, in Part 7.",x:[
+  "If money, time, and fear were not issues, what would you do with your life?",
+  "What did you dream about as a child? Is any of it still alive in you?",
+  "What would you regret most if you never tried it?",
+  "Describe one ordinary day in your ideal life. Where do you wake up? Who is with you? What do you do?",
+  "What legacy do you want to leave for your family, your community, and the world?",
+  "Whose life or work inspires you? What exactly draws you to it?",
+  {tb:"vision",cols:["Time frame","Where I want to be","What has to be true by then"],rows:["1 year","5 years","10 years"],types:["text","text"]},
+  "Which of these dreams are truly yours, and which came from someone else's expectations?"]},
+ {c:"#3ddc84",t:"Time and freedom audit",i:"Freedom is built from hours. A week has 168. Estimate where yours go now, and where you want them to go.",x:[
+  {tb:"time",cols:["Activity","Hours now / week","Hours I want / week"],rows:TIME,types:["num","num"]},
+  "Where is the biggest gap between “now” and “want”?",
+  "What steals your time without giving anything back?",
+  "Do you plan your week ahead, or react to whatever comes? What would change if you planned?",
+  "When do you put others first in a way that drains you? When does it fill you up?",
+  "When did you last put yourself first without guilt? What did it give you?",
+  "At what time of day is your mind sharpest? What do you usually spend that time on?",
+  "In trading, how much of your screen time is planned, and how much is impulse or boredom?"]},
+ {c:"#2ee6d6",t:"Life area deep dive",i:"Answer the questions for each area. Skip any that don't apply to you yet.",x:[
+  {h:"Financial"},"Do you know exactly what comes in and goes out each month?","How many months could you live if your income stopped today?","What is your relationship with money: fear, control, freedom, or avoidance?","What financial number would make you feel free?",
+  {h:"Family"},"Who in your family needs more of your presence, not just your provision?","What family patterns do you want to continue? Which ones end with you?","How do you protect family time from work and trading?",
+  {h:"Business / career"},"Does your work move you toward your dreams or away from them?","Which tasks could you delegate, automate, or drop?","What skill, if mastered, would double your value?",
+  {h:"Trading"},"Do you have a written trading plan, and do you follow it?","Which emotion costs you most in trading: fear, greed, impatience, or revenge?","What rules protect your capital and your peace of mind?","How do your trading results affect your mood, sleep, and family?",
+  {h:"Spiritual"},"What gives your life meaning beyond yourself?","What daily practice keeps you grounded (prayer, meditation, reading, gratitude)?","Where do you need to forgive, including yourself?",
+  {h:"Physical"},"How do your sleep, food, and movement affect your energy and decisions?","What one habit would most improve your health this month?","What is your body telling you that you've been ignoring?",
+  {h:"Personal"},"What are you learning right now? What do you want to learn next?","Who are the five people you spend the most time with? Do they lift you up?","What brings you joy that you've stopped making time for?",
+  {h:"Giving back"},"How do you serve others with your time, money, or skills?","What cause would you support if you had more freedom?"]},
+ {c:"#4d9fff",t:"Letting go of the unnecessary",i:"Every yes to something unnecessary is a no to something you value. Freedom grows when you release what no longer serves you.",x:[
+  "List 5 tasks, commitments, or habits that take your time but don't move you forward.",
+  "For each one: can you drop it, delegate it, shrink it, or schedule it?",
+  "What are you holding on to out of guilt, fear, or habit?",
+  "Which relationships drain more than they give? What boundary would help?",
+  "What possessions, subscriptions, or obligations cost more than they're worth?",
+  "What old story about yourself are you ready to let go of?",
+  "What would you do with the time and energy you get back?"]},
+ {c:"#7b6cff",t:"Tasks and steps for progress",i:"A dream without steps stays a wish. Pick your top 3 goals from Parts 3 and 5 and break each into concrete actions.",x:[
+  {tb:"goals",cols:["Goal","First step (this week)","Next 30 days","By 90 days","Who holds me accountable"],rows:["Goal 1","Goal 2","Goal 3"],types:["text","text","text","text"],editLab:true},
+  "What is the smallest action you can take in the next 24 hours toward Goal 1?",
+  "What obstacles will likely come up? How will you respond when they do?",
+  "What do you need to learn, buy, or ask for to make progress?",
+  "When will you work on these goals? Put the time blocks in your calendar now.",
+  "How will you measure progress each week?",
+  {h:"Weekly freedom checklist"},
+  {ck:["Planned my week before it started","Protected time for family","Followed my trading plan","Did something for my body","Spent time on my spiritual practice","Put myself first at least once","Said no to one unnecessary task","Took one step toward a goal"]}]},
+ {c:"#d16bff",t:"Commitment and review",i:"Finish by making a promise to yourself in writing.",x:[
+  "In one sentence, what is the life you are choosing to build?",
+  "What is the one thing you will start doing this week?",
+  "What is the one thing you will stop doing this week?",
+  "Why does this matter to you? Write it so your future self remembers on a hard day.",
+  {pl:true},
+  {tb:"sign",cols:["Signed","Date","90-day review date"],rows:[""],types:["text","text"],noLab:true}]}
+];
+
+const store={get(){try{return JSON.parse(localStorage.getItem("fmq")||"{}")}catch(e){return{}}},set(d){try{localStorage.setItem("fmq",JSON.stringify(d))}catch(e){}}};
+let data=store.get();
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const field=(k,type)=>type==="num"?`<input type="number" min="0" id="${k}" data-k="${k}" aria-label="${k}">`:`<textarea rows="1" id="${k}" data-k="${k}" aria-label="${k}"></textarea>`;
+
+let html="",nav="";
+P.forEach((p,pi)=>{
+  const n=pi+1;let qn=0;
+  nav+=`<a href="#part-${n}" style="background:${p.c}" title="Part ${n}: ${esc(p.t)}">${n}</a>`;
+  html+=`<section class="part" id="part-${n}" style="--c:${p.c}"><div class="tag">Part ${n} of 8</div><h2>${esc(p.t)}</h2><p class="intro">${esc(p.i)}</p>`;
+  p.x.forEach(it=>{
+    if(typeof it==="string"){qn++;const k=`p${n}q${qn}`;html+=`<div class="q"><label for="${k}"><span class="n">${qn}</span>${esc(it)}</label><textarea id="${k}" data-k="${k}"></textarea></div>`;}
+    else if(it.h){html+=`<h3 class="sub">${esc(it.h)}</h3>`;}
+    else if(it.ck){html+=`<div class="checks">`+it.ck.map((c,ci)=>`<label><input type="checkbox" id="p${n}c${ci}" data-k="p${n}c${ci}">${esc(c)}</label>`).join("")+`</div>`;}
+    else if(it.pl){html+=`<div class="pledge"><b>My commitment:</b> I choose to manage my time, my values, and myself so that I stay free to live the life I've described here.</div>`;}
+    else if(it.tb){
+      const cols=it.noLab?it.cols:it.cols;
+      html+=`<div class="tbl"><table><thead><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>`;
+      it.rows.forEach((r,ri)=>{
+        html+="<tr>";
+        if(it.noLab){cols.forEach((c,ci)=>html+=`<td>${field(`${it.tb}-${ri}-${ci}`,"text")}</td>`);}
+        else{
+          html+=it.editLab?`<td><textarea rows="1" id="${it.tb}-${ri}-L" data-k="${it.tb}-${ri}-L" placeholder="${esc(r)}" aria-label="${esc(r)}"></textarea></td>`:`<td class="lab">${esc(r)}</td>`;
+          it.types.forEach((ty,ci)=>html+=`<td>${field(`${it.tb}-${ri}-${ci}`,ty)}</td>`);
+        }
+        html+="</tr>";
+      });
+      html+=`</tbody></table></div>`;
+    }
+  });
+  html+=`</section>`;
+});
+document.getElementById("parts").innerHTML=html;
+document.getElementById("nav").innerHTML=nav;
+
+const rowsHTML=(id,n,lab,cols)=>{let h="";for(let r=0;r<n;r++){h+="<tr>";h+=lab?`<td class="lab">${lab} ${r+1}</td>`:"";for(let c=0;c<cols;c++)h+=`<td>${field(`${id}-${r}-${c}`,"text")}</td>`;h+="</tr>";}return h;};
+document.getElementById("ap-steps").innerHTML=rowsHTML("ap-steps",5,"",4);
+document.getElementById("ap-checks").innerHTML=(()=>{const L=["30 days","60 days","90 days"];let h="";L.forEach((l,r)=>{h+=`<tr><td class="lab">${l}</td>`;for(let c=0;c<3;c++)h+=`<td>${field(`ap-checks-${r}-${c}`,"text")}</td>`;h+="</tr>";});return h;})();
+
+const els=[...document.querySelectorAll("[data-k]")];
+els.forEach(el=>{const v=data[el.dataset.k];if(v!==undefined){el.type==="checkbox"?el.checked=!!v:el.value=v;}});
+
+function grow(el){if(el.tagName==="TEXTAREA"){el.style.height="auto";el.style.height=el.scrollHeight+2+"px";}}
+els.forEach(grow);
+
+function setSnap(id,txt){const s=document.getElementById(id);if(txt){s.textContent=txt;s.classList.remove("empty");}else{s.classList.add("empty");s.textContent=s.dataset.ph;}}
+document.querySelectorAll(".snap span").forEach(s=>s.dataset.ph=s.textContent);
+function snapshot(){
+  const r=AREAS.map((a,i)=>({a,v:parseFloat(data[`rate-${i}-0`])})).filter(o=>!isNaN(o.v));
+  if(r.length){const hi=r.reduce((m,o)=>o.v>m.v?o:m),lo=r.reduce((m,o)=>o.v<m.v?o:m);setSnap("s-high",`${hi.a} (${hi.v}/10)`);setSnap("s-low",`${lo.a} (${lo.v}/10)`);}else{setSnap("s-high");setSnap("s-low");}
+  let best=null;TIME.forEach((t,i)=>{const a=parseFloat(data[`time-${i}-0`]),b=parseFloat(data[`time-${i}-1`]);if(!isNaN(a)&&!isNaN(b)){const g=b-a;if(!best||Math.abs(g)>Math.abs(best.g))best={t,g};}});
+  setSnap("s-gap",best&&best.g!==0?`${best.t}: ${best.g>0?"+":""}${best.g} hrs/week wanted`:"");
+  setSnap("s-vals",(data.p2q3||"").trim());setSnap("s-start",(data.p8q2||"").trim());setSnap("s-stop",(data.p8q3||"").trim());
+}
+function progress(){
+  const qs=els.filter(e=>e.tagName==="TEXTAREA"&&/^p\d+q\d+$/.test(e.dataset.k));
+  const done=qs.filter(e=>e.value.trim()).length;
+  document.getElementById("count").textContent=`${done} of ${qs.length} answered`;
+  document.getElementById("bar").style.width=(done/qs.length*100)+"%";
+}
+document.addEventListener("input",e=>{const el=e.target;if(!el.dataset||!el.dataset.k)return;data[el.dataset.k]=el.type==="checkbox"?el.checked:el.value;store.set(data);grow(el);snapshot();progress();});
+document.addEventListener("change",e=>{if(e.target.type==="checkbox"){data[e.target.dataset.k]=e.target.checked;store.set(data);}});
+snapshot();progress();
+
+function asText(){
+  const L=[];const v=k=>(data[k]||"").toString().trim();
+  L.push("FREEDOM MANAGEMENT QUESTIONNAIRE");L.push(`Name: ${v("student")}   Started: ${v("started")}`);
+  document.querySelectorAll("section.part,section.plan").forEach(sec=>{
+    L.push("");L.push("== "+sec.querySelector("h2").textContent.toUpperCase()+" ==");
+    sec.querySelectorAll(".q,h3.sub,.tbl,.checks").forEach(b=>{
+      if(b.matches("h3.sub")){L.push("");L.push("-- "+b.textContent);}
+      else if(b.matches(".q")){const t=b.querySelector("[data-k]");L.push(b.querySelector("label").textContent.replace(/^(\d+)/,"$1. "));L.push("   "+(t.value.trim()||"—"));}
+      else if(b.matches(".checks")){b.querySelectorAll("label").forEach(l=>L.push(`[${l.querySelector("input").checked?"x":" "}] ${l.textContent}`));}
+      else{const hd=[...b.querySelectorAll("th")].map(t=>t.textContent);b.querySelectorAll("tbody tr").forEach(tr=>{const cells=[...tr.children].map((td,i)=>{const f=td.querySelector("[data-k]");return `${hd[i]}: ${f?(f.value.trim()||"—"):td.textContent}`;});L.push(" • "+cells.join(" | "));});}
+    });
+  });
+  return L.join("\n");
+}
+const msg=document.getElementById("msg");
+document.getElementById("copy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(asText());msg.textContent="Copied. Paste it into an email or message to your instructor.";}catch(e){msg.textContent="Copy was blocked here. Select your answers and copy them by hand.";}});
+let armed=false;document.getElementById("clear").addEventListener("click",e=>{
+  if(!armed){armed=true;e.target.textContent="Tap again to erase all";msg.textContent="This erases every answer in this browser.";setTimeout(()=>{armed=false;e.target.textContent="Clear everything";},4000);return;}
+  data={};store.set(data);els.forEach(el=>{el.type==="checkbox"?el.checked=false:el.value="";grow(el);});snapshot();progress();armed=false;e.target.textContent="Clear everything";msg.textContent="All answers cleared.";
+});
+</script>
+</body>
+</html>
