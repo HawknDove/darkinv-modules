@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Pain Outlasts the Win — Trading Psychology Module</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root{
+    --bg:#0d0b09;
+    --card:#1c1712;
+    --card-2:#221b15;
+    --card-border:#2e2620;
+    --gold:#c9a24a;
+    --gold-bright:#e8c874;
+    --cream:#efe6d4;
+    --cream-dim:#b8ab93;
+    --brown:#3a2a1c;
+    --teal:#5b8a78;
+    --teal-bright:#7fb7a2;
+    --rust:#a8583a;
+    --red:#e5604f;
+    --green:#3fb87f;
+    --steam:rgba(239,230,212,0.5);
+    --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(201,162,74,0.10), transparent),
+      radial-gradient(ellipse 700px 400px at 90% 30%, rgba(91,138,120,0.06), transparent),
+      var(--bg);
+    color:var(--cream);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    min-height:100vh;
+    padding-bottom:70px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding:56px 20px 36px; text-align:center; overflow:hidden; border-bottom:1px solid var(--card-border); }
+  .eyebrow{ font-size:11px; letter-spacing:0.28em; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:18px; }
+  .cup-wrap{ position:relative; width:150px; height:170px; margin:0 auto 8px; }
+  .steam-line{
+    position:absolute; bottom:108px; width:5px;
+    background:linear-gradient(to top, var(--steam), transparent);
+    border-radius:10px; filter:blur(2.5px); opacity:0; animation:rise 4.5s ease-in infinite;
+  }
+  .s1{left:44px; height:70px; animation-delay:0s;}
+  .s2{left:66px; height:90px; animation-delay:1.1s;}
+  .s3{left:88px; height:70px; animation-delay:2.3s;}
+  .s4{left:76px; height:60px; animation-delay:3.2s;}
+  @keyframes rise{
+    0%{ transform:translateY(0) translateX(0) scaleX(1); opacity:0; }
+    15%{ opacity:0.55; }
+    50%{ transform:translateY(-45px) translateX(6px) scaleX(1.4); opacity:0.35; }
+    100%{ transform:translateY(-95px) translateX(-8px) scaleX(2); opacity:0; }
+  }
+  .cup-svg{ position:relative; z-index:2; }
+  .liquid{ animation:shimmer 3s ease-in-out infinite; }
+  @keyframes shimmer{ 0%,100%{opacity:1;} 50%{opacity:0.85;} }
+
+  h1.title{
+    font-family:'Fraunces', serif; font-weight:600;
+    font-size:clamp(30px, 9vw, 48px); letter-spacing:-0.01em; margin-top:10px; line-height:1.1;
+  }
+  h1.title em{ font-style:italic; font-weight:500; color:var(--gold-bright); }
+  .subtitle{ margin:12px auto 0; color:var(--cream-dim); font-size:15px; max-width:450px; }
+  .date-pill{
+    display:inline-block; margin-top:20px; padding:8px 18px; border:1px solid var(--card-border);
+    border-radius:999px; background:var(--card); font-size:12px; letter-spacing:0.05em; color:var(--rust); font-weight:600;
+  }
+
+  /* ---------- INTRO ---------- */
+  .intro{ max-width:560px; margin:0 auto; padding:36px 22px 8px; }
+  .intro p{ color:var(--cream-dim); font-size:15px; margin-bottom:14px; }
+  .intro strong{ color:var(--cream); font-weight:600; }
+  .intro em{ color:var(--gold-bright); font-style:italic; }
+  .divider{ max-width:560px; margin:28px auto; height:1px; background:linear-gradient(to right, transparent, var(--card-border), transparent); }
+
+  /* ---------- ACCORDION ---------- */
+  .modules{ max-width:600px; margin:0 auto; padding:0 16px; }
+  .module{ background:var(--card); border:1px solid var(--card-border); border-radius:14px; margin-bottom:14px; overflow:hidden; transition:border-color 0.3s ease; }
+  .module.open{ border-color:rgba(201,162,74,0.4); }
+  .module-head{ display:flex; align-items:center; gap:14px; padding:18px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .week-tag{
+    flex-shrink:0; width:52px; height:52px; border-radius:10px;
+    background:linear-gradient(145deg, var(--brown), #241a11); border:1px solid var(--card-border);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:'Fraunces', serif;
+  }
+  .week-tag .num{ font-size:18px; font-weight:700; color:var(--gold-bright); line-height:1; }
+  .week-tag .lbl{ font-size:8px; letter-spacing:0.08em; color:var(--cream-dim); text-transform:uppercase; margin-top:2px; }
+  .module-head-text{ flex:1; min-width:0; }
+  .module-date{ font-size:11px; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase; font-weight:600; margin-bottom:3px; }
+  .module-title{ font-family:'Fraunces', serif; font-size:17px; font-weight:600; color:var(--cream); line-height:1.25; }
+  .chevron{ flex-shrink:0; width:20px; height:20px; color:var(--cream-dim); transition:transform 0.35s ease; }
+  .module.open .chevron{ transform:rotate(180deg); color:var(--gold); }
+  .module-body{ max-height:0; overflow:hidden; transition:max-height 0.5s ease; }
+  .module.open .module-body{ max-height:16000px; }
+  .module-inner{ padding:16px 18px 22px; border-top:1px solid var(--card-border); }
+  .module-tagline{ font-style:italic; color:var(--gold-bright); font-size:14px; margin-bottom:14px; }
+  .module-inner h4{ font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--teal-bright); margin:18px 0 8px; font-weight:600; }
+  .module-inner h4:first-of-type{ margin-top:0; }
+  .module-inner p, .module-inner li{ color:var(--cream-dim); font-size:14px; }
+  .module-inner p + p{ margin-top:10px; }
+  .module-inner ul{ padding-left:18px; margin-bottom:4px; }
+  .module-inner li{ margin-bottom:6px; }
+  .module-inner li b, .module-inner p b{ color:var(--cream); font-weight:600; }
+
+  .mind-hack{ margin-top:14px; padding:14px 16px; background:rgba(201,162,74,0.07); border-left:3px solid var(--gold); border-radius:6px; font-size:13.5px; color:var(--cream); }
+  .mind-hack b{ color:var(--gold-bright); }
+  .reflect{ margin-top:14px; padding:14px 16px; background:rgba(91,138,120,0.09); border-left:3px solid var(--teal); border-radius:6px; font-size:13.5px; color:var(--cream); }
+  .reflect b{ color:var(--teal-bright); }
+  .care{ margin-top:14px; padding:12px 14px; border:1px dashed var(--card-border); border-radius:8px; font-size:13px; color:var(--cream-dim); }
+  .care b{ color:var(--cream); }
+
+  /* ---------- EVIDENCE CARD ---------- */
+  .ev{ background:var(--card-2); border:1px solid var(--card-border); border-radius:12px; padding:16px; margin:12px 0; }
+  .ev-top{ display:flex; gap:14px; align-items:center; margin-bottom:10px; }
+  .chip{
+    flex-shrink:0; min-width:84px; max-width:96px; text-align:center; padding:8px 8px; border-radius:10px;
+    background:var(--bg); border:1px solid rgba(201,162,74,0.3);
+  }
+  .chip .big{ font-family:var(--mono); font-size:14px; font-weight:600; color:var(--gold-bright); line-height:1.2; }
+  .chip .sm{ font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--cream-dim); margin-top:3px; font-weight:600; }
+  .ev h3{ font-family:'Fraunces', serif; font-size:16.5px; font-weight:600; line-height:1.25; color:var(--cream); }
+  .ev p{ font-size:13.5px; color:var(--cream-dim); margin-bottom:8px; }
+  .ev p b{ color:var(--cream); font-weight:600; }
+  .ev .yours{ font-size:13.5px; color:var(--cream); padding:10px 12px; border-radius:8px; background:rgba(201,162,74,0.07); border-left:3px solid var(--gold); }
+  .ev .yours b{ color:var(--gold-bright); }
+  .cite{ font-size:11.5px; color:var(--cream-dim); margin-top:8px; font-style:italic; }
+  .honest{ margin-top:12px; padding:14px 16px; border:1px dashed var(--card-border); border-radius:10px; font-size:13px; color:var(--cream-dim); }
+  .honest b{ color:var(--cream); }
+
+  /* ---------- DAY GRID ---------- */
+  .gridbox{ background:var(--bg); border:1px solid var(--card-border); border-radius:12px; padding:14px 12px 12px; margin:6px 0 10px; }
+  .toggle{ display:flex; gap:6px; justify-content:center; margin-bottom:12px; }
+  .toggle button{
+    font-family:'Inter', sans-serif; font-size:12.5px; font-weight:600; padding:8px 14px; border-radius:999px; cursor:pointer;
+    background:var(--card); color:var(--cream-dim); border:1px solid var(--card-border);
+  }
+  .toggle button[aria-pressed="true"]{ background:rgba(201,162,74,0.15); color:var(--gold-bright); border-color:rgba(201,162,74,0.5); }
+  .toggle button:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:2px; }
+  .cal{ display:grid; grid-template-columns:30px repeat(5, 1fr); gap:6px; align-items:center; max-width:360px; margin:0 auto; }
+  .cal .dh{ font-size:10.5px; color:var(--cream-dim); text-align:center; letter-spacing:0.08em; font-weight:600; }
+  .cal .wk{ font-family:var(--mono); font-size:10.5px; color:var(--cream-dim); }
+  .cell{
+    aspect-ratio:1; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    font-size:15px; font-weight:700; transition:transform 0.55s cubic-bezier(.2,.7,.2,1), opacity 0.55s ease, box-shadow 0.55s ease;
+  }
+  .cell.w{ background:rgba(63,184,127,0.25); border:1px solid rgba(63,184,127,0.6); color:var(--green); }
+  .cell.l{ background:rgba(229,96,79,0.25); border:1px solid rgba(229,96,79,0.7); color:var(--red); }
+  .cal.memory .cell.w{ transform:scale(0.78); opacity:0.4; }
+  .cal.memory .cell.l{ transform:scale(1.18); box-shadow:0 0 18px rgba(229,96,79,0.55); position:relative; z-index:2; }
+  .grid-cap{ text-align:center; font-size:13px; color:var(--cream); margin-top:12px; min-height:58px; padding:0 6px; }
+  .grid-key{ display:flex; justify-content:center; gap:16px; margin-top:8px; font-size:12px; color:var(--cream-dim); }
+  .grid-key i{ display:inline-block; width:11px; height:11px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
+  .grid-note{ text-align:center; font-size:11.5px; color:var(--cream-dim); font-style:italic; margin-top:6px; }
+
+  /* ---------- THREE KINDS OF WINNING DAY ---------- */
+  .days{ display:grid; grid-template-columns:1fr; gap:10px; margin-top:6px; }
+  .day{ border-radius:10px; padding:14px; background:var(--card-2); border:1px solid var(--card-border); border-left:4px solid var(--green); }
+  .day.off{ border-left-color:var(--red); }
+  .day h5{ font-family:'Fraunces', serif; font-size:15.5px; font-weight:600; color:var(--cream); margin-bottom:3px; }
+  .day p{ font-size:13.5px; }
+  .day .tag{ display:inline-block; font-size:10.5px; letter-spacing:0.1em; font-weight:700; text-transform:uppercase; margin-bottom:6px; }
+  .day .tag.g{ color:var(--green); } .day .tag.r{ color:#e5806f; }
+  @media (min-width:560px){ .days{ grid-template-columns:1fr 1fr; } .day.wide{ grid-column:1 / -1; } }
+
+  /* ---------- STEPS ---------- */
+  .steps{ list-style:none; counter-reset:s; margin-top:6px; position:relative; }
+  .steps li{
+    counter-increment:s; position:relative; padding:12px 0 12px 48px; border-top:1px solid var(--card-border);
+    font-size:14px; color:var(--cream-dim);
+  }
+  .steps li:first-child{ border-top:none; }
+  .steps li::before{
+    content:counter(s); position:absolute; left:0; top:11px; width:32px; height:32px; border-radius:50%;
+    background:var(--card-2); border:1.5px solid var(--gold); color:var(--gold-bright);
+    font-family:'Fraunces', serif; font-weight:700; display:flex; align-items:center; justify-content:center;
+  }
+  .steps li b{ color:var(--cream); font-weight:600; display:block; margin-bottom:1px; }
+  .steps li.back::before{ content:'\21BA'; background:rgba(201,162,74,0.15); }
+
+  /* ---------- TABLE TALK ---------- */
+  .table-talk{ max-width:600px; margin:8px auto 0; padding:0 16px; }
+  .tt-head{ text-align:center; margin-bottom:16px; }
+  .tt-head .eyebrow2{ font-size:11px; letter-spacing:0.24em; text-transform:uppercase; color:var(--rust); font-weight:700; margin-bottom:8px; }
+  .tt-head h3{ font-family:'Fraunces', serif; font-size:24px; font-weight:600; }
+  .tt-head p{ color:var(--cream-dim); font-size:13.5px; margin-top:8px; }
+  .prompt-card{ background:linear-gradient(155deg, rgba(168,88,58,0.1), var(--card) 55%); border:1px solid rgba(168,88,58,0.35); border-radius:14px; padding:20px; margin-bottom:14px; }
+  .prompt-num{ font-family:'Fraunces', serif; font-size:13px; color:var(--rust); font-weight:700; letter-spacing:0.05em; margin-bottom:8px; text-transform:uppercase; }
+  .prompt-q{ font-family:'Fraunces', serif; font-size:18px; font-style:italic; font-weight:500; color:var(--gold-bright); line-height:1.4; }
+  .prompt-sub{ margin-top:8px; font-size:13.5px; color:var(--cream-dim); }
+
+  .line-box{ max-width:560px; margin:30px auto 0; padding:28px 24px; text-align:center; border:1px solid rgba(201,162,74,0.35); border-radius:14px; background:linear-gradient(160deg, rgba(201,162,74,0.08), transparent); }
+  .line-box .big{ font-family:'Fraunces', serif; font-style:italic; font-weight:600; font-size:21px; color:var(--gold-bright); margin-bottom:10px; line-height:1.3; }
+  .line-box p{ color:var(--cream-dim); font-size:14px; }
+
+  .sources{ max-width:560px; margin:34px auto 0; padding:0 22px; }
+  .sources h4{ font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:10px; }
+  .sources li{ font-size:12.5px; color:var(--cream-dim); margin-bottom:8px; margin-left:16px; }
+  .sources a{ color:var(--gold-bright); text-underline-offset:2px; }
+  .footer{ max-width:560px; margin:30px auto 0; padding:0 22px; text-align:center; }
+  .footer p{ color:var(--cream-dim); font-size:12.5px; }
+
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+
+  /* ---------- FADE CHART ---------- */
+  .chartbox{ background:var(--bg); border:1px solid var(--card-border); border-radius:12px; padding:14px 12px 12px; margin:6px 0 10px; }
+  .chartbox svg{ width:100%; height:auto; display:block; max-width:380px; margin:0 auto; }
+  .chart-cap{ text-align:center; font-size:13px; color:var(--cream); margin-top:10px; min-height:56px; padding:0 6px; }
+  .legend{ display:flex; justify-content:center; gap:16px; margin-top:6px; font-size:12px; color:var(--cream-dim); }
+  .legend i{ display:inline-block; width:14px; height:3px; border-radius:2px; margin-right:6px; vertical-align:3px; }
+  .ill-note{ text-align:center; font-size:11.5px; color:var(--cream-dim); font-style:italic; margin-top:6px; }
+  .pain-line, .joy-line{ fill:none; stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+  .pain-line{ stroke:var(--red); } .joy-line{ stroke:var(--green); }
+
+  /* ---------- WIPEOUT SLIDER ---------- */
+  .wipe{ background:var(--bg); border:1px solid var(--card-border); border-radius:12px; padding:16px 14px; margin:8px 0 10px; }
+  .wipe label{ display:block; font-size:13px; color:var(--cream); margin-bottom:8px; }
+  .wipe input[type=range]{ width:100%; accent-color:var(--gold); }
+  .sq-row{ display:grid; grid-template-columns:repeat(12,1fr); gap:4px; margin:14px 0 8px; }
+  .sq{ aspect-ratio:1; border-radius:5px; background:rgba(63,184,127,0.3); border:1px solid rgba(63,184,127,0.6); transition:all .35s ease; }
+  .sq.gone{ background:rgba(229,96,79,0.28); border-color:rgba(229,96,79,0.7); opacity:.75; }
+  .wipe-out{ font-family:'Fraunces',serif; font-size:20px; color:var(--gold-bright); text-align:center; margin-top:6px; }
+  .wipe-msg{ font-size:13.5px; color:var(--cream-dim); text-align:center; margin-top:6px; min-height:60px; }
+  .wipe-msg b{ color:var(--cream); }
+
+  /* ---------- TWO-COLUMN COMPARE ---------- */
+  .vs{ display:grid; grid-template-columns:1fr; gap:8px; margin-top:6px; }
+  .vs-row{ display:grid; grid-template-columns:1fr; gap:6px; }
+  .vs-a, .vs-b{ padding:10px 12px; border-radius:8px; font-size:13.5px; }
+  .vs-a{ background:rgba(229,96,79,0.1); border-left:3px solid var(--red); color:var(--cream); }
+  .vs-b{ background:rgba(63,184,127,0.1); border-left:3px solid var(--green); color:var(--cream); }
+  .vs-a small, .vs-b small{ display:block; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; font-weight:700; margin-bottom:2px; }
+  .vs-a small{ color:#e5806f; } .vs-b small{ color:var(--green); }
+  @media (min-width:560px){ .vs-row{ grid-template-columns:1fr 1fr; } }
+  .vs-row + .vs-row{ margin-top:8px; }
+
+  /* ---------- MAPPING ---------- */
+  .map{ display:grid; gap:8px; margin-top:6px; }
+  .map-row{ background:var(--card-2); border:1px solid var(--card-border); border-radius:10px; padding:12px 14px; }
+  .map-row .t{ font-size:12.5px; color:var(--gold-bright); font-weight:600; }
+  .map-row .l{ font-size:13.5px; color:var(--cream); margin-top:3px; }
+
+  /* ---------- PROPORTION CHECK ---------- */
+  .pc{ background:var(--bg); border:1px solid var(--card-border); border-radius:12px; padding:8px 14px 14px; margin:8px 0 10px; }
+  .pc-row{ padding:12px 0; border-top:1px solid var(--card-border); }
+  .pc-row:first-child{ border-top:none; }
+  .pc-name{ font-size:14px; color:var(--cream); font-weight:600; }
+  .pc-name span{ display:block; font-weight:400; font-size:12px; color:var(--cream-dim); }
+  .pc-opts{ display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+  .pc-opts button, .chip-btn{
+    font-family:'Inter',sans-serif; font-size:12.5px; font-weight:600; padding:8px 12px; border-radius:999px; cursor:pointer;
+    background:var(--card); color:var(--cream-dim); border:1px solid var(--card-border);
+  }
+  .pc-opts button[aria-pressed="true"].more{ background:rgba(229,96,79,0.15); color:#f0907f; border-color:rgba(229,96,79,0.6); }
+  .pc-opts button[aria-pressed="true"].ok{ background:rgba(63,184,127,0.15); color:var(--green); border-color:rgba(63,184,127,0.6); }
+  .pc-opts button[aria-pressed="true"].less{ background:rgba(201,162,74,0.15); color:var(--gold-bright); border-color:rgba(201,162,74,0.55); }
+  .pc-opts button:focus-visible, .chip-btn:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:2px; }
+  .pc-result{ margin-top:12px; padding:14px 16px; background:rgba(201,162,74,0.07); border-left:3px solid var(--gold); border-radius:6px; font-size:13.5px; color:var(--cream); min-height:60px; }
+  .pc-result b{ color:var(--gold-bright); }
+
+  .words{ display:grid; grid-template-columns:1fr; gap:8px; margin-top:6px; }
+  .word{ padding:12px 14px; border-radius:10px; background:var(--card-2); border:1px solid var(--card-border); }
+  .word.pick{ border-color:rgba(201,162,74,0.55); background:linear-gradient(150deg, rgba(201,162,74,0.12), var(--card-2)); }
+  .word h5{ font-family:'Fraunces',serif; font-size:16px; color:var(--cream); margin-bottom:2px; }
+  .word.pick h5{ color:var(--gold-bright); }
+  .word p{ font-size:13.5px; }
+  @media (min-width:560px){ .words{ grid-template-columns:1fr 1fr; } .word.pick{ grid-column:1 / -1; } }
+
+  /* ---------- MILESTONES ---------- */
+  .ms{ background:var(--bg); border:1px solid var(--card-border); border-radius:12px; padding:10px 12px 14px; margin:8px 0 10px; }
+  .ms-item{ display:flex; gap:12px; align-items:center; width:100%; text-align:left; padding:12px 8px; border:none; border-top:1px solid var(--card-border); background:transparent; color:var(--cream-dim); font-family:'Inter',sans-serif; font-size:14px; cursor:pointer; border-radius:0; }
+  .ms-item:first-child{ border-top:none; }
+  .ms-item:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:-2px; }
+  .ms-box{ flex-shrink:0; width:26px; height:26px; border-radius:8px; border:1.5px solid var(--gold); display:flex; align-items:center; justify-content:center; font-size:15px; color:transparent; transition:all .3s cubic-bezier(.2,.8,.3,1.4); }
+  .ms-item[aria-pressed="true"]{ color:var(--cream); }
+  .ms-item[aria-pressed="true"] .ms-box{ background:var(--green); border-color:var(--green); color:#0d0b09; transform:scale(1.12); font-weight:800; }
+  .ms-add{ display:flex; gap:8px; margin-top:10px; }
+  .ms-add input{ flex:1; min-width:0; padding:10px 12px; border-radius:8px; border:1px solid var(--card-border); background:var(--card); color:var(--cream); font-family:'Inter',sans-serif; font-size:14px; }
+  .ms-add input:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:1px; }
+  .ms-count{ margin-top:12px; text-align:center; font-family:'Fraunces',serif; font-size:19px; color:var(--gold-bright); }
+  .ms-say{ text-align:center; font-size:13.5px; color:var(--cream-dim); margin-top:4px; min-height:42px; }
+  .ms-say b{ color:var(--cream); }
+  .glow{ animation:glow 1.2s ease-out; }
+  @keyframes glow{ 0%{ text-shadow:0 0 0 rgba(232,200,116,0);} 30%{ text-shadow:0 0 18px rgba(232,200,116,.9);} 100%{ text-shadow:0 0 0 rgba(232,200,116,0);} }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="eyebrow">Saturday Coffee &amp; Tea · Trading Psychology</div>
+    <div class="cup-wrap">
+      <div class="steam-line s1"></div><div class="steam-line s2"></div><div class="steam-line s3"></div><div class="steam-line s4"></div>
+      <svg class="cup-svg" width="150" height="170" viewBox="0 0 150 170" aria-hidden="true">
+        <ellipse cx="75" cy="150" rx="46" ry="7" fill="#000" opacity="0.35"/>
+        <path d="M35 78 L44 138 Q45 146 54 146 L96 146 Q105 146 106 138 L115 78 Z" fill="#211a13" stroke="#3a2e20" stroke-width="1.5"/>
+        <path class="liquid" d="M39 82 L41 100 Q75 108 109 100 L111 82 Z" fill="#7a4a2a"/>
+        <ellipse cx="75" cy="82" rx="40" ry="7" fill="#8a5732"/>
+        <ellipse cx="75" cy="82" rx="40" ry="7" fill="none" stroke="#3a2e20" stroke-width="1.5"/>
+        <path d="M113 90 Q136 90 134 112 Q132 132 108 128" fill="none" stroke="#211a13" stroke-width="7" stroke-linecap="round"/>
+        <rect x="26" y="150" width="98" height="9" rx="3" fill="#171310" stroke="#3a2e20" stroke-width="1"/>
+      </svg>
+    </div>
+    <h1 class="title">Why Pain<br><em>Outlasts the Win</em></h1>
+    <p class="subtitle">Good days are real. So why does one hard day get to live in us longer than ten good ones, and what do we do about it?</p>
+    <div class="date-pill">UNDERSTAND · PROPORTION · CELEBRATE</div>
+  </div>
+
+  <div class="intro">
+    <p><strong>Last time we looked at what the mind does. This time we go to the root.</strong> Many of us can tell you every win we've had, and still one bad day makes us want to quit. In trading, in family life, in health. The pain stays and the good days slip.</p>
+    <p>Here's the thread we'll follow: <em>pain isn't always heavier than joy. It's often just replayed more.</em> And if that's true, then what we do after a bad moment matters more than the bad moment. That's good news, because you can train it.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="modules">
+
+    <!-- PART 1 -->
+    <div class="module open">
+      <div class="module-head" onclick="toggleModule(this)">
+        <div class="week-tag"><div class="num">01</div><div class="lbl">Part</div></div>
+        <div class="module-head-text">
+          <div class="module-date">The Root</div>
+          <div class="module-title">The Mind Can Heal Itself. So Why Doesn't It?</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body"><div class="module-inner">
+        <p class="module-tagline">"For most people, pain fades faster than joy. When it doesn't, something is feeding it."</p>
+
+        <h4>The Built-In Healer</h4>
+        <p>Researchers who study memory for emotional events describe the <b>fading affect bias</b>: the feeling attached to unpleasant memories tends to fade faster than the feeling attached to pleasant ones. In plain words, the mind is wired to keep more of the good. Most of us start out with a healer on board.</p>
+
+        <div class="ev">
+          <div class="ev-top">
+            <div class="chip"><div class="big">FADES FASTER</div><div class="sm">Fading affect</div></div>
+            <h3>In people struggling with low mood, the healer weakens</h3>
+          </div>
+          <p>In the research reviewed, non-dysphoric people showed a robust bias, <b>but dysphoric people did not</b>. For them, unpleasant and pleasant emotions faded at the same rate. In a larger follow-up (N = 337), people with the highest dysphoria levels had negative emotions that faded <b>less</b> and positive emotions that faded <b>more</b>. The authors say the reasons are still untested.</p>
+          <div class="yours"><b>For you:</b> If your good days feel rare and your bad ones feel permanent, that isn't weakness or a flaw in you. It's a known pattern, and it means the gap can narrow.</div>
+          <div class="cite">As reviewed in the Walker &amp; Skowronski fading affect bias article (Skowronski lab, Northern Illinois University). The review does not discuss rumination.</div>
+        </div>
+
+        <h4>What Feeds the Pain</h4>
+        <p>One of the best-studied feeders has a name: <b>rumination</b>. It means repetitively and passively focusing on your distress, its possible causes and its possible consequences. It isn't problem solving. It's replaying.</p>
+
+        <div class="ev">
+          <div class="ev-top">
+            <div class="chip"><div class="big">REPLAY</div><div class="sm">Nolen-Hoeksema</div></div>
+            <h3>Replaying a hard moment keeps it going and doesn't fix it</h3>
+          </div>
+          <p>A major review concluded that rumination <b>exacerbates and prolongs distress</b>. It also <b>impairs problem solving</b>: people who ruminate tend to see their problems as overwhelming, and they can come up with solutions but are <b>less likely to act on them</b>. It can also strain social support, because the people around us get worn out by the same story.</p>
+          <div class="yours"><b>For you:</b> Replaying a losing trade at 2 a.m. feels like you're working on it. The research suggests you're mostly feeding it.</div>
+          <div class="cite">Nolen-Hoeksema, Wisco &amp; Lyubomirsky (2008), <i>Perspectives on Psychological Science</i>, 3(5). Mostly depression research. Rumination predicts the <i>start</i> of depression more consistently than how long it lasts.</div>
+        </div>
+
+        <h4>See It on a Chart</h4>
+        <p>Same bad day. Tap each version.</p>
+
+        <div class="chartbox">
+          <div class="toggle" role="group" aria-label="Fade or replay">
+            <button id="f-fade" type="button" aria-pressed="true">Let it fade</button>
+            <button id="f-replay" type="button" aria-pressed="false">Replay it</button>
+          </div>
+          <svg viewBox="0 0 320 170" role="img" aria-label="Chart of how strongly a bad day and a good day are felt over fourteen days">
+            <g stroke="#2e2620" stroke-width="1"><line x1="30" y1="15" x2="30" y2="140"/><line x1="30" y1="140" x2="310" y2="140"/></g>
+            <text x="6" y="22" fill="#b8ab93" font-size="9">High</text>
+            <text x="8" y="138" fill="#b8ab93" font-size="9">Low</text>
+            <text x="30" y="156" fill="#b8ab93" font-size="9">Day 1</text>
+            <text x="262" y="156" fill="#b8ab93" font-size="9">Day 14</text>
+            <path id="joyLine" class="joy-line" d=""/>
+            <path id="painLine" class="pain-line" d=""/>
+          </svg>
+          <div class="legend"><span><i style="background:var(--red)"></i>Bad day</span><span><i style="background:var(--green)"></i>Good day</span></div>
+          <div class="chart-cap" id="chartcap" aria-live="polite"></div>
+          <p class="ill-note">An illustration of the idea, not measured data.</p>
+        </div>
+
+        <div class="mind-hack"><b>Mind Hack:</b> Ask one question when the replay starts: <b>"Am I solving this or feeding it?"</b> Solving ends with an action. Feeding ends with a feeling. If there's no action to take, put it down.</div>
+      </div></div>
+    </div>
+
+    <!-- PART 2 -->
+    <div class="module">
+      <div class="module-head" onclick="toggleModule(this)">
+        <div class="week-tag"><div class="num">02</div><div class="lbl">Part</div></div>
+        <div class="module-head-text">
+          <div class="module-date">The Wipe-Out</div>
+          <div class="module-title">Why One Bad Day Erases Everything, and Makes You Want to Quit</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body"><div class="module-inner">
+        <p class="module-tagline">"There are two different wipe-outs. Only one of them is in your head."</p>
+
+        <h4>Wipe-Out One: The Account</h4>
+        <p>Sometimes the bad day really did erase the wins, in dollars. That isn't a mindset problem. That's a <b>sizing problem</b>. Slide it and watch.</p>
+
+        <div class="wipe">
+          <label for="wipeRange">My worst day is about <b id="wipeX">2</b>× a typical winning day.</label>
+          <input id="wipeRange" type="range" min="0.5" max="8" step="0.5" value="2" aria-describedby="wipeOut">
+          <div class="sq-row" id="sqRow" aria-hidden="true"></div>
+          <div class="wipe-out" id="wipeOut" aria-live="polite"></div>
+          <div class="wipe-msg" id="wipeMsg"></div>
+          <p class="ill-note">Twelve winning days shown. A simple illustration of proportion, not a rule.</p>
+        </div>
+
+        <div class="reflect"><b>The consistency threshold:</b> Good days start to outweigh bad ones when your bad days are <i>small enough to survive</i>. That's what a daily loss limit buys. It's our working rule of thumb, not a research finding: cap your worst day so it costs one or two good days, never ten.</div>
+
+        <h4>Wipe-Out Two: The Feeling</h4>
+        <p>The second wipe-out happens even when the numbers are fine. A stretch of wins gets erased by one hard day, and you still want to quit. Psychology has a close name for it.</p>
+
+        <div class="ev">
+          <div class="ev-top">
+            <div class="chip"><div class="big">LAPSE → QUIT</div><div class="sm">Marlatt</div></div>
+            <h3>It isn't the slip. It's the story we tell about the slip</h3>
+          </div>
+          <p>Marlatt's relapse model, from addiction research, describes the <b>abstinence violation effect</b>. After a lapse, people who blame themselves with "my personal failure" or "I have no willpower" feel guilt and negative emotion and are <b>more likely to abandon the whole attempt</b>. People who blame a specific situation they failed to cope with are more likely to <b>learn from it</b>. The authors stress that moving from lapse to relapse <b>is not inevitable</b>.</p>
+          <div class="yours"><b>For you:</b> "I'm a bad trader" makes you want to quit. "I traded without my stop on a gap day" gives you something to fix. Same day. Different story.</div>
+          <div class="cite">Larimer, Palmer &amp; Marlatt (1999), <i>Alcohol Research &amp; Health</i>, 23(2), 151–160. Built on alcohol relapse. Applying it to trading is our analogy.</div>
+        </div>
+
+        <h4>Verdict or Event?</h4>
+        <p>Our framing: files you label as <b>verdicts</b> never close. Files you label as <b>events</b> can be learned from and shelved.</p>
+
+        <div class="vs">
+          <div class="vs-row">
+            <div class="vs-a"><small>Verdict</small>"I always blow it after a good run."</div>
+            <div class="vs-b"><small>Event</small>"I broke my size rule on Thursday after three wins."</div>
+          </div>
+          <div class="vs-row">
+            <div class="vs-a"><small>Verdict</small>"I'm not cut out for this."</div>
+            <div class="vs-b"><small>Event</small>"I didn't stop when I hit my limit. That's the one thing to fix."</div>
+          </div>
+          <div class="vs-row">
+            <div class="vs-a"><small>Verdict</small>"Everything was ruined today."</div>
+            <div class="vs-b"><small>Event</small>"One hour went badly. The other hours were fine."</div>
+          </div>
+        </div>
+
+        <div class="ev">
+          <div class="ev-top">
+            <div class="chip"><div class="big">IT FADES</div><div class="sm">Gilbert</div></div>
+            <h3>We overestimate how long bad feelings will last</h3>
+          </div>
+          <p>In experiments on affective forecasting, people were <b>generally unaware of the mental mechanisms that ease negative feelings</b>, so they tended to <b>overestimate the duration</b> of their emotional reactions to negative events.</p>
+          <div class="yours"><b>For you:</b> "I want to quit" is often a forecast: "this feeling will last forever." The research says that forecast tends to run long. Don't make a permanent decision from a temporary feeling.</div>
+          <div class="cite">Gilbert, Pinel, Wilson, Blumberg &amp; Wheatley (1998), "Immune neglect," <i>Journal of Personality and Social Psychology</i>, 75(3), 617–638. Lab experiments.</div>
+        </div>
+
+        <div class="mind-hack"><b>Mind Hack: The 72-hour rule.</b> Make no big decision about quitting inside 72 hours of a bad day. You can feel it fully. You just don't get to sign anything. (Our rule of thumb, not a studied number.)</div>
+      </div></div>
+    </div>
+
+    <!-- PART 3 -->
+    <div class="module">
+      <div class="module-head" onclick="toggleModule(this)">
+        <div class="week-tag"><div class="num">03</div><div class="lbl">Part</div></div>
+        <div class="module-head-text">
+          <div class="module-date">The No</div>
+          <div class="module-title">Daily Life Runs on Trading Rules</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body"><div class="module-inner">
+        <p class="module-tagline">"You can't be disciplined at the desk and scattered everywhere else. It's one person making all of those decisions."</p>
+
+        <h4>Your Trading Rules Already Have a Life Version</h4>
+        <div class="map">
+          <div class="map-row"><div class="t">Daily loss limit</div><div class="l">A limit on what a day is allowed to cost you: energy, money, patience, hours.</div></div>
+          <div class="map-row"><div class="t">Position size</div><div class="l">How much of yourself you put into any one thing. No single thing gets everything.</div></div>
+          <div class="map-row"><div class="t">The stop</div><div class="l">The point where you leave a conversation, a task or a mood, decided before you're in it.</div></div>
+          <div class="map-row"><div class="t">Sitting out</div><div class="l">"Not today" to a request, an invitation or an urge that doesn't fit the plan.</div></div>
+          <div class="map-row"><div class="t">Revenge trade</div><div class="l">The snack, the text, the argument, the scroll you reach for after a bad moment to feel something else.</div></div>
+        </div>
+
+        <h4>Saying No to Others</h4>
+        <ul>
+          <li><b>Short, kind, no essay.</b> "I can't take that on today."</li>
+          <li><b>Offer a when, if you mean it.</b> "I can do Thursday."</li>
+          <li><b>Every no is a yes to something.</b> The plan, your rest, your focus. Say the yes to yourself first.</li>
+        </ul>
+
+        <h4>Saying No to Yourself</h4>
+        <ul>
+          <li><b>"Not now" with a time.</b> "Not today. I'll look at it Monday at 9." It's easier to accept than "never."</li>
+          <li><b>If–then, written in advance.</b> "If I feel the urge to revenge trade, then I stand up and leave the room for ten minutes."</li>
+          <li><b>Make the no easier than the yes.</b> Log out, delete the app, put the phone in another room.</li>
+        </ul>
+
+        <div class="mind-hack"><b>Mind Hack:</b> Treat a "no" like a position you're holding. It has a size, a reason and an exit. You don't have to defend it to anyone, including yourself.</div>
+      </div></div>
+    </div>
+
+    <!-- PART 4 -->
+    <div class="module">
+      <div class="module-head" onclick="toggleModule(this)">
+        <div class="week-tag"><div class="num">04</div><div class="lbl">Part</div></div>
+        <div class="module-head-text">
+          <div class="module-date">The Walk-Away</div>
+          <div class="module-title">When to Walk Away, From Anything</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body"><div class="module-inner">
+        <p class="module-tagline">"The hardest walk away is from the thing we keep going back to."</p>
+
+        <p>It might be the screen. It might be a habit, a situation, or something small and hard to name. We say we'll leave and then we're back, again and again. We'll keep this general on purpose. Everyone in the room can fill in their own.</p>
+
+        <h4>Why the Small Things Hold Us</h4>
+        <p>It's rarely the big thing. It's usually something small that keeps the door open. Our read, as a few common hooks:</p>
+        <ul>
+          <li><b>"Just one more."</b> One more trade, one more try, one more chance to make it right.</li>
+          <li><b>The familiar.</b> Even pain is predictable, and predictable feels safe.</li>
+          <li><b>What we've already put in.</b> Leaving feels like admitting that the time was wasted.</li>
+          <li><b>Fear of what ending it means.</b> Sometimes we aren't holding on to the thing. We're holding on to avoid the feeling of letting go.</li>
+        </ul>
+
+        <h4>Three Questions Before You Decide</h4>
+        <ol class="steps">
+          <li><b>Is this still serving the plan?</b>Not "has it ever." Is it, today, moving me toward what I said I wanted?</li>
+          <li><b>If I weren't already in it, would I choose it today?</b>If the answer is no, you're staying because of the past, not because of the present.</li>
+          <li><b>What am I actually holding on to?</b>The thing itself, or the fear of what comes after letting go? Name it out loud.</li>
+        </ol>
+
+        <h4>Three Steps, Smallest First</h4>
+        <ul>
+          <li><b>Pause.</b> Step away for ten minutes. Nothing is decided.</li>
+          <li><b>Step back.</b> A day, or a set distance. You reduce the size, the contact or the time.</li>
+          <li><b>Leave.</b> A decision made from your plan, not from the loudest moment.</li>
+        </ul>
+        <p style="margin-top:8px;">Pause and step back are not weakness. They're how you test whether leaving is right, without needing to be sure first.</p>
+
+        <div class="ev">
+          <div class="ev-top">
+            <div class="chip"><div class="big">22 OF 32</div><div class="sm">Kahneman</div></div>
+            <h3>People judge an episode mostly by its worst moment and how it ends</h3>
+          </div>
+          <p>In a lab study, 32 people put a hand in painfully cold water twice: once for 60 seconds, and once for 60 seconds plus 30 more as the water was slowly warmed a little. <b>22 of 32 chose to repeat the longer trial</b>, the one with more total pain, because it <b>ended</b> a bit better. The authors treat this as a memory mistake.</p>
+          <div class="yours"><b>For you:</b> How you leave matters. If you walk away on purpose, with a clean ending, you remember it as a decision. If you leave in a blaze, you remember the blaze. Choose your ending.</div>
+          <div class="cite">Kahneman, Fredrickson, Schreiber &amp; Redelmeier (1993), <i>Psychological Science</i>, 4(6), 401–405. Small lab sample (university students).</div>
+        </div>
+
+        <div class="care"><b>A note of care:</b> If staying in a situation affects your safety or your health, that isn't a trading-psychology question. Please reach out to a trusted person or a professional.</div>
+
+        <div class="mind-hack"><b>Mind Hack:</b> Set your walk-away rule while you're calm. "If ___ happens, I walk." Then when the moment comes, you aren't deciding. You're following your own rule.</div>
+      </div></div>
+    </div>
+
+    <!-- PART 5 -->
+    <div class="module">
+      <div class="module-head" onclick="toggleModule(this)">
+        <div class="week-tag"><div class="num">05</div><div class="lbl">Part</div></div>
+        <div class="module-head-text">
+          <div class="module-date">The Proportion</div>
+          <div class="module-title">A Better Word Than "Balance"</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body"><div class="module-inner">
+        <p class="module-tagline">"A little here, a little there, not too much of anything and not too little of anything. And room to breathe."</p>
+
+        <h4>Four Word Options</h4>
+        <div class="words">
+          <div class="word pick"><h5>Proportion</h5><p>Our pick. It comes straight from trading: <b>position sizing and rebalancing</b>. You don't ask whether everything is equal. You ask whether each thing is the right size. Rebalancing is a small adjustment, not a collapse.</p></div>
+          <div class="word"><h5>Margin</h5><p>The room and grace. Space left unfilled in your day so one surprise doesn't break it.</p></div>
+          <div class="word"><h5>Steadiness</h5><p>Less about splitting your time, more about staying level through it.</p></div>
+          <div class="word"><h5>Enough</h5><p>The permission word. A good-enough day counts.</p></div>
+        </div>
+        <p style="margin-top:10px;">Our suggestion is <b>Proportion with Margin</b>: right-sized, with room to spare.</p>
+
+        <h4>Run a Proportion Check</h4>
+        <p>For each area, tap what's true right now. No judging.</p>
+
+        <div class="pc" id="pc"></div>
+        <div class="pc-result" id="pcResult" aria-live="polite">Tap each area to see your nudge.</div>
+
+        <div class="mind-hack"><b>Mind Hack:</b> Rebalance with one notch, not a rebuild. A big swing is how you end up on the other side of too much.</div>
+      </div></div>
+    </div>
+
+    <!-- PART 6 -->
+    <div class="module">
+      <div class="module-head" onclick="toggleModule(this)">
+        <div class="week-tag"><div class="num">06</div><div class="lbl">Part</div></div>
+        <div class="module-head-text">
+          <div class="module-date">The Celebration</div>
+          <div class="module-title">Check It Off and Celebrate the Day</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="module-body"><div class="module-inner">
+        <p class="module-tagline">"This is a good day. Check it off. Celebrate it. We don't do enough of that."</p>
+
+        <h4>Why Small Wins Count</h4>
+        <div class="ev">
+          <div class="ev-top">
+            <div class="chip"><div class="big">76%</div><div class="sm">Amabile &amp; Kramer</div></div>
+            <h3>Small steps forward shape how the whole day feels</h3>
+          </div>
+          <p>Amabile and Kramer analyzed diaries from <b>238 workers</b> on 26 project teams, close to <b>12,000 entries</b>. Steps forward showed up on <b>76% of people's best-mood days</b>. Of events that had a minor impact on the project, <b>28% had a major impact on how people felt</b>. On the worst days, setbacks showed up on 67%.</p>
+          <div class="yours"><b>For you:</b> You don't need a big win to have a good day. A small, real step counts, and your mood takes notice.</div>
+          <div class="cite">Amabile &amp; Kramer (2011), "The power of small wins," <i>Harvard Business Review</i>. Correlational study of knowledge workers, not traders.</div>
+        </div>
+
+        <h4>Today's Check-Off</h4>
+        <p>Tap what's true for you. Add your own.</p>
+
+        <div class="ms">
+          <div id="msList"></div>
+          <div class="ms-add">
+            <input id="msInput" type="text" placeholder="Add your own milestone" aria-label="Add your own milestone" maxlength="60">
+            <button class="chip-btn" id="msAdd" type="button">Add</button>
+          </div>
+          <div class="ms-count" id="msCount"></div>
+          <div class="ms-say" id="msSay" aria-live="polite"></div>
+        </div>
+
+        <h4>Close the Day on Purpose</h4>
+        <ol class="steps">
+          <li><b>Check off what went right.</b>Before you review what went wrong.</li>
+          <li><b>Talk to yourself like a coach, by name.</b>In one lab study, using your own name rather than "I" in your head gave people distance, less distress, and better-rated performance under stress. Try "Coach, here's what you did well today."</li>
+          <li><b>Do one small thing to celebrate.</b>A cup of tea. A walk. A call. Let the day end well.</li>
+        </ol>
+
+        <div class="ev">
+          <div class="ev-top">
+            <div class="chip"><div class="big">3 PARTS</div><div class="sm">Neff</div></div>
+            <h3>Grace has a shape: kindness, shared humanity, awareness</h3>
+          </div>
+          <p>Neff describes self-compassion as treating yourself with the kindness and support you'd show a good friend. It has three parts: <b>self-kindness instead of self-judgment</b>, <b>common humanity</b> ("everyone fails, makes mistakes and gets it wrong sometimes"), and <b>mindful awareness</b> of painful thoughts without being swallowed by them.</p>
+          <div class="yours"><b>For you:</b> Giving yourself grace isn't lowering the bar. It's how you stay in the game long enough to clear it.</div>
+          <div class="cite">Neff &amp; Dahm, "Self-compassion: What it is, what it does, and how it relates to mindfulness," describing Neff (2003). Breines &amp; Chen (2012) found self-compassion increased motivation to improve in small student samples.</div>
+        </div>
+
+        <div class="care"><b>A note of care:</b> If heaviness follows you around most days, not just after rough ones, please talk to a counselor or therapist. It's a strength. This session is trading psychology, not treatment.</div>
+
+        <div class="honest"><b>Being straight about the limits:</b> The fading affect finding comes from people reporting on memories. Rumination research is mostly about depression. The lapse-to-quit idea comes from addiction work. The cold-water study is small and done in a lab, and the diary study is correlational. Connecting these to trading is our read. The rules of thumb here (72 hours, one notch, the loss cap) are suggestions to test, not proven numbers.</div>
+      </div></div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="table-talk">
+    <div class="tt-head">
+      <div class="eyebrow2">Round the Table</div>
+      <h3>Your Turn, Out Loud or In the Chat</h3>
+      <p>Share only what you're comfortable sharing. Keep it about you, not about anyone else.</p>
+    </div>
+    <div class="prompt-card"><div class="prompt-num">Question One</div><div class="prompt-q">After a bad day, what do you replay, and when does it usually start?</div><div class="prompt-sub">Name the time and the trigger. Naming it is step one.</div></div>
+    <div class="prompt-card"><div class="prompt-num">Question Two</div><div class="prompt-q">Is your worst day too big, or is the story you tell about it too big?</div><div class="prompt-sub">Account wipe-out or feeling wipe-out? Be honest about which one.</div></div>
+    <div class="prompt-card"><div class="prompt-num">Question Three</div><div class="prompt-q">What's one thing you keep going back to that you know it's time to step away from?</div><div class="prompt-sub">No details needed. Just name the size of the hook: small, medium or large.</div></div>
+    <div class="prompt-card"><div class="prompt-num">Question Four</div><div class="prompt-q">Which area is out of proportion for you right now, and what's your one-notch move?</div><div class="prompt-sub">One notch. Not a rebuild.</div></div>
+    <div class="prompt-card"><div class="prompt-num">Question Five</div><div class="prompt-q">What did you check off today, and how will you celebrate it?</div><div class="prompt-sub">Say it out loud. "That counts."</div></div>
+  </div>
+
+  <div class="line-box">
+    <div class="big">Pain lasts longest where we keep replaying it. Joy lasts longest where we stop to celebrate it.</div>
+    <p>Right-size the day. Leave some margin. Walk away on purpose. Check it off, and celebrate.</p>
+  </div>
+
+  <div class="sources">
+    <h4>Sources</h4>
+    <ul>
+      <li>Nolen-Hoeksema, S., Wisco, B. E., &amp; Lyubomirsky, S. (2008). <a href="https://websites.umich.edu/~gonzo/Rumination/Nolen-Hoeksema-Wisco-Lyubomirsky-2008.pdf" target="_blank" rel="noopener">Rethinking rumination</a>. <i>Perspectives on Psychological Science, 3</i>(5).</li>
+      <li>Walker, W. R., &amp; Skowronski, J. J. <a href="https://www.niu.edu/jskowronski/publications/walkerskowronski2009.pdf" target="_blank" rel="noopener">Article on the fading affect bias</a> (Skowronski lab, Northern Illinois University). Reviews the dysphoria findings.</li>
+      <li>Larimer, M. E., Palmer, R. S., &amp; Marlatt, G. A. (1999). <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6760427" target="_blank" rel="noopener">Relapse prevention: An overview of Marlatt's cognitive-behavioral model</a>. <i>Alcohol Research &amp; Health, 23</i>(2), 151–160.</li>
+      <li>Gilbert, D. T., Pinel, E. C., Wilson, T. D., Blumberg, S. J., &amp; Wheatley, T. P. (1998). <a href="https://pubmed.ncbi.nlm.nih.gov/9781405/" target="_blank" rel="noopener">Immune neglect: A source of durability bias in affective forecasting</a>. <i>Journal of Personality and Social Psychology, 75</i>(3), 617–638.</li>
+      <li>Kahneman, D., Fredrickson, B. L., Schreiber, C. A., &amp; Redelmeier, D. A. (1993). <a href="https://www.ius.uzh.ch/dam/jcr:5ae9adc9-61ec-4174-b37c-4b752f36c23b/Kahnemann%20et%20al.%20-%20When%20More%20Pain%20is%20Preferred%20to%20Less%20(1993).pdf" target="_blank" rel="noopener">When more pain is preferred to less: Adding a better end</a>. <i>Psychological Science, 4</i>(6), 401–405.</li>
+      <li>Kross, E., et al. (2014). <a href="https://pubmed.ncbi.nlm.nih.gov/24467424/" target="_blank" rel="noopener">Self-talk as a regulatory mechanism: How you do it matters</a>. <i>Journal of Personality and Social Psychology, 106</i>(2), 304–324.</li>
+      <li>Amabile, T. M., &amp; Kramer, S. J. (2011). <a href="https://www.develor.si/wp-content/uploads/2022/05/The-power-of-small-wins.pdf" target="_blank" rel="noopener">The power of small wins</a>. <i>Harvard Business Review</i>.</li>
+      <li>Neff, K. D., &amp; Dahm, K. A. <a href="https://self-compassion.org/wp-content/uploads/publications/Mindfulness_and_SC_chapter_in_press.pdf" target="_blank" rel="noopener">Self-compassion: What it is, what it does, and how it relates to mindfulness</a>. Book chapter, describing Neff (2003).</li>
+    </ul>
+  </div>
+
+  <div class="footer"><p>Same cup, same honesty, every Saturday. Educational only, not financial advice or mental health treatment.</p></div>
+
+<script>
+  function toggleModule(headEl){
+    const m = headEl.parentElement, was = m.classList.contains('open');
+    document.querySelectorAll('.module.open').forEach(x => x.classList.remove('open'));
+    if(!was){ m.classList.add('open'); }
+  }
+  const $ = id => document.getElementById(id);
+
+  /* ---------- FADE vs REPLAY chart ---------- */
+  (function(){
+    const X0=30, X1=305, Y0=140, Y1=20, N=14;
+    const px = d => X0 + (X1-X0) * d/(N-1);
+    const py = v => Y0 - (Y0-Y1) * v/100;
+    function series(replay){
+      const pain=[], joy=[]; let p=100, j=100;
+      const boosts = [2,4,6,9,12];
+      for(let d=0; d<N; d++){
+        if(d>0){ p*=0.70; j*=0.90; if(replay && boosts.includes(d)) p=Math.min(100, p+45); }
+        pain.push(p); joy.push(j);
+      }
+      return {pain, joy};
+    }
+    const path = arr => arr.map((v,i)=> (i?'L':'M') + px(i).toFixed(1) + ' ' + py(v).toFixed(1)).join(' ');
+    const bF=$('f-fade'), bR=$('f-replay');
+    const CF='<b>Left alone, the bad day fades faster than the good one.</b> That is the mind\'s healer doing its job.';
+    const CR='<b>Every replay brings the pain back up.</b> Five replays and the bad day is still loud on day 14, while the good day has quietly faded.';
+    function set(r){
+      const s = series(r);
+      $('painLine').setAttribute('d', path(s.pain));
+      $('joyLine').setAttribute('d', path(s.joy));
+      bF.setAttribute('aria-pressed', String(!r)); bR.setAttribute('aria-pressed', String(r));
+      $('chartcap').innerHTML = r ? CR : CF;
+    }
+    bF.addEventListener('click', ()=>set(false)); bR.addEventListener('click', ()=>set(true));
+    set(false);
+  })();
+
+  /* ---------- Wipe-out slider ---------- */
+  (function(){
+    const row=$('sqRow'); let h=''; for(let i=0;i<12;i++) h+='<div class="sq"></div>'; row.innerHTML=h;
+    const sq=row.querySelectorAll('.sq'), r=$('wipeRange');
+    function upd(){
+      const x=parseFloat(r.value); $('wipeX').textContent = x;
+      const n=Math.min(12, Math.ceil(x));
+      sq.forEach((s,i)=>s.classList.toggle('gone', i<n));
+      $('wipeOut').textContent = 'One bad day erases ' + (x%1? x : x) + (x===1?' good day':' good days');
+      let m;
+      if(x<=1) m='<b>Proportion is healthy.</b> A bad day costs about one good one. You stay ahead, and the day can stay just a day.';
+      else if(x<=2.5) m='<b>It stings, and it\'s recoverable.</b> A couple of good days rebuild it. Hold your limit and you\'re still in the game.';
+      else if(x<=4) m='<b>This is getting heavy.</b> One day is taking most of a week. Look at your size and your stop, not your character.';
+      else m='<b>This is a sizing problem, not a mindset problem.</b> No amount of positive thinking fixes a worst day this large. Shrink the size, set a hard daily limit, then work on the story.';
+      $('wipeMsg').innerHTML = m;
+    }
+    r.addEventListener('input', upd); upd();
+  })();
+
+  /* ---------- Proportion check ---------- */
+  (function(){
+    const areas=[
+      ['Trading / work','Screen time, hours, intensity'],
+      ['Rest & sleep','Real recovery, not just downtime'],
+      ['Body','Movement, food, health'],
+      ['People','Time with the ones who matter'],
+      ['Joy & play','Things you do just because you like them'],
+      ['Quiet & faith','Reflection, prayer, stillness']
+    ];
+    const state=Array(areas.length).fill(null);
+    const box=$('pc');
+    box.innerHTML = areas.map((a,i)=>`
+      <div class="pc-row">
+        <div class="pc-name">${a[0]}<span>${a[1]}</span></div>
+        <div class="pc-opts" role="group" aria-label="${a[0]}">
+          <button type="button" class="more" data-i="${i}" data-v="more" aria-pressed="false">Too much</button>
+          <button type="button" class="ok" data-i="${i}" data-v="ok" aria-pressed="false">Right-sized</button>
+          <button type="button" class="less" data-i="${i}" data-v="less" aria-pressed="false">Too little</button>
+        </div>
+      </div>`).join('');
+    box.addEventListener('click', e=>{
+      const b=e.target.closest('button'); if(!b) return;
+      const i=+b.dataset.i; state[i]=b.dataset.v;
+      box.querySelectorAll(`button[data-i="${i}"]`).forEach(x=>x.setAttribute('aria-pressed', String(x===b)));
+      show();
+    });
+    function show(){
+      const more=areas.filter((a,i)=>state[i]==='more').map(a=>a[0]);
+      const less=areas.filter((a,i)=>state[i]==='less').map(a=>a[0]);
+      const done=state.filter(Boolean).length;
+      let t;
+      if(!done) t='Tap each area to see your nudge.';
+      else if(!more.length && !less.length) t=done<areas.length ? '<b>So far, so proportionate.</b> Keep going through the list.' : '<b>Everything feels right-sized.</b> Nothing to fix. Notice that, and count it as a win today.';
+      else if(more.length && less.length) t=`<b>Your one-notch move:</b> take a small slice from <b>${more[0]}</b> and give it to <b>${less[0]}</b>. Not a rebuild, just one notch. Then leave a little margin.`;
+      else if(more.length) t=`<b>Your one-notch move:</b> ease <b>${more[0]}</b> down a notch and leave that time unfilled. That's margin.`;
+      else t=`<b>Your one-notch move:</b> add a small, doable slice of <b>${less[0]}</b>, ten minutes to start. Small enough that you'll actually do it.`;
+      if(done<areas.length && (more.length||less.length)) t+=` <i>(${areas.length-done} area${areas.length-done>1?'s':''} left.)</i>`;
+      $('pcResult').innerHTML=t;
+    }
+  })();
+
+  /* ---------- Milestones ---------- */
+  (function(){
+    const items=['Followed my plan, or sat out by plan','Stayed inside my size and my limit','Said no to something that wasn\'t mine to carry','Said "not now" to myself once','Moved my body','Ate and rested like I meant it','Gave or got one kind word','Closed the day on purpose'];
+    const list=$('msList'); const on=new Set();
+    function render(){
+      list.innerHTML=items.map((t,i)=>`<button type="button" class="ms-item" data-i="${i}" aria-pressed="${on.has(i)}"><span class="ms-box" aria-hidden="true">✓</span><span></span></button>`).join('');
+      list.querySelectorAll('.ms-item').forEach((b,i)=>{ b.lastElementChild.textContent=items[i]; });
+      count();
+    }
+    function count(prev){
+      const n=on.size, c=$('msCount'), s=$('msSay');
+      c.textContent = n + ' of ' + items.length + ' checked';
+      if(n===0) s.innerHTML='Nothing checked yet. What already went right today?';
+      else if(n<4) s.innerHTML='<b>That counts.</b> A small, real step is a good day in the making. Say it out loud.';
+      else if(n<items.length) s.innerHTML='<b>That\'s a good day.</b> Celebrate it. A cup of something warm, a walk, a call. You earned the pause.';
+      else s.innerHTML='<b>Full check.</b> Close the day on purpose and enjoy it. No review needed tonight.';
+      if(prev!==undefined && n>prev){ c.classList.remove('glow'); void c.offsetWidth; c.classList.add('glow'); }
+    }
+    list.addEventListener('click', e=>{
+      const b=e.target.closest('.ms-item'); if(!b) return;
+      const i=+b.dataset.i, prev=on.size;
+      on.has(i)? on.delete(i) : on.add(i);
+      b.setAttribute('aria-pressed', String(on.has(i)));
+      count(prev);
+    });
+    function add(){
+      const inp=$('msInput'), v=inp.value.trim(); if(!v) return;
+      items.push(v); on.add(items.length-1); inp.value='';
+      const keep=new Set(on); render(); keep.forEach(k=>on.add(k)); render();
+    }
+    $('msAdd').addEventListener('click', add);
+    $('msInput').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); add(); }});
+    render();
+  })();
+</script>
+
+</body>
+</html>
